@@ -53,7 +53,6 @@ public class RecommendationServlet extends HttpServlet {
       String address = restaurant.getString("formatted_address");
       String stringifiedLocation = restaurant.getJSONObject("geometry").getJSONObject("location").toString();
       Map<String, Double> latLngCoords = gson.fromJson(stringifiedLocation, HashMap.class);
-      // check for exception
       double rating = restaurant.has("rating") ? restaurant.getDouble("rating") : -1;
       int numRatings = restaurant.has("user_ratings_total") ? restaurant.getInt("user_ratings_total") : -1;
       int price = restaurant.has("price_level") ? restaurant.getInt("price_level") : -1;

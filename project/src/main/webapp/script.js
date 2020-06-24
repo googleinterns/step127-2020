@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 function getRecommendation() {
-  const cuisineType = /*document.getElementById('cuisine').value*/'mexican';
-  const radius = /*document.getElementById('distance').value*/10;
-  const priceLevel = /*document.getElementById('price-level').value*/'low';
-  const currLat = /*document.getElementById('latitude').value*/40.35;
-  const currLng = /*document.getElementById('longitude').value*/-74.66;
-  const diningExp = /*document.getElementById('dining-experience').value*/'delivery';
+  const cuisineType = document.getElementById('cuisine').value;
+  const radius = document.getElementById('distance').value;
+  const priceLevel = document.getElementById('price-level').value;
+  const currLat = document.getElementById('latitude').value;
+  const currLng = document.getElementById('longitude').value;
+  const diningExp = document.getElementById('dining-experience').value;
   const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
   const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
   const textSearchBaseUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?';

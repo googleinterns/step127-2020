@@ -1,18 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>My Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <script src="script.js"></script>
   </head>
+
   <body>
-    <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="getRecommendation()">Hello</button>
-      <div id="greeting-container"></div>
+
+    <div id="restuarant-prefs">
+      <label for="cuisine">What cuisine?</label>
+      <select name="cuisine" id="cuisine">
+        <option value="italian">Italian</option>
+        <option value="mexican">Mexican</option>
+        <option value="indian">Indian</option>
+      </select>
+      <br />
+      <label for="distance">Distance</label>
+      <select name="distance" id="distance">
+        <option value="1 mile">1 mile</option>
+        <option value="5 miles">5 miles</option>
+        <option value="10 miles">10 miles</option>
+        <option value="25 miles">25 miles</option>
+      </select>
+      <br />
+      <label for="dining-experience">Dining Experience</label>
+      <select name="dining-experience" id="dining-experience">
+        <option value="takeout">Takeout</option>
+        <option value="delivery">Delivery</option>
+        <option value="dine-in">Dine-In</option>
+      </select>
+      <br />
+      <label for="price-level">Price</label>
+      <select name="price-level" id="price-level">
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
+      <br />
+      <label for="latitude">Latitude</label>
+      <input type="number" step="0.01" name="latitude" id="latitude" />
+      <br />
+      <label for="longitude">Longitude</label>
+      <input type="number" step="0.01" name="longitide" id="longitude" />
+      <br />
+      <button type="submit" onclick="getRecommendation()">Submit</button>
+
     </div>
   </body>
 </html>
