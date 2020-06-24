@@ -12,17 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random greeting to the page.
- */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+function getRecommendation() {
+  const cuisineType = /*document.getElementById('cuisine').value*/'mexican';
+  const radius = /*document.getElementById('distance').value*/10;
+  const priceLevel = /*document.getElementById('price-level').value*/'low';
+  const currLat = /*document.getElementById('latitude').value*/40.35;
+  const currLng = /*document.getElementById('longitude').value*/-74.66;
+  const diningExp = /*document.getElementById('dining-experience').value*/'delivery';
+  const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
+  const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+  const textSearchBaseUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?';
+  const searchParams = new URLSearchParams();
+  searchParams.append('query', cuisineType + '+restaurant');
+  searchParams.append('location', currLat + ',' + currLng);
+  searchParams.append('radius', radius);
+  searchParams.append('key', apiKey);
+  fetch(proxyUrl + textSearchBaseUrl + searchParams)
+  // this will give us the list of restaurants
+      .then(response => response.json())
+      .then((restaurants) => {
+        fetch('/recommendation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            restaurants: restaurants.results,
+            cuisineType: cuisineType,
+            lat: currLat,
+            lng: currLng,
+            radius: radius,
+            priceLevel: priceLevel,
+            diningExp: diningExp
+          })
+      }).then(response => response.json()).then((selection) => {
+        console.log(selection);
+      });
+    });
+    
 }
