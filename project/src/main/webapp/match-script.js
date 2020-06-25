@@ -19,3 +19,4 @@ function createMap() {
     zoom: 16,
   })
 }
+window.onload= createMap();
