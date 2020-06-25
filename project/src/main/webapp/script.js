@@ -14,7 +14,7 @@
 
 function getRecommendation() {
   const cuisineType = document.getElementById('cuisine').value;
-  const radius = document.getElementById('distance').value;
+  const radius = milesToMeters(parseInt(document.getElementById('distance').value));
   const priceLevel = document.getElementById('price-level').value;
   const currLat = document.getElementById('latitude').value;
   const currLng = document.getElementById('longitude').value;
@@ -23,7 +23,7 @@ function getRecommendation() {
   const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
   const textSearchBaseUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?';
   const searchParams = new URLSearchParams();
-  searchParams.append('query', cuisineType + '+restaurant');
+  searchParams.append('query', cuisineType + ' restaurant');
   searchParams.append('location', currLat + ',' + currLng);
   searchParams.append('radius', radius);
   searchParams.append('key', apiKey);
@@ -50,4 +50,8 @@ function getRecommendation() {
       });
     });
     
+}
+
+function milesToMeters(numMiles) {
+  return numMiles * 1609.34;
 }

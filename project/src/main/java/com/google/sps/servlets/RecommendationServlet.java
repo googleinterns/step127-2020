@@ -24,14 +24,15 @@ public class RecommendationServlet extends HttpServlet {
 
   private final Gson gson = new Gson();
   private static final Logger LOGGER = Logger.getLogger(RecommendationServlet.class.getName());
-  private final Set<Restaurant> restaurantSet = new HashSet<>();
+  
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Set<Restaurant> restaurantSet = new HashSet<>();
     BufferedReader reader = request.getReader();
     String body = reader.readLine();
     try {
-      addRestaurantsToSet(body);
+      addRestaurantsToSet(body, restaurantSet);
     } catch (JSONException e) {
        LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
     }
@@ -43,7 +44,7 @@ public class RecommendationServlet extends HttpServlet {
     }
   }
 
-  private void addRestaurantsToSet(String body) throws JSONException {
+  private void addRestaurantsToSet(String body, Set<Restaurant> restaurantSet) throws JSONException {
     JSONObject reqBody = new JSONObject(body);
     String cuisineType = reqBody.getString("cuisineType");
     JSONArray restaurantList = reqBody.getJSONArray("restaurants");
