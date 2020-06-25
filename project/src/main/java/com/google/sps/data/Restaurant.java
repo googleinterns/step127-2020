@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-  /** Represents a restaurant with it's relevant information. */
+/** Represents a restaurant with it's relevant information. */
 public class Restaurant {
-
   /** Represents a price level for the restaurant. */
-  public enum PriceLevel {LOW, MED, HIGH, UNKNOWN};
+  public enum PriceLevel { LOW, MED, HIGH, UNKNOWN }
+  ;
 
   private final String name;
   private final String cuisineType;
@@ -21,13 +21,14 @@ public class Restaurant {
   private final String id;
   private final List<String> placeTypes;
 
-  public Restaurant(String name, String cuisineType, String address, Map<String, Double> latLngCoords, double avgRating, int numRatings, int priceNum , String id) {
+  public Restaurant(String name, String cuisineType, String address,
+      Map<String, Double> latLngCoords, double avgRating, int numRatings, int priceNum, String id) {
     this.name = name;
     this.cuisineType = cuisineType;
     this.address = address;
     this.avgRating = avgRating;
     this.numRatings = numRatings;
-    switch(priceNum) {
+    switch (priceNum) {
       case 0:
       case 1:
         priceLevel = PriceLevel.LOW;
@@ -73,6 +74,8 @@ public class Restaurant {
   }
 
   public String toString() {
-    return "name: " + name + ", cuisineType: " + cuisineType + ", address: " + address + ", avgRating: " + avgRating + ", numRatings: " + numRatings + ", priceLevel: " + priceLevel + ", id: " + id;
+    return "name: " + name + ", cuisineType: " + cuisineType + ", address: " + address
+        + ", avgRating: " + avgRating + ", numRatings: " + numRatings
+        + ", priceLevel: " + priceLevel + ", id: " + id;
   }
 }

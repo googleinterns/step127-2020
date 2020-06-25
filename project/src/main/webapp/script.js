@@ -14,22 +14,24 @@
 
 function getRecommendation() {
   const cuisineType = document.getElementById('cuisine').value;
-  const radius = milesToMeters(parseInt(document.getElementById('distance').value));
+  const radius =
+      milesToMeters(parseInt(document.getElementById('distance').value));
   const priceLevel = document.getElementById('price-level').value;
   const currLat = document.getElementById('latitude').value;
   const currLng = document.getElementById('longitude').value;
   const diningExp = document.getElementById('dining-experience').value;
   const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
   const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-  const textSearchBaseUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?';
+  const textSearchBaseUrl =
+      'https://maps.googleapis.com/maps/api/place/textsearch/json?';
   const searchParams = new URLSearchParams();
   searchParams.append('query', cuisineType + ' restaurant');
   searchParams.append('location', currLat + ',' + currLng);
   searchParams.append('radius', radius);
   searchParams.append('key', apiKey);
   fetch(proxyUrl + textSearchBaseUrl + searchParams)
-  // this will give us the list of restaurants
-      .then(response => response.json())
+      // this will give us the list of restaurants
+      .then((response) => response.json())
       .then((restaurants) => {
         fetch('/recommendation', {
           method: 'POST',
@@ -43,13 +45,14 @@ function getRecommendation() {
             lng: currLng,
             radius: radius,
             priceLevel: priceLevel,
-            diningExp: diningExp
+            diningExp: diningExp,
           })
-      }).then(response => response.json()).then((selection) => {
-        console.log(selection);
+        })
+            .then((response) => response.json())
+            .then((selection) => {
+              console.log(selection);
+            });
       });
-    });
-    
 }
 
 function milesToMeters(numMiles) {
