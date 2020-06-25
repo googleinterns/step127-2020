@@ -46,7 +46,7 @@ function getRecommendation() {
             radius: radius,
             priceLevel: priceLevel,
             diningExp: diningExp,
-          })
+          }),
         })
             .then((response) => response.json())
             .then((selection) => {
