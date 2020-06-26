@@ -9,37 +9,39 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Maven compile
+      if: always()
       run: cd project/backend; mvn package
-    - name: React.js compile
-      run: cd project/frontend; yarn build
-    - name: install node dependencies
+    - name: Install node dependencies
       if: always()
       run: make node_modules
+    - name: Install frontend node dependencies
+      if: always()
+      run: cd project/frontend; make node_modules
+    - name: React.js compile
+      if: always()
+      run: cd project/frontend; yarn build
     - name: Validate HTML
       if: always()
       run: node_modules/html-validate/bin/html-validate.js project/backend/src/main/webapp/*.html
     - name: Validate CSS
       if: always()
       run: node_modules/css-validator/bin/css-validator project/backend/src/main/webapp/*.css project/frontend/src/*.css project/frontend/src/*/*.css
-    - name: Validate JavaScript Backend
+    - name: Validate JavaScript backend
       if: always()
       run: node_modules/eslint/bin/eslint.js project/backend/src/main/webapp/*.js
-    - name: install frontend node dependencies
-      if: always()
-      run: cd project/frontend; make node_modules
-    - name: Validate JavaScript Frontend
+    - name: Validate JavaScript frontend
       if: always()
       run: project/frontend/node_modules/eslint/bin/eslint.js --max-warnings 1 --resolve-plugins-relative-to project/frontend/ project/frontend/src/*.js project/frontend/src/*/*.js
-    - name: Check HTML Formatting
+    - name: Check HTML formatting
       if: always()
       run: node_modules/prettier/bin-prettier.js -c project/backend/src/main/webapp/*.html
-    - name: Check CSS Formatting
+    - name: Check CSS formatting
       if: always()
       run: node_modules/prettier/bin-prettier.js -c project/backend/src/main/webapp/*.css project/frontend/src/*.css project/frontend/src/*/*.css
-    - name: Check JavaScript Formatting
+    - name: Check JavaScript formatting
       if: always()
       run: diff -u <(cat project/backend/src/main/webapp/*.js project/frontend/src/*.js project/frontend/src/*/*.js) <(node_modules/clang-format/bin/linux_x64/clang-format --style=Google project/backend/src/main/webapp/*.js project/frontend/src/*.js project/frontend/src/*/*.js)
-    - name: Check Java Formatting
+    - name: Check Java formatting
       if: always()
       run: diff -u <(cat project/backend/src/main/java/com/google/sps/*.java project/backend/src/main/java/com/google/sps/servlets/*.java) <(node_modules/clang-format/bin/linux_x64/clang-format --style=Google project/backend/src/main/java/com/google/sps/*.java project/backend/src/main/java/com/google/sps/servlets/*.java)
     - name: Notify on failure
