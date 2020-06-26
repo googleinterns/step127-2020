@@ -29,7 +29,7 @@ jobs:
       run: cd project/frontend; make node_modules
     - name: Validate JavaScript Frontend
       if: always()
-      run: project/frontend/node_modules/eslint/bin/eslint.js --resolve-plugins-relative-to project/frontend/ project/frontend/src/*.js project/frontend/src/*/*.js
+      run: project/frontend/node_modules/eslint/bin/eslint.js --max-warnings 1 --resolve-plugins-relative-to project/frontend/ project/frontend/src/*.js project/frontend/src/*/*.js
     - name: Check HTML Formatting
       if: always()
       run: node_modules/prettier/bin-prettier.js -c project/backend/src/main/webapp/*.html
