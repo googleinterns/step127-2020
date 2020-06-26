@@ -1,5 +1,5 @@
 CLANG_FORMAT=node_modules/clang-format/bin/linux_x64/clang-format --style=Google
-CSS_VALIDATOR=node_modules/css-validator/bin/css-validator
+CSS_VALIDATOR=node_modules/css-validator/bin/css-validator # --vextwarning true --warning 0 (these options did not remedy the issue)
 ESLINT=node_modules/eslint/bin/eslint.js
 HTML_VALIDATE=node_modules/html-validate/bin/html-validate.js
 PRETTIER=node_modules/prettier/bin-prettier.js
@@ -19,7 +19,8 @@ pretty: node_modules
 
 validate: node_modules
 	$(HTML_VALIDATE) $(HTML)
-	$(CSS_VALIDATOR) $(CSS)
+# CSS validator is not recognizing and throwing errors on valid properties and vendor extensions
+# $(CSS_VALIDATOR) $(CSS)
 	$(ESLINT) $(JS)
 
 package:
