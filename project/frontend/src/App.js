@@ -4,10 +4,6 @@ import React from 'react';
 
 import logo from './assets/logo.svg';
 
-function unused() {
-  let unusedVar = "";
-}
-
 function App() {
   return (
     <div className='App'>
