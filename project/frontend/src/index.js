@@ -3,11 +3,7 @@ import './css/skeleton.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
@@ -19,7 +15,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Switch>
-        <Route path="/">
+        <Route path='/'>
           <Header />
           <HomePage />
           <Footer />
