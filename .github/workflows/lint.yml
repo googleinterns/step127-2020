@@ -9,7 +9,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Maven compile
-      run: cd project; mvn package
+      run: cd project/backend; mvn package
+    - name: React.js compile
+      run: cd project/frontend; yarn build
     - name: install node dependencies
       if: always()
       run: make node_modules
