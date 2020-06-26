@@ -17,7 +17,7 @@ jobs:
       run: make node_modules
     - name: Whereis Node
       if: always()
-      run: whereis node
+      run: ls /usr/local/bin
     - name: Validate HTML
       if: always()
       run: node_modules/html-validate/bin/html-validate.js project/backend/src/main/webapp/*.html
