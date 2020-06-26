@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 public final class JsonToRestaurantParser {
   /** Class should not be instantiated. */
-  private JSONRestaurant() {}
+  private JsonToRestaurantParser() {}
 
   /** Parses a JSON object to a Restaurant object. */
   public static Restaurant toRestaurant(JSONObject body) throws JSONException {
