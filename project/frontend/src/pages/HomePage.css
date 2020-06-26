@@ -5,7 +5,8 @@
   align-items: center;
   justify-content: center;
   color: white;
-  background-image: url(/food-background-large.jpg), url(/food-background-small.jpg);
+  background-image: url(/food-background-large.jpg),
+    url(/food-background-small.jpg);
   background-size: cover;
   background-position: top 20% left 0%;
   background-repeat: no-repeat;
