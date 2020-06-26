@@ -33,6 +33,18 @@
   padding: 0 20px;
   box-sizing: border-box;
 }
+
+.row {
+  text-align: center;
+}
+.row-flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
 .column,
 .columns {
   width: 100%;
@@ -179,7 +191,7 @@ body {
   font-size: 1.7em; /* currently ems cause chrome bug misinterpreting rems on body element */
   line-height: 1.4;
   font-weight: 400;
-  font-family: 'IM Fell DW Pica', serif, 'HelveticaNeue', 'Helvetica Neue',
+  font-family: 'Montserrat', 'Crimson Text', serif, 'HelveticaNeue', 'Helvetica Neue',
     Helvetica, Arial, sans-serif;
   color: #222;
 }
@@ -194,7 +206,6 @@ h5,
 h6 {
   margin-top: 0;
   margin-bottom: 0;
-  font-weight: 300;
 }
 h1 {
   font-size: 4rem;
@@ -244,6 +255,7 @@ h6 {
 }
 
 p {
+  font-family: 'Crimson Text';
   margin-top: 0;
 }
 
@@ -502,6 +514,24 @@ form {
 }
 .u-center {
   text-align: center;
+}
+.u-pad16 {
+  padding: 16px;
+}
+.u-pad32 {
+  padding: 32px;
+}
+.u-pad48 {
+  padding: 48px;
+}
+.u-pad56 {
+  padding: 56px;
+}
+.u-pad64 {
+  padding: 64px;
+}
+.u-pad-no-top {
+  padding-top: 0px;
 }
 
 /* Misc
