@@ -24,9 +24,12 @@ jobs:
     - name: Validate JavaScript Backend
       if: always()
       run: node_modules/eslint/bin/eslint.js project/backend/src/main/webapp/*.js
+    - name: install frontend node dependencies
+      if: always()
+      run: cd project/frontend; make node_modules
     - name: Validate JavaScript Frontend
       if: always()
-      run: cd project/frontend; make node_modules; node_modules/eslint/bin/eslint.js src/*.js src/*/*.js
+      run: project/frontend/node_modules/eslint/bin/eslint.js --resolve-plugins-relative-to project/frontend/ project/frontend/src/*.js project/frontend/src/*/*.js
     - name: Check HTML Formatting
       if: always()
       run: node_modules/prettier/bin-prettier.js -c project/backend/src/main/webapp/*.html
