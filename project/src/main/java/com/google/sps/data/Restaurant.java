@@ -1,14 +1,19 @@
 package com.google.sps.data;
 
+import com.google.gson.Gson;
 import java.lang.Iterable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /** Represents a restaurant with it's relevant information. */
 public class Restaurant {
   /** Represents a price level for the restaurant. */
-  public enum PriceLevel { LOW, MED, HIGH, UNKNOWN }
+  public enum PriceLevel { FREE, LOW, MED, HIGH, VERYHIGH, UNKNOWN }
   ;
 
   private final String name;
@@ -28,21 +33,10 @@ public class Restaurant {
     this.address = address;
     this.avgRating = avgRating;
     this.numRatings = numRatings;
-    switch (priceNum) {
-      case 0:
-      case 1:
-        priceLevel = PriceLevel.LOW;
-        break;
-      case 2:
-        priceLevel = PriceLevel.MED;
-        break;
-      case 3:
-      case 4:
-        priceLevel = PriceLevel.HIGH;
-        break;
-      default:
-        priceLevel = PriceLevel.UNKNOWN;
-        break;
+    if (priceNum >= 0) {
+      priceLevel = PriceLevel.values()[priceNum];
+    } else {
+      priceLevel = PriceLevel.UNKNOWN;
     }
     this.latLngCoords = latLngCoords;
     this.id = id;
@@ -77,5 +71,30 @@ public class Restaurant {
     return "name: " + name + ", cuisineType: " + cuisineType + ", address: " + address
         + ", avgRating: " + avgRating + ", numRatings: " + numRatings
         + ", priceLevel: " + priceLevel + ", id: " + id;
+  }
+
+  /** Creates and returns a new Restaurant object from a JSON object. */
+  public static Restaurant fromJson(JSONObject jsonRestaurant, String cuisineType) throws JSONException {
+    String name = jsonRestaurant.getString("name");
+    String address = jsonRestaurant.getString("formatted_address");
+    String stringifiedLocation =
+    jsonRestaurant.getJSONObject("geometry").getJSONObject("location").toString();
+    Map<String, Double> latLngCoords = new Gson().fromJson(stringifiedLocation, HashMap.class);
+    double rating = jsonRestaurant.has("rating") ? jsonRestaurant.getDouble("rating") : -1;
+    int numRatings =
+    jsonRestaurant.has("user_ratings_total") ? jsonRestaurant.getInt("user_ratings_total") : -1;
+    int price = jsonRestaurant.has("price_level") ? jsonRestaurant.getInt("price_level") : -1;
+    String id = jsonRestaurant.getString("id");
+    Restaurant restaurant =
+        new Restaurant(name, cuisineType, address, latLngCoords, rating, numRatings, price, id);
+    JSONArray allTypes = jsonRestaurant.getJSONArray("types");
+    for (int j = 0; j < allTypes.length(); j++) {
+      String type = allTypes.getString(j);
+      if (type.equals("restaurant") || type.equals("meal_delivery")
+          || type.equals("meal_takeaway")) {
+        restaurant.addType(type);
+      }
+    }
+    return restaurant;
   }
 }

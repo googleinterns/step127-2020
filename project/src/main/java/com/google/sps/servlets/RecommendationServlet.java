@@ -42,6 +42,7 @@ public class RecommendationServlet extends HttpServlet {
     }
   }
 
+  /** Creates Restaurant objects for each restaurant in the body and adds them to restaurantSet. */
   private void addRestaurantsToSet(String body, Set<Restaurant> restaurantSet)
       throws JSONException {
     JSONObject reqBody = new JSONObject(body);
@@ -49,26 +50,7 @@ public class RecommendationServlet extends HttpServlet {
     JSONArray restaurantList = reqBody.getJSONArray("restaurants");
     for (int i = 0; i < restaurantList.length(); i++) {
       JSONObject restaurant = restaurantList.getJSONObject(i);
-      String name = restaurant.getString("name");
-      String address = restaurant.getString("formatted_address");
-      String stringifiedLocation =
-          restaurant.getJSONObject("geometry").getJSONObject("location").toString();
-      Map<String, Double> latLngCoords = gson.fromJson(stringifiedLocation, HashMap.class);
-      double rating = restaurant.has("rating") ? restaurant.getDouble("rating") : -1;
-      int numRatings =
-          restaurant.has("user_ratings_total") ? restaurant.getInt("user_ratings_total") : -1;
-      int price = restaurant.has("price_level") ? restaurant.getInt("price_level") : -1;
-      String id = restaurant.getString("id");
-      Restaurant restaurantObj =
-          new Restaurant(name, cuisineType, address, latLngCoords, rating, numRatings, price, id);
-      JSONArray allTypes = restaurant.getJSONArray("types");
-      for (int j = 0; j < allTypes.length(); j++) {
-        String type = allTypes.getString(j);
-        if (type.equals("restaurant") || type.equals("meal_delivery")
-            || type.equals("meal_takeaway")) {
-          restaurantObj.addType(type);
-        }
-      }
+      Restaurant restaurantObj = Restaurant.fromJson(restaurant, cuisineType);
       restaurantSet.add(restaurantObj);
     }
   }
