@@ -1,18 +1,33 @@
+import './css/normalize.css';
+import './css/skeleton.css';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
-import Header from '/header/Header.js';
-import HomePage from './home/HomePage.js';
-import Footer from '/footer/Footer.js';
+import Header from './pages/Header.js';
+import HomePage from './pages/HomePage.js';
+import Footer from './pages/Footer.js';
+
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <React.StrictMode>
-    <Header />
-    <HomePage />
-    <Footer />
+  <React.StrictMode>
+    <Router>
+      <Switch>
+        <Route path="/">
+          <Header />
+          <HomePage />
+          <Footer />
+        </Route>
+      </Switch>
+    </Router>
   </React.StrictMode>,
-  document.querySelector('body')
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
