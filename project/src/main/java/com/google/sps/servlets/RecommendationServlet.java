@@ -26,17 +26,25 @@ import org.json.JSONObject;
 public class RecommendationServlet extends HttpServlet {
   private final Gson gson = new Gson();
   private static final Logger LOGGER = Logger.getLogger(RecommendationServlet.class.getName());
+  private static Set<Restaurant> restaurantSet;
+  private static Map<Restaurant, Double> restaurantScores;
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Set<Restaurant> restaurantSet = new HashSet<>();
+    restaurantSet = new HashSet<>();
+    restaurantScores = new HashMap<>();
     BufferedReader reader = request.getReader();
     String body = reader.readLine();
     try {
-      addRestaurantsToSet(body, restaurantSet);
+      JSONObject reqBody = new JSONObject(body);
+      JSONArray restaurantList = reqBody.getJSONArray("restaurants");
+      addRestaurantsToSet(restaurantList);
+      JSONArray preferences = reqBody.getJSONArray("preferences");
+      scoreRestaurants(preferences);
     } catch (JSONException e) {
       LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
     }
+
     // Write one random restaurant to response. This will be replaced by the picking algorithm.
     response.setContentType("application/json");
     for (Restaurant restaurant : restaurantSet) {
@@ -46,15 +54,35 @@ public class RecommendationServlet extends HttpServlet {
   }
 
   /** Creates Restaurant objects for each restaurant in the body and adds them to restaurantSet. */
-  private static void addRestaurantsToSet(String body, Set<Restaurant> restaurantSet)
+  private static void addRestaurantsToSet(JSONArray restaurantList)
       throws JSONException {
-    JSONObject reqBody = new JSONObject(body);
-    String cuisineType = reqBody.getString("cuisineType");
-    JSONArray restaurantList = reqBody.getJSONArray("restaurants");
     for (int i = 0; i < restaurantList.length(); i++) {
       Restaurant restaurantObj =
           JsonToRestaurantParser.toRestaurant(restaurantList.getJSONObject(i));
       restaurantSet.add(restaurantObj);
+    }
+  }
+
+  /** Maps each restaurant to a score. A restaurant earns points for matching price level/type and having good ratings. */
+  private static void scoreRestaurants(JSONArray preferences) throws JSONException {
+    int preferredPriceLevel = preferences.getJSONObject(4).getInt("priceLevel");
+    String preferredDiningExp = preferences.getJSONObject(5).getString("diningExp");
+    for (Restaurant restaurant : restaurantSet) {
+      double score = 0;
+      double restaurantRating = restaurant.getAvgRating();
+      if (restaurant.getPriceLevel() == preferredPriceLevel) {
+        score += 1;
+      }
+      if (restaurant.getPlaceTypes().contains(preferredDiningExp)) {
+        score += 1;
+      }
+      if (restaurantRating >= 3) {
+        score += restaurantRating / 5;
+      } else if (restaurantRating > 0) {
+        // Subtract more points from score for lower rating. This calculation will be improved.
+        score -= (0.6 - restaurantRating / 5);
+      }
+      restaurantScores.put(restaurant, score);
     }
   }
 }

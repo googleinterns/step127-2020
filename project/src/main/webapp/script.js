@@ -17,7 +17,7 @@ function getRecommendation() {
   const cuisineType = document.getElementById('cuisine').value;
   const radius =
       milesToMeters(parseInt(document.getElementById('distance').value));
-  const priceLevel = document.getElementById('price-level').value;
+  const priceLevel = parseInt(document.getElementById('price-level').value);
   const lat = document.getElementById('latitude').value;
   const lng = document.getElementById('longitude').value;
   const diningExp = document.getElementById('dining-experience').value;
@@ -42,12 +42,14 @@ function getRecommendation() {
           },
           body: JSON.stringify({
             restaurants,
-            cuisineType,
-            lat,
-            lng,
-            radius,
-            priceLevel,
-            diningExp,
+            preferences: {
+              cuisineType,
+              lat,
+              lng,
+              radius,
+              priceLevel,
+              diningExp,
+            },
           }),
         })
             .then((response) => response.json())
