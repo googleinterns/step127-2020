@@ -10,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JSONRestaurant {
-
   /** Parses a JSON object to a Restaurant object. */
   public static Restaurant toRestaurant(JSONObject body) throws JSONException {
     String name = body.getString("name");
@@ -19,12 +18,12 @@ public class JSONRestaurant {
         body.getJSONObject("geometry").getJSONObject("location").toString();
     Map<String, Double> latLngCoords = new Gson().fromJson(stringifiedLocation, HashMap.class);
     double avgRating = body.has("rating") ? body.getDouble("rating") : -1;
-    int numRatings =
-        body.has("user_ratings_total") ? body.getInt("user_ratings_total") : -1;
+    int numRatings = body.has("user_ratings_total") ? body.getInt("user_ratings_total") : -1;
     int priceLevel = body.has("price_level") ? body.getInt("price_level") : -1;
     String id = body.getString("id");
     List<String> placeTypes = getTypes(body.getJSONArray("types"));
-    return Restaurant.create(name, address, latLngCoords, avgRating, numRatings, priceLevel, id, placeTypes);
+    return Restaurant.create(
+        name, address, latLngCoords, avgRating, numRatings, priceLevel, id, placeTypes);
   }
 
   private static List<String> getTypes(JSONArray allTypes) throws JSONException {
