@@ -23,7 +23,7 @@ jobs:
       run: node_modules/css-validator/bin/css-validator project/backend/src/main/webapp/*.css project/frontend/src/*.css project/frontend/src/*/*.css
     - name: Validate JavaScript
       if: always()
-      run: node_modules/eslint/bin/eslint.js project/backend/src/main/webapp/*.js project/frontend/src/*.js project/frontend/src/*/*.js
+      run: node_modules/eslint/bin/eslint.js project/backend/src/main/webapp/*.js
     - name: Check HTML Formatting
       if: always()
       run: node_modules/prettier/bin-prettier.js -c project/backend/src/main/webapp/*.html
