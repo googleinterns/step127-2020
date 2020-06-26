@@ -1,7 +1,7 @@
 package com.google.sps.servlets;
 
 import com.google.gson.Gson;
-import com.google.sps.data.JSONRestaurant;
+import com.google.sps.data.JsonToRestaurantParser;
 import com.google.sps.data.Restaurant;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,13 +46,14 @@ public class RecommendationServlet extends HttpServlet {
   }
 
   /** Creates Restaurant objects for each restaurant in the body and adds them to restaurantSet. */
-  private void addRestaurantsToSet(String body, Set<Restaurant> restaurantSet)
+  private static void addRestaurantsToSet(String body, Set<Restaurant> restaurantSet)
       throws JSONException {
     JSONObject reqBody = new JSONObject(body);
     String cuisineType = reqBody.getString("cuisineType");
     JSONArray restaurantList = reqBody.getJSONArray("restaurants");
     for (int i = 0; i < restaurantList.length(); i++) {
-      Restaurant restaurantObj = JSONRestaurant.toRestaurant(restaurantList.getJSONObject(i));
+      Restaurant restaurantObj =
+          JsonToRestaurantParser.toRestaurant(restaurantList.getJSONObject(i));
       restaurantSet.add(restaurantObj);
     }
   }

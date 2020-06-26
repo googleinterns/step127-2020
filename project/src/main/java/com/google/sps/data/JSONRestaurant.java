@@ -9,9 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class JSONRestaurant {
+public final class JsonToRestaurantParser {
+  /** Class should not be instantiated. */
+  private JSONRestaurant() {}
+
   /** Parses a JSON object to a Restaurant object. */
   public static Restaurant toRestaurant(JSONObject body) throws JSONException {
+    String id = body.getString("id");
     String name = body.getString("name");
     String address = body.getString("formatted_address");
     String stringifiedLocation =
@@ -20,10 +24,9 @@ public class JSONRestaurant {
     double avgRating = body.has("rating") ? body.getDouble("rating") : -1;
     int numRatings = body.has("user_ratings_total") ? body.getInt("user_ratings_total") : -1;
     int priceLevel = body.has("price_level") ? body.getInt("price_level") : -1;
-    String id = body.getString("id");
     List<String> placeTypes = getTypes(body.getJSONArray("types"));
     return Restaurant.create(
-        name, address, latLngCoords, avgRating, numRatings, priceLevel, id, placeTypes);
+        id, name, address, latLngCoords, avgRating, numRatings, priceLevel, placeTypes);
   }
 
   private static List<String> getTypes(JSONArray allTypes) throws JSONException {

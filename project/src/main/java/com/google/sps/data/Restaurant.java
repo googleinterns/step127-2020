@@ -6,18 +6,19 @@ import java.util.Map;
 
 @AutoValue
 public abstract class Restaurant {
+  public abstract String getId();
   public abstract String getName();
   public abstract String getAddress();
   public abstract Map<String, Double> getLatLngCoords();
   public abstract double getAvgRating();
   public abstract int getNumRatings();
   public abstract int getPriceLevel();
-  public abstract String getId();
   public abstract List<String> getPlaceTypes();
 
-  public static Restaurant create(String name, String address, Map<String, Double> latLngCoords,
-      double avgRating, int numRatings, int priceNum, String id, List<String> placeTypes) {
+  public static Restaurant create(String id, String name, String address,
+      Map<String, Double> latLngCoords, double avgRating, int numRatings, int priceNum,
+      List<String> placeTypes) {
     return new AutoValue_Restaurant(
-        name, address, latLngCoords, avgRating, numRatings, priceNum, id, placeTypes);
+        id, name, address, latLngCoords, avgRating, numRatings, priceNum, placeTypes);
   }
 }

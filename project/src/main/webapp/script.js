@@ -31,7 +31,7 @@ function getRecommendation() {
   searchParams.append('radius', radius);
   searchParams.append('key', apiKey);
   fetch(proxyUrl + textSearchBaseUrl + searchParams)
-      // this will give us the list of restaurants
+      // This gives us the list of restaurants.
       .then((response) => response.json())
       .then((data) => {
         const restaurants = data.results;
