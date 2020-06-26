@@ -24,6 +24,9 @@ jobs:
     - name: Validate JavaScript
       if: always()
       run: node_modules/eslint/bin/eslint.js project/backend/src/main/webapp/*.js
+    - name: Validate JavaScript
+      if: always()
+      run: project/frontend/node_modules/eslint/bin/eslint.js --resolve-plugins-relative-to project/frontend/ project/frontend/src/*.js project/frontend/src/*/*.js
     - name: Check HTML Formatting
       if: always()
       run: node_modules/prettier/bin-prettier.js -c project/backend/src/main/webapp/*.html
