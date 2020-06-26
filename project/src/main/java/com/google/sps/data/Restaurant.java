@@ -9,7 +9,7 @@ public abstract class Restaurant {
   public abstract String getName();
   public abstract String getAddress();
   public abstract Map<String, Double> getLatLngCoords();
-  public abstract double getRating();
+  public abstract double getAvgRating();
   public abstract int getNumRatings();
   public abstract int getPriceLevel();
   public abstract String getId();
