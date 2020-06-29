@@ -34,12 +34,13 @@ public class RecommendationServlet extends HttpServlet {
     Map<Restaurant, Double> restaurantScores;
     try {
       JSONObject reqBody = new JSONObject(body);
-      restaurantScores = scoreRestaurants(reqBody.getJSONArray("restaurants"), reqBody.getJSONObject("preferences"));
+      restaurantScores = scoreRestaurants(
+          reqBody.getJSONArray("restaurants"), reqBody.getJSONObject("preferences"));
     } catch (JSONException e) {
       LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
       restaurantScores = new HashMap<>();
     }
-    
+
     // Sort restaurant entries by highest score and write list of entries to the response.
     List<Map.Entry<Restaurant, Double>> sortedRestaurants =
         new ArrayList(restaurantScores.entrySet());
@@ -52,11 +53,13 @@ public class RecommendationServlet extends HttpServlet {
    * Maps each restaurant to a score. A restaurant earns points for matching price level/type and
    * having good ratings.
    */
-  private static Map<Restaurant, Double> scoreRestaurants(JSONArray restaurantList, JSONObject preferences) {
+  private static Map<Restaurant, Double> scoreRestaurants(
+      JSONArray restaurantList, JSONObject preferences) {
     Map<Restaurant, Double> restaurantScores = new HashMap<>();
     for (int i = 0; i < restaurantList.length(); i++) {
       try {
-        Restaurant restaurant = JsonToRestaurantParser.toRestaurant(restaurantList.getJSONObject(i));
+        Restaurant restaurant =
+            JsonToRestaurantParser.toRestaurant(restaurantList.getJSONObject(i));
         restaurantScores.put(restaurant, RestaurantScorer.score(restaurant, preferences));
       } catch (JSONException e) {
         LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
