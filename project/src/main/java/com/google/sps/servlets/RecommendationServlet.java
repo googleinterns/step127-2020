@@ -29,25 +29,22 @@ public class RecommendationServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    BufferedReader reader = request.getReader();
-    String body = reader.readLine();
-    Map<Restaurant, Double> restaurantScores;
-    // TODO: handle case where list of restaurants is empty.
+    String body = request.getReader().readLine();
+    response.setContentType("application/json");
     try {
       JSONObject reqBody = new JSONObject(body);
-      restaurantScores = scoreRestaurants(
+      Map<Restaurant, Double> restaurantScores = scoreRestaurants(
           reqBody.getJSONArray("restaurants"), reqBody.getJSONObject("preferences"));
+      // Sort restaurant entries by highest score and write list of entries to the response.
+      List<Map.Entry<Restaurant, Double>> sortedRestaurants =
+          new ArrayList(restaurantScores.entrySet());
+      sortedRestaurants.sort(Map.Entry.comparingByValue(Collections.reverseOrder()));
+      response.getWriter().println(gson.toJson(sortedRestaurants));
     } catch (JSONException e) {
       LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
-      restaurantScores = new HashMap<>();
+      // TODO: handle case where list of restaurants is empty.
+      response.getWriter().println();
     }
-
-    // Sort restaurant entries by highest score and write list of entries to the response.
-    List<Map.Entry<Restaurant, Double>> sortedRestaurants =
-        new ArrayList(restaurantScores.entrySet());
-    sortedRestaurants.sort(Map.Entry.comparingByValue(Collections.reverseOrder()));
-    response.setContentType("application/json");
-    response.getWriter().println(gson.toJson(sortedRestaurants));
   }
 
   /**
