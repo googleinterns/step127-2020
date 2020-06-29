@@ -21,6 +21,8 @@ function getRecommendation() {
   const lat = document.getElementById('latitude').value;
   const lng = document.getElementById('longitude').value;
   const diningExp = document.getElementById('dining-experience').value;
+  const priceLevelWeight = 2;
+  const diningExpWeight = 4;
   const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
   const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
   const textSearchBaseUrl =
@@ -47,8 +49,14 @@ function getRecommendation() {
               lat,
               lng,
               radius,
-              priceLevel,
-              diningExp,
+              priceLevel: {
+                pref: priceLevel, 
+                weight: priceLevelWeight,
+              },
+              diningExp: {
+                pref: diningExp,
+                weight: diningExpWeight,
+              },
             },
           }),
         })

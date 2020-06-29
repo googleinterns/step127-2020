@@ -3,6 +3,7 @@ package com.google.sps.servlets;
 import com.google.gson.Gson;
 import com.google.sps.data.JsonToRestaurantParser;
 import com.google.sps.data.Restaurant;
+import com.google.sps.data.RestaurantScorer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,15 +47,12 @@ public class RecommendationServlet extends HttpServlet {
       LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
     }
 
-    // Sort restaurant entries by highest score and write highest score to response.
+    // Sort restaurant entries by highest score and write list of entries to the response.
     List<Map.Entry<Restaurant, Double>> sortedRestaurants =
         new ArrayList(restaurantScores.entrySet());
     sortedRestaurants.sort(Map.Entry.comparingByValue(Collections.reverseOrder()));
     response.setContentType("application/json");
-    if (sortedRestaurants.size() > 0) {
-      System.out.println(sortedRestaurants.get(0).getValue());
-      response.getWriter().println(gson.toJson(sortedRestaurants.get(0).getKey()));
-    }
+    response.getWriter().println(gson.toJson(sortedRestaurants));
   }
 
   /** Creates Restaurant objects for each restaurant in the body and adds them to restaurantSet. */
@@ -71,25 +69,8 @@ public class RecommendationServlet extends HttpServlet {
    * having good ratings.
    */
   private static void scoreRestaurants(JSONObject preferences) throws JSONException {
-    int preferredPriceLevel = preferences.getInt("priceLevel");
-    String preferredDiningExp = preferences.getString("diningExp");
     for (Restaurant restaurant : restaurantSet) {
-      double score = 0;
-      double restaurantRating = restaurant.getAvgRating();
-      if (restaurant.getPriceLevel() == preferredPriceLevel) {
-        score += 1;
-      }
-      if (restaurant.getPlaceTypes().contains(preferredDiningExp)) {
-        score += 1;
-      }
-      if (restaurantRating >= 3) {
-        score += restaurantRating / 5;
-      } else if (restaurantRating > 0) {
-        // Subtract more points from score for lower rating. This calculation will be improved.
-        score -= (0.6 - restaurantRating / 5);
-      }
-      System.out.println(score);
-      restaurantScores.put(restaurant, score);
+      restaurantScores.put(restaurant, RestaurantScorer.score(restaurant, preferences));
     }
   }
 }
