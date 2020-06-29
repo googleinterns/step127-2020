@@ -7,11 +7,13 @@ public final class RestaurantScorer {
   /** Class should not be instantiated. */
   private RestaurantScorer() {}
 
+  /** Returns the percent match for a restaurant to a set of user preferences. */
   public static double score(Restaurant restaurant, JSONObject preferences) throws JSONException {
     int preferredPriceLevel = preferences.getJSONObject("priceLevel").getInt("pref");
     String preferredDiningExp = preferences.getJSONObject("diningExp").getString("pref");
     int priceLevelWeight = preferences.getJSONObject("priceLevel").getInt("weight");
     int diningExpWeight = preferences.getJSONObject("diningExp").getInt("weight");
+    int maxPoints = priceLevelWeight + diningExpWeight + 1;
     double score = 0;
     double restaurantRating = restaurant.getAvgRating();
     if (restaurant.getPriceLevel() == preferredPriceLevel) {
@@ -26,6 +28,7 @@ public final class RestaurantScorer {
       // Subtract more points from score for lower rating. This calculation will be improved.
       score -= (0.6 - restaurantRating / 5);
     }
-    return score;
+    double percentMatch = score / maxPoints;
+    return percentMatch;
   }
 }
