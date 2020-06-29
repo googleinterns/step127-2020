@@ -47,7 +47,8 @@ public class RecommendationServlet extends HttpServlet {
     }
 
     // Sort restaurant entries by highest score and write highest score to response.
-    List<Map.Entry<Restaurant, Double>> sortedRestaurants = new ArrayList(restaurantScores.entrySet());
+    List<Map.Entry<Restaurant, Double>> sortedRestaurants =
+        new ArrayList(restaurantScores.entrySet());
     sortedRestaurants.sort(Map.Entry.comparingByValue(Collections.reverseOrder()));
     response.setContentType("application/json");
     if (sortedRestaurants.size() > 0) {
@@ -57,8 +58,7 @@ public class RecommendationServlet extends HttpServlet {
   }
 
   /** Creates Restaurant objects for each restaurant in the body and adds them to restaurantSet. */
-  private static void addRestaurantsToSet(JSONArray restaurantList)
-      throws JSONException {
+  private static void addRestaurantsToSet(JSONArray restaurantList) throws JSONException {
     for (int i = 0; i < restaurantList.length(); i++) {
       Restaurant restaurantObj =
           JsonToRestaurantParser.toRestaurant(restaurantList.getJSONObject(i));
@@ -66,7 +66,10 @@ public class RecommendationServlet extends HttpServlet {
     }
   }
 
-  /** Maps each restaurant to a score. A restaurant earns points for matching price level/type and having good ratings. */
+  /**
+   * Maps each restaurant to a score. A restaurant earns points for matching price level/type and
+   * having good ratings.
+   */
   private static void scoreRestaurants(JSONObject preferences) throws JSONException {
     int preferredPriceLevel = preferences.getInt("priceLevel");
     String preferredDiningExp = preferences.getString("diningExp");
