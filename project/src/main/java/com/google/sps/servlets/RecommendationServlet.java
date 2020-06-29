@@ -6,6 +6,7 @@ import com.google.sps.data.Restaurant;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -39,17 +40,19 @@ public class RecommendationServlet extends HttpServlet {
       JSONObject reqBody = new JSONObject(body);
       JSONArray restaurantList = reqBody.getJSONArray("restaurants");
       addRestaurantsToSet(restaurantList);
-      JSONArray preferences = reqBody.getJSONArray("preferences");
+      JSONObject preferences = reqBody.getJSONObject("preferences");
       scoreRestaurants(preferences);
     } catch (JSONException e) {
       LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
     }
 
-    // Write one random restaurant to response. This will be replaced by the picking algorithm.
+    // Sort restaurant entries by highest score and write highest score to response.
+    List<Map.Entry<Restaurant, Double>> sortedRestaurants = new ArrayList(restaurantScores.entrySet());
+    sortedRestaurants.sort(Map.Entry.comparingByValue(Collections.reverseOrder()));
     response.setContentType("application/json");
-    for (Restaurant restaurant : restaurantSet) {
-      response.getWriter().println(gson.toJson(restaurant));
-      return;
+    if (sortedRestaurants.size() > 0) {
+      System.out.println(sortedRestaurants.get(0).getValue());
+      response.getWriter().println(gson.toJson(sortedRestaurants.get(0).getKey()));
     }
   }
 
@@ -64,9 +67,9 @@ public class RecommendationServlet extends HttpServlet {
   }
 
   /** Maps each restaurant to a score. A restaurant earns points for matching price level/type and having good ratings. */
-  private static void scoreRestaurants(JSONArray preferences) throws JSONException {
-    int preferredPriceLevel = preferences.getJSONObject(4).getInt("priceLevel");
-    String preferredDiningExp = preferences.getJSONObject(5).getString("diningExp");
+  private static void scoreRestaurants(JSONObject preferences) throws JSONException {
+    int preferredPriceLevel = preferences.getInt("priceLevel");
+    String preferredDiningExp = preferences.getString("diningExp");
     for (Restaurant restaurant : restaurantSet) {
       double score = 0;
       double restaurantRating = restaurant.getAvgRating();
@@ -82,6 +85,7 @@ public class RecommendationServlet extends HttpServlet {
         // Subtract more points from score for lower rating. This calculation will be improved.
         score -= (0.6 - restaurantRating / 5);
       }
+      System.out.println(score);
       restaurantScores.put(restaurant, score);
     }
   }
