@@ -24,12 +24,12 @@ public final class RestaurantScorer {
     if (restaurant.getPlaceTypes().contains(preferredDiningExp)) {
       score += diningExpWeight;
     }
-    // This statement executes if a rating exists for the resturant.
-    // Adds points to the score if the rating is > 3, subtracts points if rating is < 3.
-    if (restaurantRating > 0) {
+    // Adds points to the score if the rating is > MID_RATING, subtracts points if rating is <
+    // MID_RATING.
+    boolean hasRating = restaurantRating != -1;
+    if (hasRating) {
       score += (restaurantRating / MAX_RATING) - (MID_RATING / MAX_RATING);
     }
-
     double percentMatch = score / maxPoints;
     return percentMatch;
   }

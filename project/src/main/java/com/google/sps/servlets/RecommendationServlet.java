@@ -28,21 +28,16 @@ import org.json.JSONObject;
 public class RecommendationServlet extends HttpServlet {
   private final Gson gson = new Gson();
   private static final Logger LOGGER = Logger.getLogger(RecommendationServlet.class.getName());
-  private static Set<Restaurant> restaurantSet;
   private static Map<Restaurant, Double> restaurantScores;
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    restaurantSet = new HashSet<>();
     restaurantScores = new HashMap<>();
     BufferedReader reader = request.getReader();
     String body = reader.readLine();
     try {
       JSONObject reqBody = new JSONObject(body);
-      JSONArray restaurantList = reqBody.getJSONArray("restaurants");
-      addRestaurantsToSet(restaurantList);
-      JSONObject preferences = reqBody.getJSONObject("preferences");
-      scoreRestaurants(preferences);
+      scoreRestaurants(reqBody.getJSONArray("restaurants"), reqBody.getJSONObject("preferences"));
     } catch (JSONException e) {
       LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
     }
@@ -55,21 +50,14 @@ public class RecommendationServlet extends HttpServlet {
     response.getWriter().println(gson.toJson(sortedRestaurants));
   }
 
-  /** Creates Restaurant objects for each restaurant in the body and adds them to restaurantSet. */
-  private static void addRestaurantsToSet(JSONArray restaurantList) throws JSONException {
-    for (int i = 0; i < restaurantList.length(); i++) {
-      Restaurant restaurantObj =
-          JsonToRestaurantParser.toRestaurant(restaurantList.getJSONObject(i));
-      restaurantSet.add(restaurantObj);
-    }
-  }
-
   /**
    * Maps each restaurant to a score. A restaurant earns points for matching price level/type and
    * having good ratings.
    */
-  private static void scoreRestaurants(JSONObject preferences) throws JSONException {
-    for (Restaurant restaurant : restaurantSet) {
+  private static void scoreRestaurants(JSONArray restaurantList, JSONObject preferences)
+      throws JSONException {
+    for (int i = 0; i < restaurantList.length(); i++) {
+      Restaurant restaurant = JsonToRestaurantParser.toRestaurant(restaurantList.getJSONObject(i));
       restaurantScores.put(restaurant, RestaurantScorer.score(restaurant, preferences));
     }
   }
