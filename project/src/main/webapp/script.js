@@ -50,7 +50,7 @@ function getRecommendation() {
               lng,
               radius,
               priceLevel: {
-                pref: priceLevel, 
+                pref: priceLevel,
                 weight: priceLevelWeight,
               },
               diningExp: {
