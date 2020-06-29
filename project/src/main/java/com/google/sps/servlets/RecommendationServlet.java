@@ -9,10 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.annotation.WebServlet;
@@ -28,16 +26,16 @@ import org.json.JSONObject;
 public class RecommendationServlet extends HttpServlet {
   private final Gson gson = new Gson();
   private static final Logger LOGGER = Logger.getLogger(RecommendationServlet.class.getName());
-  private static Map<Restaurant, Double> restaurantScores;
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    restaurantScores = new HashMap<>();
+    Map<Restaurant, Double> restaurantScores = new HashMap<>();
     BufferedReader reader = request.getReader();
     String body = reader.readLine();
     try {
       JSONObject reqBody = new JSONObject(body);
-      scoreRestaurants(reqBody.getJSONArray("restaurants"), reqBody.getJSONObject("preferences"));
+      scoreRestaurants(reqBody.getJSONArray("restaurants"), reqBody.getJSONObject("preferences"),
+          restaurantScores);
     } catch (JSONException e) {
       LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
     }
@@ -54,8 +52,8 @@ public class RecommendationServlet extends HttpServlet {
    * Maps each restaurant to a score. A restaurant earns points for matching price level/type and
    * having good ratings.
    */
-  private static void scoreRestaurants(JSONArray restaurantList, JSONObject preferences)
-      throws JSONException {
+  private static void scoreRestaurants(JSONArray restaurantList, JSONObject preferences,
+      Map<Restaurant, Double> restaurantScores) throws JSONException {
     for (int i = 0; i < restaurantList.length(); i++) {
       Restaurant restaurant = JsonToRestaurantParser.toRestaurant(restaurantList.getJSONObject(i));
       restaurantScores.put(restaurant, RestaurantScorer.score(restaurant, preferences));
