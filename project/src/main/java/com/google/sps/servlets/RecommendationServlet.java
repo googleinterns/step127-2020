@@ -32,6 +32,7 @@ public class RecommendationServlet extends HttpServlet {
     BufferedReader reader = request.getReader();
     String body = reader.readLine();
     Map<Restaurant, Double> restaurantScores;
+    // TODO: handle case where list of restaurants is empty.
     try {
       JSONObject reqBody = new JSONObject(body);
       restaurantScores = scoreRestaurants(
