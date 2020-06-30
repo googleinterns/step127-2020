@@ -15,17 +15,18 @@ function Header(props) {
     const onGoogleAuthLoaded = () => {
       window.gapi.load('auth2', () => {
         const auth2 = window.gapi.auth2.init({
-          client_id: '21423804760-e3goj1cdhg49ojdf780mcq92qgshbr4v.apps.googleusercontent.com',
+          client_id:
+            '21423804760-e3goj1cdhg49ojdf780mcq92qgshbr4v.apps.googleusercontent.com',
         });
-        
+
         auth2.isSignedIn.listen((signedIn) => {
           setSignedIn(signedIn);
         });
-        
+
         auth2.currentUser.listen((user) => {
           setCurrentUser(user);
         });
-        
+
         setGoogleAuth(auth2);
       });
     };
@@ -40,7 +41,7 @@ function Header(props) {
       };
     }
   }, []);
-  
+
   if (currentUser === undefined) {
     return (
       <div id='header'>
@@ -51,7 +52,7 @@ function Header(props) {
     const toggleModal = () => {
       setIsModalOpen(!isModalOpen);
     };
-    
+
     const signOut = () => {
       setIsModalOpen(false);
       GoogleAuth.signOut();
@@ -61,24 +62,39 @@ function Header(props) {
     const name = profile.getName();
     const email = profile.getEmail();
     const imageUrl = profile.getImageUrl();
-    
+
     return (
-      <div id="header">
-        <img className='profile-pic' src={imageUrl} alt="Profile." onClick={toggleModal} />
-        <Modal open={isModalOpen} onDismiss={toggleModal} top='64px' right='16px'>
-          <img className='profile-pic large' src={imageUrl} alt="Large profile."/>
-          <h4 className="user-name">{name}</h4>
-          <h5 className="user-email">{email}</h5>
+      <div id='header'>
+        <img
+          className='profile-pic'
+          src={imageUrl}
+          alt='Profile.'
+          onClick={toggleModal}
+        />
+        <Modal
+          open={isModalOpen}
+          onDismiss={toggleModal}
+          top='64px'
+          right='16px'>
+          <img
+            className='profile-pic large'
+            src={imageUrl}
+            alt='Large profile.'
+          />
+          <h4 className='user-name'>{name}</h4>
+          <h5 className='user-email'>{email}</h5>
           <button>Profile</button>
           <br />
-          <button className="sign-out"onClick={signOut}>Sign Out</button>
+          <button className='sign-out' onClick={signOut}>
+            Sign Out
+          </button>
         </Modal>
       </div>
     );
   } else {
     return (
-      <div id="header">
-        <button className="sign-in" onClick={GoogleAuth.signIn}>
+      <div id='header'>
+        <button className='sign-in' onClick={GoogleAuth.signIn}>
           Sign In with Google
         </button>
       </div>

@@ -3,7 +3,7 @@ import './Modal.css';
 import React from 'react';
 
 /**
- * A modal window with a fixed position on the viewport. 
+ * A modal window with a fixed position on the viewport.
  *
  * @param {bool} props.open True if the modal should be shown; false if it
  *     should be hidden.
@@ -33,10 +33,13 @@ function Modal(props) {
     bottom: props.bottom,
     left: props.left,
   };
-  
+
   return (
-    <div className="modal-backdrop" onClick={props.onDismiss} style={backdropStyle}>
-      <div className="modal" onClick={dontDismiss} style={modalStyle}>
+    <div
+      className='modal-backdrop'
+      onClick={props.onDismiss}
+      style={backdropStyle}>
+      <div className='modal' onClick={dontDismiss} style={modalStyle}>
         {props.children}
       </div>
     </div>

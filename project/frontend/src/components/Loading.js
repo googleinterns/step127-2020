@@ -7,7 +7,7 @@ import React from 'react';
  */
 function Loading(props) {
   return (
-    <div id="loading-comments" className="loading-ripple">
+    <div id='loading-comments' className='loading-ripple'>
       <div></div>
       <div></div>
     </div>
