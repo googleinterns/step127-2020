@@ -3,14 +3,14 @@ package com.google.sps.servlets;
 import com.google.gson.Gson;
 import com.google.sps.data.JsonToRestaurantParser;
 import com.google.sps.data.Restaurant;
+import com.google.sps.data.RestaurantScorer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.annotation.WebServlet;
@@ -29,32 +29,40 @@ public class RecommendationServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Set<Restaurant> restaurantSet = new HashSet<>();
-    BufferedReader reader = request.getReader();
-    String body = reader.readLine();
+    String body = request.getReader().readLine();
+    response.setContentType("application/json");
     try {
-      addRestaurantsToSet(body, restaurantSet);
+      JSONObject reqBody = new JSONObject(body);
+      Map<Restaurant, Double> restaurantScores = scoreRestaurants(
+          reqBody.getJSONArray("restaurants"), reqBody.getJSONObject("preferences"));
+      // Sort restaurant entries by highest score and write list of entries to the response.
+      List<Map.Entry<Restaurant, Double>> sortedRestaurants =
+          new ArrayList(restaurantScores.entrySet());
+      sortedRestaurants.sort(Map.Entry.comparingByValue(Collections.reverseOrder()));
+      response.getWriter().println(gson.toJson(sortedRestaurants));
     } catch (JSONException e) {
       LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
-    }
-    // Write one random restaurant to response. This will be replaced by the picking algorithm.
-    response.setContentType("application/json");
-    for (Restaurant restaurant : restaurantSet) {
-      response.getWriter().println(gson.toJson(restaurant));
-      return;
+      // TODO: handle case where list of restaurants is empty.
+      response.getWriter().println();
     }
   }
 
-  /** Creates Restaurant objects for each restaurant in the body and adds them to restaurantSet. */
-  private static void addRestaurantsToSet(String body, Set<Restaurant> restaurantSet)
-      throws JSONException {
-    JSONObject reqBody = new JSONObject(body);
-    String cuisineType = reqBody.getString("cuisineType");
-    JSONArray restaurantList = reqBody.getJSONArray("restaurants");
+  /**
+   * Maps each restaurant to a score. A restaurant earns points for matching price level/type and
+   * having good ratings.
+   */
+  private static Map<Restaurant, Double> scoreRestaurants(
+      JSONArray restaurantList, JSONObject preferences) {
+    Map<Restaurant, Double> restaurantScores = new HashMap<>();
     for (int i = 0; i < restaurantList.length(); i++) {
-      Restaurant restaurantObj =
-          JsonToRestaurantParser.toRestaurant(restaurantList.getJSONObject(i));
-      restaurantSet.add(restaurantObj);
+      try {
+        Restaurant restaurant =
+            JsonToRestaurantParser.toRestaurant(restaurantList.getJSONObject(i));
+        restaurantScores.put(restaurant, RestaurantScorer.score(restaurant, preferences));
+      } catch (JSONException e) {
+        LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
+      }
     }
+    return restaurantScores;
   }
 }

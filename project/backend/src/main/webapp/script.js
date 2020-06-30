@@ -17,10 +17,12 @@ function getRecommendation() {
   const cuisineType = document.getElementById('cuisine').value;
   const radius =
       milesToMeters(parseInt(document.getElementById('distance').value));
-  const priceLevel = document.getElementById('price-level').value;
+  const priceLevel = parseInt(document.getElementById('price-level').value);
   const lat = document.getElementById('latitude').value;
   const lng = document.getElementById('longitude').value;
   const diningExp = document.getElementById('dining-experience').value;
+  const priceLevelWeight = 2;
+  const diningExpWeight = 4;
   const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
   const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
   const textSearchBaseUrl =
@@ -42,12 +44,20 @@ function getRecommendation() {
           },
           body: JSON.stringify({
             restaurants,
-            cuisineType,
-            lat,
-            lng,
-            radius,
-            priceLevel,
-            diningExp,
+            preferences: {
+              cuisineType,
+              lat,
+              lng,
+              radius,
+              priceLevel: {
+                pref: priceLevel,
+                weight: priceLevelWeight,
+              },
+              diningExp: {
+                pref: diningExp,
+                weight: diningExpWeight,
+              },
+            },
           }),
         })
             .then((response) => response.json())
