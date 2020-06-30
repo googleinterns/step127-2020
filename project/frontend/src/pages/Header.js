@@ -2,36 +2,14 @@ import './Header.css';
 
 import React, { useState, useEffect } from 'react';
 
-function Dropdown(props) {
-  const dontDismiss = (event) => {
-    event.stopPropagation();
-  };
-
-  const backdropStyle = {
-    display: props.open ? 'block' : 'none',
-  };
-
-  const dropdownStyle = {
-    top: props.top,
-    right: props.right,
-    bottom: props.bottom,
-    left: props.left,
-  };
-  
-  return (
-    <div className="dropdown-backdrop" onClick={props.onDismiss} style={backdropStyle}>
-      <div className="dropdown" onClick={dontDismiss} style={dropdownStyle}>
-        {props.children}
-      </div>
-    </div>
-  );
-}
+import Modal from '../components/Modal.js';
+import Loading from '../components/Loading.js';
 
 function Header(props) {
   let [GoogleAuth, setGoogleAuth] = useState(undefined);
   let [currentUser, setCurrentUser] = useState(undefined);
   let [signedIn, setSignedIn] = useState(false);
-  let [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  let [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const onGoogleAuthLoaded = () => {
@@ -65,20 +43,17 @@ function Header(props) {
   
   if (currentUser === undefined) {
     return (
-      <div id="header">
-        <div id="loading-comments" className="loading-ripple">
-          <div></div>
-          <div></div>
-        </div>
+      <div id='header'>
+        <Loading />
       </div>
     );
   } else if (currentUser.isSignedIn()) {
-    const toggleDropdown = () => {
-      setIsDropdownOpen(!isDropdownOpen);
+    const toggleModal = () => {
+      setIsModalOpen(!isModalOpen);
     };
     
     const signOut = () => {
-      setIsDropdownOpen(false);
+      setIsModalOpen(false);
       GoogleAuth.signOut();
     };
 
@@ -89,15 +64,15 @@ function Header(props) {
     
     return (
       <div id="header">
-        <img className='profile-pic' src={imageUrl} alt="Profile." onClick={toggleDropdown} />
-        <Dropdown open={isDropdownOpen} onDismiss={toggleDropdown} top='64px' right='16px'>
+        <img className='profile-pic' src={imageUrl} alt="Profile." onClick={toggleModal} />
+        <Modal open={isModalOpen} onDismiss={toggleModal} top='64px' right='16px'>
           <img className='profile-pic large' src={imageUrl} alt="Large profile."/>
           <h4 className="user-name">{name}</h4>
           <h5 className="user-email">{email}</h5>
           <button>Profile</button>
           <br />
           <button className="sign-out"onClick={signOut}>Sign Out</button>
-        </Dropdown>
+        </Modal>
       </div>
     );
   } else {
