@@ -3,8 +3,45 @@ import ReactDOM from "react-dom"
 
 class PreferenceForm extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
+    this.state = {'cuisine': '', 'distance': '', 'dining-experience': '', 'price-level': '',
+                    'latitude': '', 'longitude': ''};
+    this.state = {formControls: {
+      cuisine: {
+        value: ''
+      },
+      distance: {
+        value: ''
+      },
+      dining: {
+        value: ''
+      },
+      price: {
+        value: ''
+      },
+      latitude: {
+        value: ''
+      },
+      longitude: {
+        value: ''
+      }
+    }
+   }
   }
+  changeHandler = event => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    this.setState({
+      formControls: {...this.state.formControls, [
+        name]: {
+          ...this.state.formControls[name], 
+          value
+        }
+      }
+    });
+  }
+
   render() {
     const cuisines = ["Italian", "Mexican", "Indian"];
     const distances = ["1 mile", "5 miles", "10 miles", "25 miles"];
