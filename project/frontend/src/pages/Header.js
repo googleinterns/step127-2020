@@ -48,7 +48,7 @@ function Header(props) {
         <Loading />
       </div>
     );
-  } else if (currentUser.isSignedIn()) {
+  } else if (signedIn && currentUser.isSignedIn()) {
     const toggleModal = () => {
       setIsModalOpen(!isModalOpen);
     };
