@@ -11,3 +11,52 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+/* exported getRecommendation */
+function getRecommendation() {
+  const cuisineType = document.getElementById('cuisine').value;
+  const radius =
+      milesToMeters(parseInt(document.getElementById('distance').value));
+  const priceLevel = document.getElementById('price-level').value;
+  const lat = document.getElementById('latitude').value;
+  const lng = document.getElementById('longitude').value;
+  const diningExp = document.getElementById('dining-experience').value;
+  const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
+  const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+  const textSearchBaseUrl =
+      'https://maps.googleapis.com/maps/api/place/textsearch/json?';
+  const searchParams = new URLSearchParams();
+  searchParams.append('query', cuisineType + ' restaurant');
+  searchParams.append('location', lat + ',' + lng);
+  searchParams.append('radius', radius);
+  searchParams.append('key', apiKey);
+  fetch(proxyUrl + textSearchBaseUrl + searchParams)
+      // This gives us the list of restaurants.
+      .then((response) => response.json())
+      .then((data) => {
+        const restaurants = data.results;
+        fetch('/recommendation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            restaurants,
+            cuisineType,
+            lat,
+            lng,
+            radius,
+            priceLevel,
+            diningExp,
+          }),
+        })
+            .then((response) => response.json())
+            .then((selection) => {
+              console.log(selection);
+            });
+      });
+}
+
+function milesToMeters(numMiles) {
+  return numMiles * 1609.34;
+}
