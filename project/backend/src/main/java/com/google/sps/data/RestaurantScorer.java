@@ -6,6 +6,7 @@ import org.json.JSONObject;
 public final class RestaurantScorer {
   private static final int MAX_RATING = 5;
   private static final int MID_RATING = 3;
+  private static final int NUM_INITIAL_RATINGS = 20;
   /** Class should not be instantiated. */
   private RestaurantScorer() {}
 
@@ -28,9 +29,17 @@ public final class RestaurantScorer {
     // MID_RATING.
     boolean hasRating = restaurantRating != -1;
     if (hasRating) {
-      score += (restaurantRating / MAX_RATING) - (MID_RATING / MAX_RATING);
+      score += calculateRatingScore(restaurantRating, restaurant.getNumRatings());
     }
     double percentMatch = score / maxPoints;
     return percentMatch;
+  }
+
+  /** Skews ratings so that ratings with a lower number of ratings are weighed less. */
+  private static double calculateRatingScore(double avgRating, int numRatings) {
+    int totalRatings = NUM_INITIAL_RATINGS + numRatings;
+    double totalPoints = NUM_INITIAL_RATINGS * MID_RATING + avgRating * numRatings;
+    double weightedRating = totalPoints / totalRatings;
+    return (weightedRating - MID_RATING) / MAX_RATING;
   }
 }
