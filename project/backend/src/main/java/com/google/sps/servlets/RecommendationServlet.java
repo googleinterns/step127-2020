@@ -54,11 +54,13 @@ public class RecommendationServlet extends HttpServlet {
   private static Map<Restaurant, Double> scoreRestaurants(
       JSONArray restaurantList, JSONObject preferences) {
     Map<Restaurant, Double> restaurantScores = new HashMap<>();
+    int avgNumRatings = RestaurantScorer.calcAvgNumRatings(restaurantList);
     for (int i = 0; i < restaurantList.length(); i++) {
       try {
         Restaurant restaurant =
             JsonToRestaurantParser.toRestaurant(restaurantList.getJSONObject(i));
-        restaurantScores.put(restaurant, RestaurantScorer.score(restaurant, preferences));
+        restaurantScores.put(
+            restaurant, RestaurantScorer.score(restaurant, preferences, avgNumRatings));
       } catch (JSONException e) {
         LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
       }
