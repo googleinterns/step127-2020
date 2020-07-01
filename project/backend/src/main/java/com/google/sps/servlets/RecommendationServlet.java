@@ -41,7 +41,6 @@ public class RecommendationServlet extends HttpServlet {
       sortedRestaurants.sort(Map.Entry.comparingByValue(Collections.reverseOrder()));
       response.getWriter().println(gson.toJson(sortedRestaurants));
     } catch (JSONException e) {
-      LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
   }
