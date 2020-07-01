@@ -15,8 +15,8 @@ public final class RestaurantScorer {
   private RestaurantScorer() {}
 
   /** Returns the percent match for a restaurant to a set of user preferences. */
-  public static double score(Restaurant restaurant, JSONObject preferences, DescriptiveStatistics statistics)
-      throws JSONException {
+  public static double score(Restaurant restaurant, JSONObject preferences,
+      DescriptiveStatistics statistics) throws JSONException {
     int preferredPriceLevel = preferences.getJSONObject("priceLevel").getInt("pref");
     String preferredDiningExp = preferences.getJSONObject("diningExp").getString("pref");
     int priceLevelWeight = preferences.getJSONObject("priceLevel").getInt("weight");
@@ -40,16 +40,20 @@ public final class RestaurantScorer {
     return percentMatch;
   }
 
-  /** Creates and returns a DescriptiveStatistics object containing all the values for number of ratings for each restaurant. */
+  /**
+   * Creates and returns a DescriptiveStatistics object containing all the values for number of
+   * ratings for each restaurant.
+   */
   public static DescriptiveStatistics createDescriptiveStatistics(JSONArray restaurantList) {
     DescriptiveStatistics statistics = new DescriptiveStatistics();
     for (int i = 0; i < restaurantList.length(); i++) {
       try {
-        //int numRatings = restaurantList.getJSONObject(i).has("user_ratings_total") ? restaurantList.getJSONObject(i).getInt("user_ratings_total") : 0;
-        //statistics.addValue(numRatings);
+        // int numRatings = restaurantList.getJSONObject(i).has("user_ratings_total") ?
+        // restaurantList.getJSONObject(i).getInt("user_ratings_total") : 0;
+        // statistics.addValue(numRatings);
         statistics.addValue(restaurantList.getJSONObject(i).getInt("user_ratings_total"));
       } catch (JSONException e) {
-        //LOGGER.log("Error parsing JSON: " + e.getMessage());
+        // LOGGER.log("Error parsing JSON: " + e.getMessage());
         statistics.addValue(0);
       }
     }
@@ -57,7 +61,8 @@ public final class RestaurantScorer {
   }
 
   /** Skews ratings so that ratings with a lower number of ratings are weighed less. */
-  private static double calculateRatingScore(double avgRating, int numRatings, DescriptiveStatistics statistics) {
+  private static double calculateRatingScore(
+      double avgRating, int numRatings, DescriptiveStatistics statistics) {
     int numInitialRatings = (int) Math.round(statistics.getPercentile(25));
     int totalRatings = numInitialRatings + numRatings;
     double totalPoints = numInitialRatings * MID_RATING + avgRating * numRatings;
