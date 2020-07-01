@@ -6,6 +6,8 @@ import org.json.JSONObject;
 public final class RestaurantScorer {
   private static final int MAX_RATING = 5;
   private static final int MID_RATING = 3;
+  // Number of "dummy ratings" that will be used to calculate the rating score.
+  // Arbitrary value will be replaced by a value based on the average num ratings.
   private static final int NUM_INITIAL_RATINGS = 20;
   /** Class should not be instantiated. */
   private RestaurantScorer() {}
