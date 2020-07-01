@@ -2,6 +2,7 @@ package com.google.sps.data;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +15,7 @@ public final class RestaurantScorer {
   private RestaurantScorer() {}
 
   /** Returns the percent match for a restaurant to a set of user preferences. */
-  public static double score(Restaurant restaurant, JSONObject preferences, int avgNumRatings)
+  public static double score(Restaurant restaurant, JSONObject preferences, DescriptiveStatistics statistics)
       throws JSONException {
     int preferredPriceLevel = preferences.getJSONObject("priceLevel").getInt("pref");
     String preferredDiningExp = preferences.getJSONObject("diningExp").getString("pref");
@@ -33,29 +34,31 @@ public final class RestaurantScorer {
     // MID_RATING.
     boolean hasRating = restaurantRating != -1;
     if (hasRating) {
-      score += calculateRatingScore(restaurantRating, restaurant.getNumRatings(), avgNumRatings);
+      score += calculateRatingScore(restaurantRating, restaurant.getNumRatings(), statistics);
     }
     double percentMatch = score / maxPoints;
     return percentMatch;
   }
 
-  /** Calculates the average number of ratings left for the restaurants. */
-  public static int calcAvgNumRatings(JSONArray restaurantList) {
-    int runningTotalRatings = 0;
-    int numRestaurants = restaurantList.length();
+  /** Creates and returns a DescriptiveStatistics object containing all the values for number of ratings for each restaurant. */
+  public static DescriptiveStatistics createDescriptiveStatistics(JSONArray restaurantList) {
+    DescriptiveStatistics statistics = new DescriptiveStatistics();
     for (int i = 0; i < restaurantList.length(); i++) {
       try {
-        runningTotalRatings += restaurantList.getJSONObject(i).getInt("user_ratings_total");
+        //int numRatings = restaurantList.getJSONObject(i).has("user_ratings_total") ? restaurantList.getJSONObject(i).getInt("user_ratings_total") : 0;
+        //statistics.addValue(numRatings);
+        statistics.addValue(restaurantList.getJSONObject(i).getInt("user_ratings_total"));
       } catch (JSONException e) {
-        LOGGER.log(Level.WARNING, "Field not found: " + e.getMessage());
+        //LOGGER.log("Error parsing JSON: " + e.getMessage());
+        statistics.addValue(0);
       }
     }
-    return runningTotalRatings / numRestaurants;
+    return statistics;
   }
 
   /** Skews ratings so that ratings with a lower number of ratings are weighed less. */
-  private static double calculateRatingScore(double avgRating, int numRatings, int avgNumRatings) {
-    int numInitialRatings = avgNumRatings / 2;
+  private static double calculateRatingScore(double avgRating, int numRatings, DescriptiveStatistics statistics) {
+    int numInitialRatings = (int) Math.round(statistics.getPercentile(25));
     int totalRatings = numInitialRatings + numRatings;
     double totalPoints = numInitialRatings * MID_RATING + avgRating * numRatings;
     double weightedRating = totalPoints / totalRatings;
