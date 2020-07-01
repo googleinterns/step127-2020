@@ -30,6 +30,7 @@ public class RecommendationServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String body = request.getReader().readLine();
+    response.setContentType("application/json");
     try {
       JSONObject reqBody = new JSONObject(body);
       Map<Restaurant, Double> restaurantScores = scoreRestaurants(
@@ -38,12 +39,10 @@ public class RecommendationServlet extends HttpServlet {
       List<Map.Entry<Restaurant, Double>> sortedRestaurants =
           new ArrayList(restaurantScores.entrySet());
       sortedRestaurants.sort(Map.Entry.comparingByValue(Collections.reverseOrder()));
-      response.setContentType("application/json");
       response.getWriter().println(gson.toJson(sortedRestaurants));
     } catch (JSONException e) {
       LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
-      response.setContentType("text/html");
-      response.getWriter().println("Oops! We could not process your request at this time.");
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
   }
 
