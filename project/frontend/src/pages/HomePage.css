@@ -1,0 +1,78 @@
+#welcome {
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-image: url(/food-background-large.jpg),
+    url(/food-background-small.jpg);
+  background-size: cover;
+  background-position: top 20% left 0%;
+  background-repeat: no-repeat;
+}
+
+#welcome button {
+  margin: 16px 32px 0px 32px;
+  background-color: white;
+}
+
+#logo {
+  margin-top: 150px;
+  font-size: 8rem;
+  font-weight: bold;
+}
+
+.title {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 4rem;
+  line-height: 1;
+  cursor: default;
+}
+
+.subtitle {
+  text-transform: uppercase;
+  letter-spacing: 1.4rem;
+  font-size: 1.2rem;
+  font-weight: 400;
+  cursor: default;
+}
+
+.example {
+  display: inline-block;
+  height: 500px;
+  width: 500px;
+  background-color: brown;
+}
+
+.match {
+  background-color: #f3f3f3;
+}
+
+.description {
+  z-index: 2;
+}
+
+.description.match {
+  background-color: white;
+}
+
+.description.swipe {
+  background-color: #f3f3f3;
+}
+
+.description p {
+  margin-bottom: 0px;
+}
+
+.feedback {
+  color: white;
+  background-color: black;
+}
+
+.feedback button {
+  color: white;
+  margin-left: 32px;
+  margin-bottom: 0px;
+}
