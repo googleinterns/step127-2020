@@ -10,6 +10,9 @@ public final class RestaurantScorer {
   private static final double EARTH_RADIUS_METERS = 6371000;
   private static final int MAX_RATING = 5;
   private static final int MID_RATING = 3;
+  // Number of "dummy ratings" that will be used to calculate the rating score.
+  // Arbitrary value will be replaced by a value based on the average num ratings.
+  private static final int NUM_INITIAL_RATINGS = 20;
   /** Class should not be instantiated. */
   private RestaurantScorer() {}
 
@@ -44,7 +47,7 @@ public final class RestaurantScorer {
     // rating is < MID_RATING.
     boolean hasRating = restaurantRating != -1;
     if (hasRating) {
-      score += (restaurantRating / MAX_RATING) - (MID_RATING / MAX_RATING);
+      score += calculateRatingScore(restaurantRating, restaurant.getNumRatings());
     }
     double percentMatch = score / maxPoints;
     return percentMatch;
@@ -66,5 +69,11 @@ public final class RestaurantScorer {
   /** Converts meters to miles and rounds to the nearest mile. */
   private static long roundMetersToMiles(double numMeters) {
     return Math.round(numMeters / 1609.34);
+  /** Skews ratings so that ratings with a lower number of ratings are weighed less. */
+  private static double calculateRatingScore(double avgRating, int numRatings) {
+    int totalRatings = NUM_INITIAL_RATINGS + numRatings;
+    double totalPoints = NUM_INITIAL_RATINGS * MID_RATING + avgRating * numRatings;
+    double weightedRating = totalPoints / totalRatings;
+    return (weightedRating - MID_RATING) / MAX_RATING;
   }
 }
