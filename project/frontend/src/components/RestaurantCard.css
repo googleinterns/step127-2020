@@ -11,7 +11,7 @@
 }
 
 .restaurant-name {
-  font-size: 2.0rem;
+  font-size: 2rem;
 }
 
 .rating-stars-container {
@@ -58,7 +58,7 @@
 }
 
 .slider-wrapper.shifting {
-  transition: left .2s cubic-bezier(0.35, 0.91, 0.33, 0.97);
+  transition: left 0.2s cubic-bezier(0.35, 0.91, 0.33, 0.97);
 }
 
 .slide {
@@ -71,7 +71,7 @@
   font-size: 18px;
   transition: all 1s;
   position: relative;
-  background: #FFCF47;
+  background: #ffcf47;
 }
 
 .slide:active {
@@ -86,7 +86,7 @@
   margin-top: -12px;
   cursor: pointer;
   z-index: 2;
-  transition: opacity .25s cubic-bezier(0.35, 0.91, 0.33, 0.97);
+  transition: opacity 0.25s cubic-bezier(0.35, 0.91, 0.33, 0.97);
 }
 
 .control.hidden {

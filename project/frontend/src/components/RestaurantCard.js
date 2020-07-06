@@ -21,80 +21,89 @@ function reducer(state, action) {
   const width = 344;
 
   switch (action.type) {
-  case 'SWIPING': {
-    const minLeft = (state.slideCount - 1) * -width;
-    const dir = (action.deltaX > 0) ? 'right' : 'left';
+    case 'SWIPING': {
+      const minLeft = (state.slideCount - 1) * -width;
+      const dir = action.deltaX > 0 ? 'right' : 'left';
 
-    let newLeft;
-    if ((dir === 'left' && state.left <= minLeft) ||
-        (dir === 'right' && state.left >= 0)) {
-      newLeft = state.left;
-    } else {
-      newLeft = state.lastLeft + action.deltaX;
-    }
-    
-    return {
-      left: newLeft,
-      lastLeft: state.lastLeft,
-      slide: state.slide,
-      slideCount: state.slideCount,
-    };
-  }
-  case 'SWIPED_LEFT': {
-    let newSlide = state.slide;
-    if (newSlide < state.slideCount - 1) {
-      if (Math.abs(state.left) % width > width / 2 ||
-          action.velocity >= 0.5) {
-        newSlide++;
+      let newLeft;
+      if (
+        (dir === 'left' && state.left <= minLeft) ||
+        (dir === 'right' && state.left >= 0)
+      ) {
+        newLeft = state.left;
+      } else {
+        newLeft = state.lastLeft + action.deltaX;
       }
+
+      return {
+        left: newLeft,
+        lastLeft: state.lastLeft,
+        slide: state.slide,
+        slideCount: state.slideCount,
+      };
     }
-    
-    const newLeft = newSlide * -width;
-    return {
-      left: newLeft,
-      lastLeft: newLeft,
-      slide: newSlide,
-      slideCount: state.slideCount,
-      shifting: true,
-    };
-  }
-  case 'SWIPED_RIGHT': {
-    let newSlide = state.slide;
-    if (newSlide > 0) {
-      if (width - (Math.abs(state.left) % width) > width / 2 ||
-          action.velocity >= 0.5) {
-        newSlide--;
+    case 'SWIPED_LEFT': {
+      let newSlide = state.slide;
+      if (newSlide < state.slideCount - 1) {
+        if (
+          Math.abs(state.left) % width > width / 2 ||
+          action.velocity >= 0.5
+        ) {
+          newSlide++;
+        }
       }
+
+      const newLeft = newSlide * -width;
+      return {
+        left: newLeft,
+        lastLeft: newLeft,
+        slide: newSlide,
+        slideCount: state.slideCount,
+        shifting: true,
+      };
     }
-    
-    const newLeft = newSlide * -width;
-    return {
-      left: newLeft,
-      lastLeft: newLeft,
-      slide: newSlide,
-      slideCount: state.slideCount,
-      shifting: true,
-    };
-  }
-  default:
-    throw new Error();
+    case 'SWIPED_RIGHT': {
+      let newSlide = state.slide;
+      if (newSlide > 0) {
+        if (
+          width - (Math.abs(state.left) % width) > width / 2 ||
+          action.velocity >= 0.5
+        ) {
+          newSlide--;
+        }
+      }
+
+      const newLeft = newSlide * -width;
+      return {
+        left: newLeft,
+        lastLeft: newLeft,
+        slide: newSlide,
+        slideCount: state.slideCount,
+        shifting: true,
+      };
+    }
+    default:
+      throw new Error();
   }
 }
 
 function ImageSlider(props) {
   const images = props.images;
 
-  const [state, dispatch] = useReducer(reducer, {...initialState, slideCount: images.length});
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    slideCount: images.length,
+  });
 
   const handlers = useSwipeable({
     onSwipedLeft: (event) => {
-      dispatch({type: 'SWIPED_LEFT', velocity: event.velocity});
+      dispatch({ type: 'SWIPED_LEFT', velocity: event.velocity });
     },
     onSwipedRight: (event) => {
-      dispatch({type: 'SWIPED_RIGHT', velocity: event.velocity});
+      dispatch({ type: 'SWIPED_RIGHT', velocity: event.velocity });
     },
     onSwiping: (event) => {
-      dispatch({type: 'SWIPING', deltaX: -event.deltaX});
+      dispatch({ type: 'SWIPING', deltaX: -event.deltaX });
     },
     delta: 5,
     trackTouch: true,
@@ -107,7 +116,7 @@ function ImageSlider(props) {
   const toggleControls = (visible) => {
     setAreControlsVisible(visible);
   };
-  
+
   return (
     <div
       className='slider'
@@ -115,18 +124,24 @@ function ImageSlider(props) {
       onMouseLeave={() => toggleControls(false)}>
       <div
         className={`slider-wrapper ${state.shifting ? 'shifting' : ''}`}
-        style={{left: state.left + 'px'}}
+        style={{ left: state.left + 'px' }}
         {...handlers}>
-        {images.map((image) => <span key={image} className='slide'>{image}</span>)}
+        {images.map((image) => (
+          <span key={image} className='slide'>
+            {image}
+          </span>
+        ))}
       </div>
       <img
         src={Prev}
         className='control prev'
-        style={{opacity: areControlsVisible ? '1' : '0'}}/>
+        style={{ opacity: areControlsVisible ? '1' : '0' }}
+      />
       <img
         src={Next}
         className='control next'
-        style={{opacity: areControlsVisible ? '1' : '0'}}/>
+        style={{ opacity: areControlsVisible ? '1' : '0' }}
+      />
     </div>
   );
 }
@@ -134,38 +149,32 @@ function ImageSlider(props) {
 function RatingStars(props) {
   return (
     <div className='rating-stars-container'>
-      <img src={Star} width='15' height='15'/>
-      <img src={Star} width='15' height='15'/>
-      <img src={Star} width='15' height='15'/>
-      <img src={Star} width='15' height='15'/>
-      <img src={Star} width='15' height='15'/>
+      <img src={Star} width='15' height='15' />
+      <img src={Star} width='15' height='15' />
+      <img src={Star} width='15' height='15' />
+      <img src={Star} width='15' height='15' />
+      <img src={Star} width='15' height='15' />
       <span>4.5 (213)</span>
     </div>
   );
 }
 
 function RestaurantCard(props) {
-  const images = [
-    'Slide 1',
-    'Slide 2',
-    'Slide 3',
-    'Slide 4',
-    'Slide 5',
-  ];
-  
+  const images = ['Slide 1', 'Slide 2', 'Slide 3', 'Slide 4', 'Slide 5'];
+
   return (
     <div className='restaurant-card'>
-      <ImageSlider images={images}/>
+      <ImageSlider images={images} />
       <div className='restaurant-content'>
         <h5 className='restaurant-name'>Cafe Badilico</h5>
         <RatingStars />
         <p className='restaurant-type'>$$ • Italian, Cafe</p>
         <div className='restaurant-detail-container'>
-          <img src={Place}/>
+          <img src={Place} />
           <span>123 Pinewood Street, Atlanta GA, 30022</span>
         </div>
         <div className='restaurant-detail-container'>
-          <img src={Globe}/>
+          <img src={Globe} />
           <span>https://restaurantwebsite.com</span>
         </div>
       </div>
