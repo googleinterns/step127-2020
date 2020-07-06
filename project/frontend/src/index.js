@@ -1,14 +1,27 @@
-import './index.css';
+import './css/normalize.css';
+import './css/skeleton.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import App from './App';
+import Header from './pages/Header.js';
+import HomePage from './pages/HomePage.js';
+import Footer from './pages/Footer.js';
+
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <Switch>
+        <Route path='/'>
+          <Header />
+          <HomePage />
+          <Footer />
+        </Route>
+      </Switch>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );
