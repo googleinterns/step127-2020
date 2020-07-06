@@ -6,10 +6,10 @@ import Modal from '../components/Modal.js';
 import Loading from '../components/Loading.js';
 
 function Header(props) {
-  let [GoogleAuth, setGoogleAuth] = useState(undefined);
-  let [currentUser, setCurrentUser] = useState(undefined);
-  let [signedIn, setSignedIn] = useState(false);
-  let [isModalOpen, setIsModalOpen] = useState(false);
+  const [GoogleAuth, setGoogleAuth] = useState(undefined);
+  const [currentUser, setCurrentUser] = useState(undefined);
+  const [signedIn, setSignedIn] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const onGoogleAuthLoaded = () => {
