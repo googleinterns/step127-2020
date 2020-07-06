@@ -45,7 +45,8 @@ class PreferenceForm extends React.Component {
             name='cuisine'
             id='cuisine'
             onChange={this.changeState}
-            value={this.state.cuisine}>
+            value={this.state.cuisine}
+            multiple>
             {cuisines.map((cuisine) => (
               <option value={cuisine}>{cuisine}</option>
             ))}
