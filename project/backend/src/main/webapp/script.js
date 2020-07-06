@@ -17,7 +17,7 @@
 function getRecommendation() {
   const cuisineType = document.getElementById('cuisine').value;
   const radius = milesToMeters(
-    parseInt(document.getElementById('distance').value)
+    parseInt(document.getElementById('distance').value),
   );
   const priceLevel = parseInt(document.getElementById('price-level').value);
   const lat = parseFloat(document.getElementById('latitude').value);
