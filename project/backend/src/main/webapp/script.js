@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* eslint indent: ["error", 2, { "MemberExpression": 1 }]*/
 /* exported getRecommendation */
 function getRecommendation() {
   const cuisineType = document.getElementById('cuisine').value;
-  const radius = milesToMeters(
-    parseInt(document.getElementById('distance').value),
-  );
+  const milesRadius = parseInt(document.getElementById('distance').value);
+  const radius = milesToMeters(milesRadius);
   const priceLevel = parseInt(document.getElementById('price-level').value);
   const lat = parseFloat(document.getElementById('latitude').value);
   const lng = parseFloat(document.getElementById('longitude').value);

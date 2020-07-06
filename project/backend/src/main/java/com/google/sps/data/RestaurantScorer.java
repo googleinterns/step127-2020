@@ -71,8 +71,9 @@ public final class RestaurantScorer {
     DescriptiveStatistics statistics = new DescriptiveStatistics();
     for (int i = 0; i < restaurantList.length(); i++) {
       try {
-        int numRatings = restaurantList.getJSONObject(i).has("user_ratings_total") ?
-        restaurantList.getJSONObject(i).getInt("user_ratings_total") : 0;
+        int numRatings = restaurantList.getJSONObject(i).has("user_ratings_total")
+            ? restaurantList.getJSONObject(i).getInt("user_ratings_total")
+            : 0;
         statistics.addValue(numRatings);
       } catch (JSONException e) {
         statistics.addValue(0);
