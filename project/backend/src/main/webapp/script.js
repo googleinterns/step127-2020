@@ -32,10 +32,10 @@ function getRecommendation() {
       // This gives us the list of restaurants.
       .then(
           (responses) =>
-              Promise.all(responses.map((response) => response.json())))
+            Promise.all(responses.map((response) => response.json())))
       .then((data) => {
         let restaurants = [];
-        for (let restaurant of data) {
+        for (const restaurant of data) {
           restaurants = restaurants.concat(restaurant.results);
         }
         fetch('/recommendation', {
@@ -77,7 +77,7 @@ function makePromisesArray(cuisineTypes, lat, lng, radius) {
   const textSearchBaseUrl =
       'https://maps.googleapis.com/maps/api/place/textsearch/json?';
   const promises = [];
-  for (let cuisineType of cuisineTypes) {
+  for (const cuisineType of cuisineTypes) {
     const searchParams = new URLSearchParams();
     searchParams.append('query', cuisineType + ' restaurant');
     searchParams.append('location', lat + ',' + lng);
