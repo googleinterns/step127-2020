@@ -66,9 +66,14 @@ function getRecommendation() {
             },
           }),
         })
-            .then((response) => response.json())
-            .then((selection) => {
-              console.log(selection);
+            .then((response) => response.text())
+            .then((data) => {
+              try {
+                const selections = JSON.parse(data);
+                console.log(selections);
+              } catch (err) {
+                console.log(err);
+              }
             });
       });
 }
