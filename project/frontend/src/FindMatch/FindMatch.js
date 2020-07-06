@@ -30,13 +30,13 @@ class PreferenceForm extends React.Component {
 
   render() {
     const cuisines = ['Italian', 'Mexican', 'Indian'];
-    const distances = [1, 5, 10, 25];
+    const distances_on_miles = [1, 5, 10, 25];
     const dining_experiences = {
       meal_takeaway: 'Takeout',
       meal_delivery: 'Delivery',
       restaurant: 'Eat In',
     };
-    const prices = ['Low', 'Medium', 'High'];
+    const prices = { Low: 1, Medium: 2, High: 3, 'Very High': 4 };
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
@@ -87,8 +87,8 @@ class PreferenceForm extends React.Component {
             id='price_level'
             onChange={this.changeState}
             value={this.state.price_level}>
-            {prices.map((price) => (
-              <option value={price}>{price}</option>
+            {prices.forEach((title, value) => (
+              <option value={value}>{title}</option>
             ))}
             ;
           </select>
