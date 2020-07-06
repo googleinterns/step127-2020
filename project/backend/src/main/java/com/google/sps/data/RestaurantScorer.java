@@ -3,6 +3,10 @@ package com.google.sps.data;
 import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,6 +14,7 @@ public final class RestaurantScorer {
   private static final double EARTH_RADIUS_METERS = 6371000;
   private static final int MAX_RATING = 5;
   private static final int MID_RATING = 3;
+  private static final Logger LOGGER = Logger.getLogger(RestaurantScorer.class.getName());
   // Number of "dummy ratings" that will be used to calculate the rating score.
   // Arbitrary value will be replaced by a value based on the average num ratings.
   private static final int NUM_INITIAL_RATINGS = 20;
@@ -18,7 +23,10 @@ public final class RestaurantScorer {
   private RestaurantScorer() {}
 
   /** Returns the percent match for a restaurant to a set of user preferences. */
-  public static double score(Restaurant restaurant, JSONObject preferences) throws JSONException {
+  public static double score(Restaurant restaurant, JSONObject preferences,
+      DescriptiveStatistics statistics) throws JSONException {
+    int preferredPriceLevel = preferences.getJSONObject("priceLevel").getInt("pref");
+    String preferredDiningExp = preferences.getJSONObject("diningExp").getString("pref");
     int priceLevelWeight = preferences.getJSONObject("priceLevel").getInt("weight");
     int diningExpWeight = preferences.getJSONObject("diningExp").getInt("weight");
     int radiusWeight = preferences.getJSONObject("radius").getInt("weight");
@@ -49,10 +57,29 @@ public final class RestaurantScorer {
     // rating is < MID_RATING.
     boolean hasRating = restaurantRating != -1;
     if (hasRating) {
-      score += calculateRatingScore(restaurantRating, restaurant.getNumRatings());
+      score += calculateRatingScore(restaurantRating, restaurant.getNumRatings(), statistics);
     }
     double percentMatch = score / maxPoints;
     return percentMatch;
+  }
+
+  /**
+   * Creates and returns a DescriptiveStatistics object containing all the values for number of
+   * ratings for each restaurant.
+   */
+  public static DescriptiveStatistics createDescriptiveStatistics(JSONArray restaurantList) {
+    DescriptiveStatistics statistics = new DescriptiveStatistics();
+    for (int i = 0; i < restaurantList.length(); i++) {
+      try {
+        int numRatings = restaurantList.getJSONObject(i).has("user_ratings_total")
+            ? restaurantList.getJSONObject(i).getInt("user_ratings_total")
+            : 0;
+        statistics.addValue(numRatings);
+      } catch (JSONException e) {
+        statistics.addValue(0);
+      }
+    }
+    return statistics;
   }
 
   /**
@@ -77,9 +104,11 @@ public final class RestaurantScorer {
   }
 
   /** Skews ratings so that ratings with a lower number of ratings are weighed less. */
-  private static double calculateRatingScore(double avgRating, int numRatings) {
-    int totalRatings = NUM_INITIAL_RATINGS + numRatings;
-    double totalPoints = NUM_INITIAL_RATINGS * MID_RATING + avgRating * numRatings;
+  private static double calculateRatingScore(
+      double avgRating, int numRatings, DescriptiveStatistics statistics) {
+    int numInitialRatings = (int) Math.round(statistics.getPercentile(25));
+    int totalRatings = numInitialRatings + numRatings;
+    double totalPoints = numInitialRatings * MID_RATING + avgRating * numRatings;
     double weightedRating = totalPoints / totalRatings;
     return (weightedRating - MID_RATING) / MAX_RATING;
   }
