@@ -29,7 +29,7 @@ class PreferenceForm extends React.Component {
   }
 
   render() {
-    const cuisines = ['italian', 'mexican', 'indian'];
+    const cuisines = ['Italian', 'Mexican', 'Indian'];
     const distances = [1, 5, 10, 25];
     const dining_experiences = {
       meal_takeaway: 'Takeout',
@@ -47,9 +47,7 @@ class PreferenceForm extends React.Component {
             onChange={this.changeState}
             value={this.state.cuisine}>
             {cuisines.map((cuisine) => (
-              <option value={cuisine}>
-                {cuisine[0].toUpperCase() + cuisine.slice(1)}
-              </option>
+              <option value={cuisine}>{cuisine}</option>
             ))}
             ;
           </select>
