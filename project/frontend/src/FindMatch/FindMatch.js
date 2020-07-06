@@ -24,6 +24,7 @@ class PreferenceForm extends React.Component {
   }
 
   handleSubmit(event) {
+    // TODO: Remove alert and implement.
     alert('the cuisine you chose is: ' + this.state.cuisine);
     event.preventDefault();
   }
