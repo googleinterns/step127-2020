@@ -17,17 +17,15 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Switch>
-        
         <Route path='/test'>
           <RestaurantCard />
         </Route>
-        
+
         <Route path='/'>
           <Header />
           <HomePage />
           <Footer />
         </Route>
-        
       </Switch>
     </Router>
   </React.StrictMode>,
