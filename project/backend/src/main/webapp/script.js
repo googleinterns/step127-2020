@@ -52,31 +52,31 @@ function getRecommendation() {
               lat,
               lng,
             },
-            radius: {
-              pref: radius,
-              weight: radiusWeight,
-            },
-            priceLevel: {
-              pref: priceLevel,
-              weight: priceLevelWeight,
-            },
-            diningExp: {
-              pref: diningExp,
-              weight: diningExpWeight,
-            },
+          radius: {
+            pref: radius,
+            weight: radiusWeight,
           },
-        }),
-      })
-        .then((response) => response.text())
-        .then((data) => {
-          try {
-            const selections = JSON.parse(data);
-            console.log(selections);
-          } catch (err) {
-            console.log(err);
-          }
-        });
-    });
+          priceLevel: {
+            pref: priceLevel,
+            weight: priceLevelWeight,
+          },
+          diningExp: {
+            pref: diningExp,
+            weight: diningExpWeight,
+          },
+        },
+      }),
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        try {
+          const selections = JSON.parse(data);
+          console.log(selections);
+        } catch (err) {
+          console.log(err);
+        }
+      });
+  });
 }
 
 function milesToMeters(numMiles) {
