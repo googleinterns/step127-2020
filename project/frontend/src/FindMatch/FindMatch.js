@@ -101,6 +101,7 @@ class PreferenceForm extends React.Component {
             name='latitude'
             value={this.state.latitude}
             onChange={this.changeState}
+            required
           />
         </label>
         <label>
@@ -111,6 +112,7 @@ class PreferenceForm extends React.Component {
             name='longitude'
             value={this.state.longitude}
             onChange={this.changeState}
+            required
           />
         </label>
         <label>
