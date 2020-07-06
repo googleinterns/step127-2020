@@ -1,12 +1,12 @@
 package com.google.sps.data;
 
+import com.google.gson.Gson;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.json.JSONArray;
-import com.google.gson.Gson;
-import java.util.HashMap;
-import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -82,7 +82,7 @@ public final class RestaurantScorer {
     }
     return statistics;
   }
-  
+
   /**
    * Calculates the distance in meters between two sets of lat long coordinates using the Haversine
    * formula.
