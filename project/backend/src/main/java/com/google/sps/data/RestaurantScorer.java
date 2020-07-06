@@ -69,11 +69,13 @@ public final class RestaurantScorer {
   /** Converts meters to miles and rounds to the nearest mile. */
   private static long roundMetersToMiles(double numMeters) {
     return Math.round(numMeters / 1609.34);
-    /** Skews ratings so that ratings with a lower number of ratings are weighed less. */
-    private static double calculateRatingScore(double avgRating, int numRatings) {
-      int totalRatings = NUM_INITIAL_RATINGS + numRatings;
-      double totalPoints = NUM_INITIAL_RATINGS * MID_RATING + avgRating * numRatings;
-      double weightedRating = totalPoints / totalRatings;
-      return (weightedRating - MID_RATING) / MAX_RATING;
-    }
   }
+
+  /** Skews ratings so that ratings with a lower number of ratings are weighed less. */
+  private static double calculateRatingScore(double avgRating, int numRatings) {
+    int totalRatings = NUM_INITIAL_RATINGS + numRatings;
+    double totalPoints = NUM_INITIAL_RATINGS * MID_RATING + avgRating * numRatings;
+    double weightedRating = totalPoints / totalRatings;
+    return (weightedRating - MID_RATING) / MAX_RATING;
+  }
+}
