@@ -1,104 +1,75 @@
 import './Header.css';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 
+import { AuthContext } from '../components/Authentication.js';
 import Modal from '../components/Modal.js';
 import Loading from '../components/Loading.js';
 
+function UserModal(props) {
+  return (
+    <Modal
+      open={props.isModalOpen}
+      onDismiss={props.toggleModal}
+      top='64px'
+      right='16px'>
+      <img
+        className='profile-pic large'
+        src={props.user.getImageUrl()}
+        alt='Large profile.'/>
+      <h4 className='user-name'>{props.user.getName()}</h4>
+      <h5 className='user-email'>{props.user.getEmail()}</h5>
+      <button>Profile</button>
+      <br />
+      <button className='sign-out' onClick={props.signOut}>Sign Out</button>
+    </Modal>
+  );
+}
+
 function Header(props) {
-  const [GoogleAuth, setGoogleAuth] = useState(undefined);
-  const [currentUser, setCurrentUser] = useState(undefined);
-  const [signedIn, setSignedIn] = useState(false);
+  const context = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const onGoogleAuthLoaded = () => {
-      window.gapi.load('auth2', () => {
-        const auth2 = window.gapi.auth2.init({
-          client_id: '21423804760-e3goj1cdhg49ojdf780mcq92qgshbr4v.apps.googleusercontent.com',
-        });
-
-        auth2.isSignedIn.listen((signedIn) => {
-          setSignedIn(signedIn);
-        });
-
-        auth2.currentUser.listen((user) => {
-          setCurrentUser(user);
-        });
-
-        setGoogleAuth(auth2);
-      });
-    };
-
-    if (window.gapi) {
-      onGoogleAuthLoaded();
-      return () => {};
-    } else {
-      window.addEventListener('DOMContentLoaded', onGoogleAuthLoaded);
-      return () => {
-        window.removeEventListener('DOMContentLoaded', onGoogleAuthLoaded);
-      };
-    }
-  }, []);
-
-  if (currentUser === undefined) {
-    return (
-      <div id='header'>
-        <Loading />
-      </div>
-    );
-  } else if (signedIn && currentUser.isSignedIn()) {
+  let headerContent;
+  if (context.currentUser.get === undefined) {
+    headerContent = <Loading />;
+  } else if (context.currentUser.get.isSignedIn()) {
     const toggleModal = () => {
-      setIsModalOpen(!isModalOpen);
+      setIsModalOpen((prev) => !prev);
     };
-
+    
     const signOut = () => {
       setIsModalOpen(false);
-      GoogleAuth.signOut();
+      context.GoogleAuth.get.signOut();
     };
-
-    const profile = currentUser.getBasicProfile();
-    const name = profile.getName();
-    const email = profile.getEmail();
-    const imageUrl = profile.getImageUrl();
-
-    return (
-      <div id='header'>
-        <img
-          className='profile-pic'
-          src={imageUrl}
-          alt='Profile.'
-          onClick={toggleModal}
-        />
-        <Modal
-          open={isModalOpen}
-          onDismiss={toggleModal}
-          top='64px'
-          right='16px'>
-          <img
-            className='profile-pic large'
-            src={imageUrl}
-            alt='Large profile.'
-          />
-          <h4 className='user-name'>{name}</h4>
-          <h5 className='user-email'>{email}</h5>
-          <button>Profile</button>
-          <br />
-          <button className='sign-out' onClick={signOut}>
-            Sign Out
-          </button>
-        </Modal>
-      </div>
-    );
+    
+    headerContent = ([
+      <img
+        key='profile-pic'
+        className='profile-pic'
+        src={context.currentUser.get.getBasicProfile().getImageUrl()}
+        alt='Profile.'
+        onClick={toggleModal}/>,
+      <UserModal
+        key='user-modal'
+        isModalOpen={isModalOpen}
+        toggleModal={toggleModal}
+        signOut={signOut}
+        user={context.currentUser.get.getBasicProfile()}/>
+    ]);
   } else {
-    return (
-      <div id='header'>
-        <button className='sign-in' onClick={GoogleAuth.signIn}>
-          Sign In with Google
-        </button>
-      </div>
+    headerContent = (
+      <button className='sign-in' onClick={context.GoogleAuth.get.signIn}>
+        Sign In with Google
+      </button>
     );
   }
+  
+  return (
+    <div id='header'>
+      {headerContent}
+    </div>
+  );
 }
 
 export default Header;
