@@ -25,29 +25,14 @@ function getRecommendation() {
   const diningExp = document.getElementById('dining-experience').value;
   const priceLevelWeight = 2;
   const diningExpWeight = 4;
-  const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
-  const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-  const textSearchBaseUrl =
-      'https://maps.googleapis.com/maps/api/place/textsearch/json?';
-  const promises = [];
-  for (let cuisineType of cuisineTypes) {
-    const searchParams = new URLSearchParams();
-    searchParams.append('query', cuisineType + ' restaurant');
-    searchParams.append('location', lat + ',' + lng);
-    searchParams.append('radius', radius);
-    searchParams.append('key', apiKey);
-    promises.push(fetch(proxyUrl + textSearchBaseUrl + searchParams));
-  }
-  console.log(promises);
-  
-  Promise.all(promises)
+  const promises = makePromisesArray(cuisineTypes, lat, lng, radius);
+
+  Promise
+      .all(promises)
       // This gives us the list of restaurants.
-      .then(function (responses) {
-        // Get a JSON object from each of the responses
-        return Promise.all(responses.map(function (response) {
-          return response.json();
-        }));
-      })
+      .then(
+          (responses) =>
+              Promise.all(responses.map((response) => response.json())))
       .then((data) => {
         let restaurants = [];
         for (let restaurant of data) {
@@ -80,6 +65,27 @@ function getRecommendation() {
               console.log(selection);
             });
       });
+}
+
+/**
+ *  Returns an array of promises of calls to the Google Places API.
+ *  One promise is created for every cuisine type.
+ */
+function makePromisesArray(cuisineTypes, lat, lng, radius) {
+  const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
+  const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+  const textSearchBaseUrl =
+      'https://maps.googleapis.com/maps/api/place/textsearch/json?';
+  const promises = [];
+  for (let cuisineType of cuisineTypes) {
+    const searchParams = new URLSearchParams();
+    searchParams.append('query', cuisineType + ' restaurant');
+    searchParams.append('location', lat + ',' + lng);
+    searchParams.append('radius', radius);
+    searchParams.append('key', apiKey);
+    promises.push(fetch(proxyUrl + textSearchBaseUrl + searchParams));
+  }
+  return promises;
 }
 
 function milesToMeters(numMiles) {
