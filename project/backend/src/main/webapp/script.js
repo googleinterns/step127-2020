@@ -16,7 +16,7 @@
 function getRecommendation() {
   const cuisineType = document.getElementById('cuisine').value;
   const radius = milesToMeters(
-    parseInt(document.getElementById('distance').value)
+      parseInt(document.getElementById('distance').value),
   );
   const priceLevel = parseInt(document.getElementById('price-level').value);
   const lat = parseFloat(document.getElementById('latitude').value);
@@ -35,48 +35,48 @@ function getRecommendation() {
   searchParams.append('radius', radius);
   searchParams.append('key', apiKey);
   fetch(proxyUrl + textSearchBaseUrl + searchParams)
-    // This gives us the list of restaurants.
-    .then((response) => response.json())
-    .then((data) => {
-      const restaurants = data.results;
-      fetch('/recommendation', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          restaurants,
-          preferences: {
-            cuisineType,
-            currLocation: {
-              lat,
-              lng,
-            },
-            radius: {
-              pref: radius,
-              weight: radiusWeight,
-            },
-            priceLevel: {
-              pref: priceLevel,
-              weight: priceLevelWeight,
-            },
-            diningExp: {
-              pref: diningExp,
-              weight: diningExpWeight,
-            },
+  // This gives us the list of restaurants.
+      .then((response) => response.json())
+      .then((data) => {
+        const restaurants = data.results;
+        fetch('/recommendation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        }),
-      })
-        .then((response) => response.text())
-        .then((data) => {
-          try {
-            const selections = JSON.parse(data);
-            console.log(selections);
-          } catch (err) {
-            console.log(err);
-          }
-        });
-    });
+          body: JSON.stringify({
+            restaurants,
+            preferences: {
+              cuisineType,
+              currLocation: {
+                lat,
+                lng,
+              },
+              radius: {
+                pref: radius,
+                weight: radiusWeight,
+              },
+              priceLevel: {
+                pref: priceLevel,
+                weight: priceLevelWeight,
+              },
+              diningExp: {
+                pref: diningExp,
+                weight: diningExpWeight,
+              },
+            },
+          }),
+        })
+            .then((response) => response.text())
+            .then((data) => {
+              try {
+                const selections = JSON.parse(data);
+                console.log(selections);
+              } catch (err) {
+                console.log(err);
+              }
+            });
+      });
 }
 
 function milesToMeters(numMiles) {
