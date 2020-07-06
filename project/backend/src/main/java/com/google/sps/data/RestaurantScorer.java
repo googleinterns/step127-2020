@@ -13,6 +13,7 @@ public final class RestaurantScorer {
   // Number of "dummy ratings" that will be used to calculate the rating score.
   // Arbitrary value will be replaced by a value based on the average num ratings.
   private static final int NUM_INITIAL_RATINGS = 20;
+  private static final Gson GSON = new Gson();
   /** Class should not be instantiated. */
   private RestaurantScorer() {}
 
@@ -21,9 +22,10 @@ public final class RestaurantScorer {
     int priceLevelWeight = preferences.getJSONObject("priceLevel").getInt("weight");
     int diningExpWeight = preferences.getJSONObject("diningExp").getInt("weight");
     int radiusWeight = preferences.getJSONObject("radius").getInt("weight");
-    int maxPoints = priceLevelWeight + diningExpWeight + radiusWeight + 1;
+    int maxPoints = priceLevelWeight + diningExpWeight + radiusWeight
+        + 1; // add 1 because rating score has an upper bound of 1
     Map<String, Double> currLocation =
-        new Gson().fromJson(preferences.getJSONObject("currLocation").toString(), HashMap.class);
+        GSON.fromJson(preferences.getJSONObject("currLocation").toString(), HashMap.class);
     double score = 0;
     double restaurantRating = restaurant.getAvgRating();
     double distMeters = distanceInMeters(currLocation, restaurant.getLatLngCoords());
@@ -53,7 +55,10 @@ public final class RestaurantScorer {
     return percentMatch;
   }
 
-  /** Calculates the distance in meters between two sets of lat long coordinates. */
+  /**
+   * Calculates the distance in meters between two sets of lat long coordinates using the Haversine
+   * formula.
+   */
   private static double distanceInMeters(
       Map<String, Double> currCoords, Map<String, Double> placeCoords) {
     double latDiff = Math.toRadians(placeCoords.get("lat") - currCoords.get("lat"));
