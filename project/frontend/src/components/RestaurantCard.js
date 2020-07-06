@@ -82,8 +82,31 @@ function reducer(state, action) {
         shifting: true,
       };
     }
-    default:
+    case 'PREV_SLIDE': {
+      const newSlide = (state.slide > 0) ? state.slide - 1 : state.slide;
+      const newLeft = newSlide * -width;
+      return {
+        left: newLeft,
+        lastLeft: newLeft,
+        slide: newSlide,
+        slideCount: state.slideCount,
+        shifting: true,
+      };
+    }
+    case 'NEXT_SLIDE': {
+      const newSlide = (state.slide < state.slideCount - 1) ? state.slide + 1 : state.slide;
+      const newLeft = newSlide * -width;
+      return {
+        left: newLeft,
+        lastLeft: newLeft,
+        slide: newSlide,
+        slideCount: state.slideCount,
+        shifting: true,
+      };
+    }
+    default: {
       throw new Error();
+    }
   }
 }
 
@@ -136,11 +159,13 @@ function ImageSlider(props) {
         src={Prev}
         className='control prev'
         style={{ opacity: areControlsVisible ? '1' : '0' }}
+        onClick={() => dispatch({type: 'PREV_SLIDE'})}
       />
       <img
         src={Next}
         className='control next'
         style={{ opacity: areControlsVisible ? '1' : '0' }}
+        onClick={() => dispatch({type: 'NEXT_SLIDE'})}
       />
     </div>
   );
