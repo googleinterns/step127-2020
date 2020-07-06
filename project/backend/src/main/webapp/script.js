@@ -15,8 +15,8 @@
 /* exported getRecommendation */
 function getRecommendation() {
   const cuisineType = document.getElementById('cuisine').value;
-  const radius =
-      milesToMeters(parseInt(document.getElementById('distance').value));
+  const milesRadius = parseInt(document.getElementById('distance').value);
+  const radius = milesToMeters(milesRadius);
   const priceLevel = parseInt(document.getElementById('price-level').value);
   const lat = parseFloat(document.getElementById('latitude').value);
   const lng = parseFloat(document.getElementById('longitude').value);
@@ -27,55 +27,55 @@ function getRecommendation() {
   const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
   const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
   const textSearchBaseUrl =
-      'https://maps.googleapis.com/maps/api/place/textsearch/json?';
+    'https://maps.googleapis.com/maps/api/place/textsearch/json?';
   const searchParams = new URLSearchParams();
   searchParams.append('query', cuisineType + ' restaurant');
   searchParams.append('location', lat + ',' + lng);
   searchParams.append('radius', radius);
   searchParams.append('key', apiKey);
   fetch(proxyUrl + textSearchBaseUrl + searchParams)
-      // This gives us the list of restaurants.
-      .then((response) => response.json())
-      .then((data) => {
-        const restaurants = data.results;
-        fetch('/recommendation', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            restaurants,
-            preferences: {
-              cuisineType,
-              currLocation: {
-                lat,
-                lng,
-              },
-              radius: {
-                pref: radius,
-                weight: radiusWeight,
-              },
-              priceLevel: {
-                pref: priceLevel,
-                weight: priceLevelWeight,
-              },
-              diningExp: {
-                pref: diningExp,
-                weight: diningExpWeight,
-              },
+    // This gives us the list of restaurants.
+    .then((response) => response.json())
+    .then((data) => {
+      const restaurants = data.results;
+      fetch('/recommendation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          restaurants,
+          preferences: {
+            cuisineType,
+            currLocation: {
+              lat,
+              lng,
             },
-          }),
-        })
-            .then((response) => response.text())
-            .then((data) => {
-              try {
-                const selections = JSON.parse(data);
-                console.log(selections);
-              } catch (err) {
-                console.log(err);
-              }
-            });
-      });
+            radius: {
+              pref: radius,
+              weight: radiusWeight,
+            },
+            priceLevel: {
+              pref: priceLevel,
+              weight: priceLevelWeight,
+            },
+            diningExp: {
+              pref: diningExp,
+              weight: diningExpWeight,
+            },
+          },
+        }),
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          try {
+            const selections = JSON.parse(data);
+            console.log(selections);
+          } catch (err) {
+            console.log(err);
+          }
+        });
+    });
 }
 
 function milesToMeters(numMiles) {
