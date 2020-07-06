@@ -1,5 +1,4 @@
 import React from "react"
-import ReactDOM from "react-dom"
 
 class PreferenceForm extends React.Component {
   constructor(props) {
@@ -28,7 +27,7 @@ class PreferenceForm extends React.Component {
           <select
             name="cuisine"
             id="cuisine"
-            onChange={changeState}
+            onChange={changeState()}
             value={this.state.cuisine}
           >
             {cuisines.map((cuisine) => (
