@@ -15,8 +15,7 @@ function Header(props) {
     const onGoogleAuthLoaded = () => {
       window.gapi.load('auth2', () => {
         const auth2 = window.gapi.auth2.init({
-          client_id:
-            '21423804760-e3goj1cdhg49ojdf780mcq92qgshbr4v.apps.googleusercontent.com',
+          client_id: '21423804760-e3goj1cdhg49ojdf780mcq92qgshbr4v.apps.googleusercontent.com',
         });
 
         auth2.isSignedIn.listen((signedIn) => {
