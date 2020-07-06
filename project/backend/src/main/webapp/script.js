@@ -14,7 +14,9 @@
 
 /* exported getRecommendation */
 function getRecommendation() {
-  const cuisineType = document.getElementById('cuisine').value;
+  const cuisineTypes = [];
+  cuisineTypes.push(document.getElementById('cuisine').value);
+  cuisineTypes.push('chinese');
   const radius =
       milesToMeters(parseInt(document.getElementById('distance').value));
   const priceLevel = parseInt(document.getElementById('price-level').value);
@@ -27,16 +29,30 @@ function getRecommendation() {
   const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
   const textSearchBaseUrl =
       'https://maps.googleapis.com/maps/api/place/textsearch/json?';
-  const searchParams = new URLSearchParams();
-  searchParams.append('query', cuisineType + ' restaurant');
-  searchParams.append('location', lat + ',' + lng);
-  searchParams.append('radius', radius);
-  searchParams.append('key', apiKey);
-  fetch(proxyUrl + textSearchBaseUrl + searchParams)
+  const promises = [];
+  for (let cuisineType of cuisineTypes) {
+    const searchParams = new URLSearchParams();
+    searchParams.append('query', cuisineType + ' restaurant');
+    searchParams.append('location', lat + ',' + lng);
+    searchParams.append('radius', radius);
+    searchParams.append('key', apiKey);
+    promises.push(fetch(proxyUrl + textSearchBaseUrl + searchParams));
+  }
+  console.log(promises);
+  
+  Promise.all(promises)
       // This gives us the list of restaurants.
-      .then((response) => response.json())
+      .then(function (responses) {
+        // Get a JSON object from each of the responses
+        return Promise.all(responses.map(function (response) {
+          return response.json();
+        }));
+      })
       .then((data) => {
-        const restaurants = data.results;
+        let restaurants = [];
+        for (let restaurant of data) {
+          restaurants = restaurants.concat(restaurant.results);
+        }
         fetch('/recommendation', {
           method: 'POST',
           headers: {
@@ -45,7 +61,6 @@ function getRecommendation() {
           body: JSON.stringify({
             restaurants,
             preferences: {
-              cuisineType,
               lat,
               lng,
               radius,
