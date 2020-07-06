@@ -1,35 +1,34 @@
-import React from "react"
+import React from 'react';
 
 class PreferenceForm extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = { cuisine: "" }
-    this.changeState = this.changeState.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    super(props);
+    this.state = { cuisine: '' };
+    this.changeState = this.changeState.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   // Updates the state of the input element so it holds the chosen value.
   changeState(event) {
-    this.setState({ [event.target.name]: event.target.value })
+    this.setState({ [event.target.name]: event.target.value });
   }
 
   handleSubmit(event) {
-    alert("the cuisine you chose is: " + this.state.cuisine)
-    event.preventDefault()
+    alert('the cuisine you chose is: ' + this.state.cuisine);
+    event.preventDefault();
   }
 
   render() {
-    const cuisines = ["italian", "mexican", "indian"]
+    const cuisines = ['italian', 'mexican', 'indian'];
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
           What cuisine?
           <select
-            name="cuisine"
-            id="cuisine"
-            onChange={changeState()}
-            value={this.state.cuisine}
-          >
+            name='cuisine'
+            id='cuisine'
+            onChange={this.changeState}
+            value={this.state.cuisine}>
             {cuisines.map((cuisine) => (
               <option value={cuisine}>
                 {cuisine[0].toUpperCase() + cuisine.slice(1)}
@@ -38,8 +37,8 @@ class PreferenceForm extends React.Component {
             ;
           </select>
         </label>
-        <button type="submit">Submit</button>
+        <button type='submit'>Submit</button>
       </form>
-    )
+    );
   }
 }
