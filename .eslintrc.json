@@ -10,6 +10,7 @@
   "rules": {
     "no-multi-spaces": "off",
     "require-jsdoc": "off",
-    "valid-jsdoc": "off"
+    "valid-jsdoc": "off",
+    "indent": ["error", 2, { "MemberExpression": 1 }]
   }
 }
