@@ -16,12 +16,15 @@ function UserModal(props) {
       <img
         className='profile-pic large'
         src={props.user.getImageUrl()}
-        alt='Large profile.'/>
+        alt='Large profile.'
+      />
       <h4 className='user-name'>{props.user.getName()}</h4>
       <h5 className='user-email'>{props.user.getEmail()}</h5>
       <button>Profile</button>
       <br />
-      <button className='sign-out' onClick={props.signOut}>Sign Out</button>
+      <button className='sign-out' onClick={props.signOut}>
+        Sign Out
+      </button>
     </Modal>
   );
 }
@@ -37,26 +40,28 @@ function Header(props) {
     const toggleModal = () => {
       setIsModalOpen((prev) => !prev);
     };
-    
+
     const signOut = () => {
       setIsModalOpen(false);
       context.GoogleAuth.get.signOut();
     };
-    
-    headerContent = ([
+
+    headerContent = [
       <img
         key='profile-pic'
         className='profile-pic'
         src={context.currentUser.get.getBasicProfile().getImageUrl()}
         alt='Profile.'
-        onClick={toggleModal}/>,
+        onClick={toggleModal}
+      />,
       <UserModal
         key='user-modal'
         isModalOpen={isModalOpen}
         toggleModal={toggleModal}
         signOut={signOut}
-        user={context.currentUser.get.getBasicProfile()}/>
-    ]);
+        user={context.currentUser.get.getBasicProfile()}
+      />,
+    ];
   } else {
     headerContent = (
       <button className='sign-in' onClick={context.GoogleAuth.get.signIn}>
@@ -64,12 +69,8 @@ function Header(props) {
       </button>
     );
   }
-  
-  return (
-    <div id='header'>
-      {headerContent}
-    </div>
-  );
+
+  return <div id='header'>{headerContent}</div>;
 }
 
 export default Header;
