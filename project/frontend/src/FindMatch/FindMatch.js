@@ -11,11 +11,12 @@ class PreferenceForm extends React.Component {
 
   // Updates the state of the input element so it holds the chosen value.
   changeState(event) {
-    this.setState({ cuisine: event.target.value })
+    this.setState({ [event.target.name]: event.target.value })
   }
 
   handleSubmit(event) {
     alert("the cuisine you chose is: " + this.state.cuisine)
+    event.preventDefault()
   }
 
   render() {
