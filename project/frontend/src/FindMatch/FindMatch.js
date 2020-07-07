@@ -31,7 +31,7 @@ class PreferenceForm extends React.Component {
 
   render() {
     const cuisines = ['Italian', 'Mexican', 'Indian'];
-    const distances_on_miles = [1, 5, 10, 25];
+    const distances_in_miles = [1, 5, 10, 25];
     const dining_experiences = {
       meal_takeaway: 'Takeout',
       meal_delivery: 'Delivery',
@@ -62,7 +62,7 @@ class PreferenceForm extends React.Component {
             id='distance'
             onChange={this.changeState}
             value={this.state.distance}>
-            {distances.map((distance) => (
+            {distances_in_miles.map((distance) => (
               <option value={distance}>{distance + ' mile'}</option>
             ))}
             ;
