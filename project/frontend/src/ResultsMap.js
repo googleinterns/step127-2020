@@ -11,6 +11,7 @@ export class MapContainer extends React.Component {
   render() {
     return (
       <Map
+        id='map-container'
         google={this.props.google}
         zoom={14}
         style={mapStyles}
