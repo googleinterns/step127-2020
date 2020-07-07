@@ -41,3 +41,5 @@ function RatingStars(props) {
     </div>
   );
 }
+
+export default RatingStars;
