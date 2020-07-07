@@ -6,10 +6,10 @@ import Modal from '../components/Modal.js';
 
 /**
  * A Modal implementation which displays the specified user information.
- * 
+ *
  * @param {bool} props.open True if the modal should be shown; false if it
  *     should be hidden.
- * @param {function(): undefined} props.onDismiss Callback for when modal 
+ * @param {function(): undefined} props.onDismiss Callback for when modal
  *     is dismissed by touching modal backdrop, should update props.open
  *     to false.
  * @param {!gapi.auth2.BasicProfile} user The basic profile of the user
