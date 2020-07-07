@@ -22,17 +22,15 @@ ReactDOM.render(
     <Authentication>
       <Router>
         <Switch>
-          
           <Route path='/test'>
             <RestaurantCard restaurant={restaurant} details={details} />
           </Route>
-          
+
           <Route path='/'>
             <Header />
             <HomePage />
             <Footer />
           </Route>
-          
         </Switch>
       </Router>
     </Authentication>
