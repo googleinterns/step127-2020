@@ -20,7 +20,10 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+      "extends": [
+        "plugin:jsx-a11y/recommended"
+      ]
   },
   "engines": {
     "node": "12.x.x"
