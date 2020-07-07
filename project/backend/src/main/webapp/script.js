@@ -30,9 +30,9 @@ function getRecommendation() {
 
   Promise.all(promises)
     // This gives us the list of restaurants.
-    .then(function (responses) {
-      Promise.all(responses.map((response) => response.json()));
-    })
+    .then((responses) =>
+      Promise.all(responses.map((response) => response.json()))
+    )
     .then((data) => {
       let restaurants = [];
       for (const restaurant of data) {
