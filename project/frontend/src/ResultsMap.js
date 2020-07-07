@@ -8,15 +8,27 @@ const mapStyle = {
 };
 
 export class MapContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    // TODO: change this to be the first match coordinates
+    this.state = { lat: 40.837, lng: -73.865 };
+    this.changeCenter = this.changeCenter.bind(this);
+  }
+
+  changeCenter() {
+    // TODO: change this to read off of the returned restaurants
+    this.setState({ lat: 37.419, lng: -122.078 });
+  }
+
   render() {
     return (
       <Map
         google={this.props.google}
         zoom={14}
         style={mapStyle}
-        initialCenter={{
-          lat: -1.2884,
-          lng: 36.8233,
+        center={{
+          lat: this.state.lat,
+          lng: this.state.lng,
         }}
       />
     );
