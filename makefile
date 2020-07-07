@@ -13,9 +13,8 @@ node_modules:
 	npm install clang-format prettier css-validator html-validate eslint eslint-config-google
 
 pretty: node_modules
-	$(PRETTIER) --write $(HTML) $(CSS)
+	$(PRETTIER) --write $(HTML) $(CSS) $(JS)
 	$(CLANG_FORMAT) -i $(JAVA)
-	$(CLANG_FORMAT) -i $(JS)
 
 validate: node_modules
 	$(HTML_VALIDATE) $(HTML)

@@ -16,55 +16,65 @@
 function getRecommendation() {
   const cuisineTypes = [];
   cuisineTypes.push(document.getElementById('cuisine').value);
-  cuisineTypes.push('chinese');
-  const radius =
-      milesToMeters(parseInt(document.getElementById('distance').value));
+  const milesRadius = parseInt(document.getElementById('distance').value);
+  const radius = milesToMeters(milesRadius);
   const priceLevel = parseInt(document.getElementById('price-level').value);
-  const lat = document.getElementById('latitude').value;
-  const lng = document.getElementById('longitude').value;
+  const lat = parseFloat(document.getElementById('latitude').value);
+  const lng = parseFloat(document.getElementById('longitude').value);
   const diningExp = document.getElementById('dining-experience').value;
   const priceLevelWeight = 2;
   const diningExpWeight = 4;
+  const radiusWeight = 3;
+
   const promises = makePromisesArray(cuisineTypes, lat, lng, radius);
 
-  Promise
-      .all(promises)
-      // This gives us the list of restaurants.
-      .then(
-          (responses) =>
-            Promise.all(responses.map((response) => response.json())))
-      .then((data) => {
-        let restaurants = [];
-        for (const restaurant of data) {
-          restaurants = restaurants.concat(restaurant.results);
-        }
-        fetch('/recommendation', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            restaurants,
-            preferences: {
+  Promise.all(promises)
+    // This gives us the list of restaurants.
+    .then(function (responses) {
+      Promise.all(responses.map((response) => response.json()));
+    })
+    .then((data) => {
+      let restaurants = [];
+      for (const restaurant of data) {
+        restaurants = restaurants.concat(restaurant.results);
+      }
+      fetch('/recommendation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          restaurants,
+          preferences: {
+            currLocation: {
               lat,
               lng,
-              radius,
-              priceLevel: {
-                pref: priceLevel,
-                weight: priceLevelWeight,
-              },
-              diningExp: {
-                pref: diningExp,
-                weight: diningExpWeight,
-              },
             },
-          }),
-        })
-            .then((response) => response.json())
-            .then((selection) => {
-              console.log(selection);
-            });
-      });
+            radius: {
+              pref: radius,
+              weight: radiusWeight,
+            },
+            priceLevel: {
+              pref: priceLevel,
+              weight: priceLevelWeight,
+            },
+            diningExp: {
+              pref: diningExp,
+              weight: diningExpWeight,
+            },
+          },
+        }),
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          try {
+            const selections = JSON.parse(data);
+            console.log(selections);
+          } catch (err) {
+            console.log(err);
+          }
+        });
+    });
 }
 
 /**
@@ -75,7 +85,7 @@ function makePromisesArray(cuisineTypes, lat, lng, radius) {
   const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
   const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
   const textSearchBaseUrl =
-      'https://maps.googleapis.com/maps/api/place/textsearch/json?';
+    'https://maps.googleapis.com/maps/api/place/textsearch/json?';
   const promises = [];
   for (const cuisineType of cuisineTypes) {
     const searchParams = new URLSearchParams();

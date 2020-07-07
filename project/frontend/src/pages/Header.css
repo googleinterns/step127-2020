@@ -1,0 +1,16 @@
+#header {
+  position: sticky;
+  height: 56px;
+  width: 100%;
+  top: 0px;
+  display: flex;
+  background-color: white;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  z-index: 5;
+}
+
+.header-button {
+  margin: 0px 16px 0px 0px;
+}

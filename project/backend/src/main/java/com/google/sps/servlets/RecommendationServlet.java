@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,9 +42,7 @@ public class RecommendationServlet extends HttpServlet {
       sortedRestaurants.sort(Map.Entry.comparingByValue(Collections.reverseOrder()));
       response.getWriter().println(gson.toJson(sortedRestaurants));
     } catch (JSONException e) {
-      LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
-      // TODO: handle case where list of restaurants is empty.
-      response.getWriter().println();
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -54,11 +53,13 @@ public class RecommendationServlet extends HttpServlet {
   private static Map<Restaurant, Double> scoreRestaurants(
       JSONArray restaurantList, JSONObject preferences) {
     Map<Restaurant, Double> restaurantScores = new HashMap<>();
+    DescriptiveStatistics statistics = RestaurantScorer.createDescriptiveStatistics(restaurantList);
     for (int i = 0; i < restaurantList.length(); i++) {
       try {
         Restaurant restaurant =
             JsonToRestaurantParser.toRestaurant(restaurantList.getJSONObject(i));
-        restaurantScores.put(restaurant, RestaurantScorer.score(restaurant, preferences));
+        restaurantScores.put(
+            restaurant, RestaurantScorer.score(restaurant, preferences, statistics));
       } catch (JSONException e) {
         LOGGER.log(Level.WARNING, "Error parsing JSON: " + e.getMessage());
       }
