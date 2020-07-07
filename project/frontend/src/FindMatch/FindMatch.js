@@ -33,15 +33,18 @@ class PreferenceForm extends React.Component {
   }
 
   handleSubmit(event) {
-    // TODO: Remove alert and implement.
-    console.log(this.state);
     this.getRecommendation();
     event.preventDefault();
   }
 
   render() {
     const cuisines = ['Italian', 'Mexican', 'Indian'];
-    const distances_in_miles = [1, 5, 10, 25];
+    const distances_in_miles = {
+      '1 mile': 1,
+      '5 miles': 5,
+      '10 miles': 10,
+      '25 miles': 25,
+    };
     const dining_experiences = {
       Takeout: 'meal_takeaway',
       Delivery: 'meal_delivery',
@@ -74,9 +77,9 @@ class PreferenceForm extends React.Component {
             id='distance'
             onChange={this.changeState}
             value={this.state.distance}>
-            {distances_in_miles.map((distance) => (
-              <option key={distance} value={distance}>
-                {distance + ' mile'}
+            {Object.entries(distances_in_miles).map(([label, value]) => (
+              <option key={label} value={value}>
+                {label}
               </option>
             ))}
             ;
@@ -89,9 +92,9 @@ class PreferenceForm extends React.Component {
             id='dining_experience'
             onChange={this.changeState}
             value={this.state.dining_experience}>
-            {Object.entries(dining_experiences).map(([key, value]) => (
-              <option key={key} value={value}>
-                {key}
+            {Object.entries(dining_experiences).map(([label, apiValue]) => (
+              <option key={label} value={apiValue}>
+                {label}
               </option>
             ))}
             ;
@@ -104,9 +107,9 @@ class PreferenceForm extends React.Component {
             id='price_level'
             onChange={this.changeState}
             value={this.state.price_level}>
-            {Object.entries(prices).map(([key, value]) => (
-              <option key={key} value={value}>
-                {key}
+            {Object.entries(prices).map(([level, intLevel]) => (
+              <option key={level} value={intLevel}>
+                {level}
               </option>
             ))}
             ;
