@@ -23,7 +23,7 @@ function HomePage() {
       <div className='row-flex match u-pad64 u-pad-no-top'>
         <div
           className='example'
-          style={{ transform: 'translateX(48px)' }}></div>
+          style={{transform: 'translateX(48px)',}}></div>
         <div className='seven columns description match u-pad56'>
           <h4>Let us find your best restaurant match.</h4>
           <p>
@@ -59,7 +59,7 @@ function HomePage() {
         </div>
         <div
           className='example'
-          style={{ transform: 'translateX(-48px)' }}></div>
+          style={{transform: 'translateX(-48px)',}}></div>
       </div>
       <div className='row-flex feedback u-pad48'>
         <h4>Have any feedback?</h4>

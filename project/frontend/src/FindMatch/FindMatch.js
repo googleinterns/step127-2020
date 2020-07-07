@@ -20,7 +20,7 @@ class PreferenceForm extends React.Component {
   changeState(event) {
     const value =
       event.target.name === 'open' ? event.target.checked : event.target.value;
-    this.setState({ [event.target.name]: value });
+    this.setState({[event.target.name]: value,});
   }
 
   handleSubmit(event) {
@@ -37,7 +37,7 @@ class PreferenceForm extends React.Component {
       meal_delivery: 'Delivery',
       restaurant: 'Eat In',
     };
-    const prices = { Low: 1, Medium: 2, High: 3, 'Very High': 4 };
+    const prices = {'Low': 1, 'Medium': 2, 'High': 3, 'Very High': 4,};
     return (
       <form onSubmit={this.handleSubmit}>
         <label>

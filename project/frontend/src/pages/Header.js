@@ -14,7 +14,7 @@ function Header(props) {
           </button>,
           <button key='2' className='header-button'>
             Log in
-          </button>,
+          </button>
         ]
       )}
     </div>
