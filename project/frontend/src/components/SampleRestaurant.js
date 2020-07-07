@@ -1,3 +1,7 @@
+/**
+ * A sample restaurant and restaurant detail object for use 
+ * with a RestaurantCard component.
+ */
 const restaurant = {
   hash: 123456789,
   key: {
