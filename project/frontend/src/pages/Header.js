@@ -14,7 +14,9 @@ function Header(props) {
   const authContext = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (!authContext.currentUser.get) {
+  const user = authContext.currentUser.get;
+
+  if (!user) {
     return (
       <div id='header'>
         <Loading />
@@ -22,19 +24,19 @@ function Header(props) {
     );
   }
 
-  if (authContext.currentUser.get.isSignedIn()) {
+  if (user.isSignedIn()) {
     return (
       <div id='header'>
         <img
           className='profile-pic'
-          src={authContext.currentUser.get.getBasicProfile().getImageUrl()}
+          src={user.getBasicProfile().getImageUrl()}
           alt='Profile.'
           onClick={() => setIsModalOpen((prev) => !prev)}
         />
         <UserModal
           open={isModalOpen}
           onDismiss={() => setIsModalOpen((prev) => !prev)}
-          user={authContext.currentUser.get.getBasicProfile()}
+          user={user.getBasicProfile()}
           signOut={() => {
             setIsModalOpen(false);
             authContext.signOut();
