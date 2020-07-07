@@ -14,6 +14,9 @@ import RestaurantCard from './components/RestaurantCard.js';
 
 import * as serviceWorker from './serviceWorker';
 
+// TODO: remove
+import { restaurant, details } from './components/SampleRestaurant.js';
+
 ReactDOM.render(
   <React.StrictMode>
     <Authentication>
@@ -21,7 +24,7 @@ ReactDOM.render(
         <Switch>
           
           <Route path='/test'>
-            <RestaurantCard />
+            <RestaurantCard restaurant={restaurant} details={details} />
           </Route>
           
           <Route path='/'>
