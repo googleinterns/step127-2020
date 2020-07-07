@@ -28,8 +28,8 @@ function Header(props) {
           onClick={() => setIsModalOpen((prev) => !prev)}
         />
         <UserModal
-          isModalOpen={isModalOpen}
-          toggleModal={() => setIsModalOpen((prev) => !prev)}
+          open={isModalOpen}
+          onDismiss={() => setIsModalOpen((prev) => !prev)}
           user={authContext.currentUser.get.getBasicProfile()}
           signOut={() => {
             setIsModalOpen(false);
