@@ -6,6 +6,10 @@ import { AuthContext } from '../components/Authentication.js';
 import Loading from '../components/Loading.js';
 import UserModal from '../components/UserModal.js';
 
+/**
+ * The persistent header of this application. Displays a sign in button
+ * or user profile picture based on authentication status.
+ */
 function Header(props) {
   const authContext = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
