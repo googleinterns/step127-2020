@@ -21,7 +21,7 @@ function Authentication(props) {
     signIn: () => {},
     signOut: () => {},
   });
-  const [currentUser, setCurrentUser] = useState({ get: undefined });
+  const [currentUser, setCurrentUser] = useState({ get: null });
 
   useEffect(() => {
     window.gapi.load('auth2', () => {
