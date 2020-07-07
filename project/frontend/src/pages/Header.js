@@ -10,15 +10,6 @@ function Header(props) {
   const context = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const toggleModal = () => {
-    setIsModalOpen((prev) => !prev);
-  };
-
-  const signOut = () => {
-    setIsModalOpen(false);
-    context.GoogleAuth.get.signOut();
-  };
-
   if (context.currentUser.get === undefined) {
     return <div id='header'><Loading /></div>;
   }
@@ -30,25 +21,28 @@ function Header(props) {
           className='profile-pic'
           src={context.currentUser.get.getBasicProfile().getImageUrl()}
           alt='Profile.'
-          onClick={toggleModal}
+          onClick={() => setIsModalOpen((prev) => !prev)}
         />
         <UserModal
           isModalOpen={isModalOpen}
-          toggleModal={toggleModal}
-          signOut={signOut}
+          toggleModal={() => setIsModalOpen((prev) => !prev)}
           user={context.currentUser.get.getBasicProfile()}
+          signOut={() => {
+            setIsModalOpen(false);
+            context.GoogleAuth.get.signOut();
+          }}
         />
       </div>
     );
-  } else {
-    return (
-      <div>
-        <button className='sign-in' onClick={context.GoogleAuth.get.signIn}>
-          Sign In with Google
-        </button>
-      </div>
-    );
   }
+  
+  return (
+    <div>
+      <button className='sign-in' onClick={context.GoogleAuth.get.signIn}>
+        Sign In with Google
+      </button>
+    </div>
+  );
 }
 
 export default Header;
