@@ -11,23 +11,31 @@ function reducer(state, action) {
 
   switch (action.type) {
     case 'SWIPING': {
+      const maxLeft = 0.0;
       const minLeft = (state.slideCount - 1) * -width;
-      const dir = action.deltaX > 0 ? 'right' : 'left';
+      let newLeft = state.lastLeft + action.deltaX;
+      newLeft = Math.min(Math.max(newLeft, minLeft), maxLeft);
 
-      let newLeft;
-      if (
-        (dir === 'left' && state.left <= minLeft) ||
-        (dir === 'right' && state.left >= 0)
-      ) {
-        newLeft = state.left;
+      let newSlide = state.slide;
+      const dir = (action.deltaX > 0) ? 'right' : 'left';
+      if (dir === 'left') {
+        if (newLeft <= (state.slide + 1) * -width) {
+          newSlide++;
+        } else if (newLeft > state.slide * -width) {
+          newSlide--;
+        }
       } else {
-        newLeft = state.lastLeft + action.deltaX;
+        if (newLeft >= (state.slide - 1) * -width) {
+          newSlide--;
+        } else if (newLeft < state.slide * -width) {
+          newSlide++;
+        }
       }
-
+      
       return {
         left: newLeft,
         lastLeft: state.lastLeft,
-        slide: state.slide,
+        slide: newSlide,
         slideCount: state.slideCount,
       };
     }
@@ -109,16 +117,26 @@ function ImageSlider(props) {
     slideCount: props.images.length,
   });
 
+  const handleSwipedUpOrDown = (event) => {
+    if (event.deltaX > 0) {
+      dispatch({ type: 'SWIPED_LEFT', velocity: 0 });
+    } else {
+      dispatch({ type: 'SWIPED_RIGHT', velocity: 0 });
+    }
+  };
+
   const handlers = useSwipeable({
+    onSwiping: (event) => {
+      dispatch({ type: 'SWIPING', deltaX: -event.deltaX });
+    },
     onSwipedLeft: (event) => {
       dispatch({ type: 'SWIPED_LEFT', velocity: event.velocity });
     },
     onSwipedRight: (event) => {
       dispatch({ type: 'SWIPED_RIGHT', velocity: event.velocity });
     },
-    onSwiping: (event) => {
-      dispatch({ type: 'SWIPING', deltaX: -event.deltaX });
-    },
+    onSwipedUp: handleSwipedUpOrDown,
+    onSwipedDown: handleSwipedUpOrDown,
     delta: 5,
     trackTouch: true,
     trackMouse: true,
@@ -134,23 +152,23 @@ function ImageSlider(props) {
         className={`slider-wrapper ${state.shifting ? 'shifting' : ''}`}
         style={{ left: state.left + 'px' }}
         {...handlers}>
-        {props.images.map((image) => (
-          <span key={image} className='slide'>
-            {image}
-          </span>
-        ))}
+        {props.images.map(
+          (image, index) => <img key={index} className='slide' src={image} draggable='false'/>
+        )}
       </div>
       <img
         src={prev}
         className='control prev'
         style={{ opacity: areControlsVisible ? '1' : '0' }}
         onClick={() => dispatch({type: 'PREV_SLIDE'})}
+        alt='Previous slide'
       />
       <img
         src={next}
         className='control next'
         style={{ opacity: areControlsVisible ? '1' : '0' }}
         onClick={() => dispatch({type: 'NEXT_SLIDE'})}
+        alt='Next slide'
       />
     </div>
   );

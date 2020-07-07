@@ -20,12 +20,8 @@
   width: 344px;
   height: 200px;
   cursor: grab;
-  text-align: center;
-  font-weight: bold;
-  font-size: 18px;
-  transition: all 1s;
-  position: relative;
-  background: #ffcf47;
+  object-fit: cover;
+  object-position: 50% 50%;
 }
 
 .slide:active {
@@ -41,6 +37,8 @@
   cursor: pointer;
   z-index: 2;
   transition: opacity 0.25s cubic-bezier(0.35, 0.91, 0.33, 0.97);
+  background-color: rgba(255, 255, 255, 0.33);
+  border-radius: 4px;
 }
 
 .control.hidden {
