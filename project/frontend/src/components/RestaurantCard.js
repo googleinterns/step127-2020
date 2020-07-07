@@ -23,11 +23,13 @@ function RatingStars(props) {
   
   return (
     <div className='rating-stars-container'>
-      {stars.map((star) => (
+      {stars.map((star, index) => (
         <img
+          key={index}
           src={(star === 1.0) ? Star : (star === 0.5) ? HalfStar : EmptyStar}
           width='15'
           height='15'
+          alt='Rating star'
         />
       ))}
       <span>{props.avgRating} ({props.numRatings})</span>
@@ -38,12 +40,15 @@ function RatingStars(props) {
 function RestaurantCard(props) {
   const restaurant = props.restaurant;
   const details = props.details;
-  
-  const images = ['Slide 1', 'Slide 2', 'Slide 3', 'Slide 4', 'Slide 5'];
 
+  const photoUrls = details.result.photos.map(
+    (photo) => 'https://maps.googleapis.com/maps/api/place/photo?photoreference=' +
+      photo.photo_reference + '&key=AIzaSyC0Q4CyO-BM4M5jPvL3ayJ09RfymZYQjhs&maxwidth=344'
+  );
+  
   return (
     <div className='restaurant-card'>
-      <ImageSlider images={images} />
+      <ImageSlider images={photoUrls} />
       <div className='restaurant-content'>
         <h5 className='restaurant-name'>{restaurant.key.name}</h5>
         <RatingStars
@@ -54,20 +59,20 @@ function RestaurantCard(props) {
           {'$'.repeat(restaurant.key.priceLevel)} • {restaurant.key.placeTypes.join(', ')}
         </p>
         <div className='restaurant-detail-container'>
-          <img src={Clock} />
+          <img src={Clock} alt='Clock icon'/>
           <span>{details.result.opening_hours.open_now ? 'Open' : 'Closed'}</span>
         </div>
         <div className='restaurant-detail-container'>
-          <img src={Place} />
+          <img src={Place} alt='Place marker icon' />
           <span>{restaurant.key.address}</span>
         </div>
         <div className='restaurant-detail-container'>
-          <img src={Phone} />
-          <span>{details.result.formatted_phone_number}</span>
+          <img src={Globe} alt='Globe icon' />
+          <span>{details.result.website}</span>
         </div>
         <div className='restaurant-detail-container'>
-          <img src={Globe} />
-          <span>{details.result.website}</span>
+          <img src={Phone} alt='Phone icon' />
+          <span>{details.result.formatted_phone_number}</span>
         </div>
       </div>
     </div>
