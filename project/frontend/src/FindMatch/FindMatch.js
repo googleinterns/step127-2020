@@ -43,7 +43,7 @@ class PreferenceForm extends React.Component {
         <label>
           What cuisine?
           <select
-            class='cuisine-type'
+            className='cuisine-type'
             name='cuisine'
             id='cuisine'
             onChange={this.changeState}
