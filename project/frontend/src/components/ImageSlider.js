@@ -20,7 +20,7 @@ const Action = {
 
 /**
  * The default width of a slide.
- * 
+ *
  * @type {number}
  */
 const width = 344;
@@ -41,7 +41,7 @@ function reducer(state, action) {
       // Update the current slide if user slides
       // passed multiple slides in one motion.
       let newSlide = state.slide;
-      const dir = (action.deltaX > 0) ? 'right' : 'left';
+      const dir = action.deltaX > 0 ? 'right' : 'left';
       if (dir === 'left') {
         if (newLeft <= (state.slide + 1) * -width) {
           newSlide++;
@@ -55,7 +55,7 @@ function reducer(state, action) {
           newSlide++;
         }
       }
-      
+
       return {
         left: newLeft,
         lastLeft: state.lastLeft,
@@ -110,7 +110,7 @@ function reducer(state, action) {
       };
     }
     case Action.PREV_SLIDE: {
-      const newSlide = (state.slide > 0) ? state.slide - 1 : state.slide;
+      const newSlide = state.slide > 0 ? state.slide - 1 : state.slide;
       const newLeft = newSlide * -width;
       return {
         left: newLeft,
@@ -121,7 +121,8 @@ function reducer(state, action) {
       };
     }
     case Action.NEXT_SLIDE: {
-      const newSlide = (state.slide < state.slideCount - 1) ? state.slide + 1 : state.slide;
+      const newSlide =
+        state.slide < state.slideCount - 1 ? state.slide + 1 : state.slide;
       const newLeft = newSlide * -width;
       return {
         left: newLeft,
@@ -139,7 +140,7 @@ function reducer(state, action) {
 
 function ImageSlider(props) {
   const [areControlsVisible, setAreControlsVisible] = useState(false);
-  
+
   const [state, dispatch] = useReducer(reducer, {
     left: 0,
     lastLeft: 0,
@@ -182,22 +183,22 @@ function ImageSlider(props) {
         className={`slider-wrapper ${state.shifting ? 'shifting' : ''}`}
         style={{ left: state.left + 'px' }}
         {...handlers}>
-        {props.images.map(
-          (image, index) => <img key={index} className='slide' src={image} draggable='false'/>
-        )}
+        {props.images.map((image, index) => (
+          <img key={index} className='slide' src={image} draggable='false' />
+        ))}
       </div>
       <img
         src={Prev}
         className='control prev'
         style={{ opacity: areControlsVisible ? '1' : '0' }}
-        onClick={() => dispatch({type: 'PREV_SLIDE'})}
+        onClick={() => dispatch({ type: 'PREV_SLIDE' })}
         alt='Previous slide'
       />
       <img
         src={Next}
         className='control next'
         style={{ opacity: areControlsVisible ? '1' : '0' }}
-        onClick={() => dispatch({type: 'NEXT_SLIDE'})}
+        onClick={() => dispatch({ type: 'NEXT_SLIDE' })}
         alt='Next slide'
       />
     </div>
