@@ -197,14 +197,14 @@ function ImageSlider(props) {
         src={Prev}
         className='control prev'
         style={{ opacity: areControlsVisible ? '1' : '0' }}
-        onClick={() => dispatch({ type: 'PREV_SLIDE' })}
+        onClick={() => dispatch({ type: Action.PREV_SLIDE })}
         alt='Previous slide'
       />
       <img
         src={Next}
         className='control next'
         style={{ opacity: areControlsVisible ? '1' : '0' }}
-        onClick={() => dispatch({ type: 'NEXT_SLIDE' })}
+        onClick={() => dispatch({ type: Action.NEXT_SLIDE })}
         alt='Next slide'
       />
     </div>
