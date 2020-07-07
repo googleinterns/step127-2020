@@ -18,14 +18,24 @@ class PreferenceForm extends React.Component {
 
   // Updates the state of the input element so it holds the chosen value.
   changeState(event) {
-    const value =
-      event.target.name === 'open' ? event.target.checked : event.target.value;
+    let value;
+    if (event.target.name === 'cuisine') {
+      const cuisineList = this.state.cuisine;
+      cuisineList.push(event.target.value);
+      value = cuisineList;
+    } else if (event.target.name === 'open') {
+      value = event.target.checked;
+    } else {
+      value = event.target.value;
+    }
+    console.log(value);
     this.setState({ [event.target.name]: value });
   }
 
   handleSubmit(event) {
     // TODO: Remove alert and implement.
-    alert('the cuisine you chose is: ' + this.state.cuisine);
+    console.log(this.state);
+    this.getRecommendation();
     event.preventDefault();
   }
 
@@ -50,7 +60,9 @@ class PreferenceForm extends React.Component {
             value={this.state.cuisine}
             multiple>
             {cuisines.map((cuisine) => (
-              <option key={cuisine} value={cuisine}>{cuisine}</option>
+              <option key={cuisine} value={cuisine}>
+                {cuisine}
+              </option>
             ))}
             ;
           </select>
@@ -63,7 +75,9 @@ class PreferenceForm extends React.Component {
             onChange={this.changeState}
             value={this.state.distance}>
             {distances_in_miles.map((distance) => (
-              <option key={distance} value={distance}>{distance + ' mile'}</option>
+              <option key={distance} value={distance}>
+                {distance + ' mile'}
+              </option>
             ))}
             ;
           </select>
@@ -76,8 +90,11 @@ class PreferenceForm extends React.Component {
             onChange={this.changeState}
             value={this.state.dining_experience}>
             {Object.entries(dining_experiences).map(([key, value]) => (
-              <option key={key} value={value}>{key}</option>
-            ))};
+              <option key={key} value={value}>
+                {key}
+              </option>
+            ))}
+            ;
           </select>
         </label>
         <label>
@@ -88,7 +105,9 @@ class PreferenceForm extends React.Component {
             onChange={this.changeState}
             value={this.state.price_level}>
             {Object.entries(prices).map(([key, value]) => (
-              <option key={key} value={value}>{key}</option>
+              <option key={key} value={value}>
+                {key}
+              </option>
             ))}
             ;
           </select>
@@ -124,27 +143,25 @@ class PreferenceForm extends React.Component {
             onChange={this.changeState}
           />
         </label>
-        <button type='submit' /*onClick={this.getRecommendation()}*/ >Submit</button>
+        <button type='submit'>Submit</button>
       </form>
     );
   }
 
   getRecommendation() {
-    console.log('function called');
-    const cuisineTypes = [];
-    cuisineTypes.push(document.getElementById('cuisine').value);
-    const milesRadius = parseInt(document.getElementById('distance').value);
+    const cuisineTypes = this.state.cuisine;
+    const milesRadius = parseInt(this.state.distance);
     const radius = this.milesToMeters(milesRadius);
-    const priceLevel = parseInt(document.getElementById('price-level').value);
-    const lat = parseFloat(document.getElementById('latitude').value);
-    const lng = parseFloat(document.getElementById('longitude').value);
-    const diningExp = document.getElementById('dining-experience').value;
+    const priceLevel = parseInt(this.state.price_level);
+    const lat = parseFloat(this.state.latitude);
+    const lng = parseFloat(this.state.longitude);
+    const diningExp = this.state.dining_experience;
     const priceLevelWeight = 2;
     const diningExpWeight = 4;
     const radiusWeight = 3;
-  
+
     const promises = this.makePromisesArray(cuisineTypes, lat, lng, radius);
-  
+
     Promise.all(promises)
       // This gives us the list of restaurants.
       .then((responses) =>
@@ -155,9 +172,11 @@ class PreferenceForm extends React.Component {
         for (const restaurant of data) {
           restaurants = restaurants.concat(restaurant.results);
         }
+
         fetch('/api/recommendation', {
           method: 'POST',
           headers: {
+            'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
@@ -193,7 +212,7 @@ class PreferenceForm extends React.Component {
           });
       });
   }
-  
+
   /**
    *  Returns an array of promises of calls to the Google Places API.
    *  One promise is created for every cuisine type.
@@ -214,11 +233,10 @@ class PreferenceForm extends React.Component {
     }
     return promises;
   }
-  
+
   milesToMeters(numMiles) {
     return numMiles * 1609.34;
   }
-  
 }
 
 export default PreferenceForm;
