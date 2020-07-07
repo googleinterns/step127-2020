@@ -19,28 +19,6 @@
   cursor: pointer;
 }
 
-.profile-pic.large {
-  height: 80px;
-  width: 80px;
-  margin: 0px auto 0px auto;
-}
-
-.user-name {
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 8px;
-}
-
-.user-email {
-  font-size: 14px;
-  font-weight: normal;
-  margin-bottom: 32px;
-}
-
 .sign-in {
   margin: 0px 16px 0px 0px;
-}
-
-.sign-out {
-  margin: 0px 0px 0px 0px;
 }
