@@ -7,29 +7,33 @@ import Loading from '../components/Loading.js';
 import UserModal from '../components/UserModal.js';
 
 function Header(props) {
-  const context = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (context.currentUser.get === undefined) {
-    return <div id='header'><Loading /></div>;
+  if (!authContext.currentUser.get) {
+    return (
+      <div id='header'>
+        <Loading />
+      </div>
+    );
   }
 
-  if (context.currentUser.get.isSignedIn()) {
+  if (authContext.currentUser.get.isSignedIn()) {
     return (
       <div id='header'>
         <img
           className='profile-pic'
-          src={context.currentUser.get.getBasicProfile().getImageUrl()}
+          src={authContext.currentUser.get.getBasicProfile().getImageUrl()}
           alt='Profile.'
           onClick={() => setIsModalOpen((prev) => !prev)}
         />
         <UserModal
           isModalOpen={isModalOpen}
           toggleModal={() => setIsModalOpen((prev) => !prev)}
-          user={context.currentUser.get.getBasicProfile()}
+          user={authContext.currentUser.get.getBasicProfile()}
           signOut={() => {
             setIsModalOpen(false);
-            context.GoogleAuth.get.signOut();
+            authContext.signOut();
           }}
         />
       </div>
@@ -37,8 +41,8 @@ function Header(props) {
   }
   
   return (
-    <div>
-      <button className='sign-in' onClick={context.GoogleAuth.get.signIn}>
+    <div id='header'>
+      <button className='sign-in' onClick={authContext.signIn}>
         Sign In with Google
       </button>
     </div>
