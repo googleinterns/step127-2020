@@ -4,7 +4,7 @@ class PreferenceForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cuisine: '',
+      cuisine: [],
       distance: '',
       dining_experience: '',
       price_level: '',
@@ -33,9 +33,9 @@ class PreferenceForm extends React.Component {
     const cuisines = ['Italian', 'Mexican', 'Indian'];
     const distances_in_miles = [1, 5, 10, 25];
     const dining_experiences = {
-      meal_takeaway: 'Takeout',
-      meal_delivery: 'Delivery',
-      restaurant: 'Eat In',
+      Takeout: 'meal_takeaway',
+      Delivery: 'meal_delivery',
+      'Eat In': 'restaurant',
     };
     const prices = { Low: 1, Medium: 2, High: 3, 'Very High': 4 };
     return (
@@ -43,14 +43,14 @@ class PreferenceForm extends React.Component {
         <label>
           What cuisine?
           <select
-            class='cuisine-type'
+            className='cuisine-type'
             name='cuisine'
             id='cuisine'
             onChange={this.changeState}
             value={this.state.cuisine}
             multiple>
             {cuisines.map((cuisine) => (
-              <option value={cuisine}>{cuisine}</option>
+              <option key={cuisine} value={cuisine}>{cuisine}</option>
             ))}
             ;
           </select>
@@ -63,7 +63,7 @@ class PreferenceForm extends React.Component {
             onChange={this.changeState}
             value={this.state.distance}>
             {distances_in_miles.map((distance) => (
-              <option value={distance}>{distance + ' mile'}</option>
+              <option key={distance} value={distance}>{distance + ' mile'}</option>
             ))}
             ;
           </select>
@@ -75,10 +75,9 @@ class PreferenceForm extends React.Component {
             id='dining_experience'
             onChange={this.changeState}
             value={this.state.dining_experience}>
-            {dining_experiences.forEach((id, title) => (
-              <option value={id}>{title}</option>
-            ))}
-            ;
+            {Object.entries(dining_experiences).map(([key, value]) => (
+              <option key={key} value={value}>{key}</option>
+            ))};
           </select>
         </label>
         <label>
@@ -88,8 +87,8 @@ class PreferenceForm extends React.Component {
             id='price_level'
             onChange={this.changeState}
             value={this.state.price_level}>
-            {prices.forEach((title, value) => (
-              <option value={value}>{title}</option>
+            {Object.entries(prices).map(([key, value]) => (
+              <option key={key} value={value}>{key}</option>
             ))}
             ;
           </select>
@@ -125,8 +124,101 @@ class PreferenceForm extends React.Component {
             onChange={this.changeState}
           />
         </label>
-        <button type='submit'>Submit</button>
+        <button type='submit' /*onClick={this.getRecommendation()}*/ >Submit</button>
       </form>
     );
   }
+
+  getRecommendation() {
+    console.log('function called');
+    const cuisineTypes = [];
+    cuisineTypes.push(document.getElementById('cuisine').value);
+    const milesRadius = parseInt(document.getElementById('distance').value);
+    const radius = this.milesToMeters(milesRadius);
+    const priceLevel = parseInt(document.getElementById('price-level').value);
+    const lat = parseFloat(document.getElementById('latitude').value);
+    const lng = parseFloat(document.getElementById('longitude').value);
+    const diningExp = document.getElementById('dining-experience').value;
+    const priceLevelWeight = 2;
+    const diningExpWeight = 4;
+    const radiusWeight = 3;
+  
+    const promises = this.makePromisesArray(cuisineTypes, lat, lng, radius);
+  
+    Promise.all(promises)
+      // This gives us the list of restaurants.
+      .then((responses) =>
+        Promise.all(responses.map((response) => response.json()))
+      )
+      .then((data) => {
+        let restaurants = [];
+        for (const restaurant of data) {
+          restaurants = restaurants.concat(restaurant.results);
+        }
+        fetch('/api/recommendation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            restaurants,
+            preferences: {
+              currLocation: {
+                lat,
+                lng,
+              },
+              radius: {
+                pref: radius,
+                weight: radiusWeight,
+              },
+              priceLevel: {
+                pref: priceLevel,
+                weight: priceLevelWeight,
+              },
+              diningExp: {
+                pref: diningExp,
+                weight: diningExpWeight,
+              },
+            },
+          }),
+        })
+          .then((response) => response.text())
+          .then((data) => {
+            try {
+              const selections = JSON.parse(data);
+              console.log(selections);
+            } catch (err) {
+              console.log(err);
+            }
+          });
+      });
+  }
+  
+  /**
+   *  Returns an array of promises of calls to the Google Places API.
+   *  One promise is created for every cuisine type.
+   */
+  makePromisesArray(cuisineTypes, lat, lng, radius) {
+    const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const textSearchBaseUrl =
+      'https://maps.googleapis.com/maps/api/place/textsearch/json?';
+    const promises = [];
+    for (const cuisineType of cuisineTypes) {
+      const searchParams = new URLSearchParams();
+      searchParams.append('query', cuisineType + ' restaurant');
+      searchParams.append('location', lat + ',' + lng);
+      searchParams.append('radius', radius);
+      searchParams.append('key', apiKey);
+      promises.push(fetch(proxyUrl + textSearchBaseUrl + searchParams));
+    }
+    return promises;
+  }
+  
+  milesToMeters(numMiles) {
+    return numMiles * 1609.34;
+  }
+  
 }
+
+export default PreferenceForm;
