@@ -15,27 +15,29 @@ import EmptyStar from '../assets/star_border.svg';
  */
 function RatingStars(props) {
   const { avgRating, numRatings } = props;
-  
+
   const stars = [];
   for (let average = avgRating; average > 0; average--) {
-    stars.push((average >= 1) ? 1 : 0.5);
+    stars.push(average >= 1 ? 1 : 0.5);
   }
   while (stars.length < 5) {
     stars.push(0);
   }
-  
+
   return (
     <div className='rating-stars-container'>
       {stars.map((star, index) => (
         <img
           key={index}
-          src={(star === 1.0) ? Star : (star === 0.5) ? HalfStar : EmptyStar}
+          src={star === 1.0 ? Star : star === 0.5 ? HalfStar : EmptyStar}
           width='15'
           height='15'
           alt='Rating star'
         />
       ))}
-      <span>{avgRating} ({numRatings})</span>
+      <span>
+        {avgRating} ({numRatings})
+      </span>
     </div>
   );
 }
