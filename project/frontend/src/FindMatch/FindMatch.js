@@ -28,7 +28,6 @@ class PreferenceForm extends React.Component {
     } else {
       value = event.target.value;
     }
-    console.log(value);
     this.setState({ [event.target.name]: value });
   }
 
@@ -53,7 +52,7 @@ class PreferenceForm extends React.Component {
     const prices = { Low: 1, Medium: 2, High: 3, 'Very High': 4 };
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>
+        <label for='cuisine'>
           What cuisine?
           <select
             className='cuisine-type'
@@ -70,7 +69,7 @@ class PreferenceForm extends React.Component {
             ;
           </select>
         </label>
-        <label>
+        <label for='distance'>
           Distance?
           <select
             name='distance'
@@ -85,7 +84,7 @@ class PreferenceForm extends React.Component {
             ;
           </select>
         </label>
-        <label>
+        <label for='dining_experience'>
           Dining Experience
           <select
             name='dining_experience'
@@ -100,7 +99,7 @@ class PreferenceForm extends React.Component {
             ;
           </select>
         </label>
-        <label>
+        <label for='price_level'>
           Price Level
           <select
             name='price_level'
@@ -115,7 +114,7 @@ class PreferenceForm extends React.Component {
             ;
           </select>
         </label>
-        <label>
+        <label for='latitude'>
           Latitude
           <input
             type='number'
@@ -126,7 +125,7 @@ class PreferenceForm extends React.Component {
             required
           />
         </label>
-        <label>
+        <label for='longitude'>
           Longitude
           <input
             type='number'
@@ -137,7 +136,7 @@ class PreferenceForm extends React.Component {
             required
           />
         </label>
-        <label>
+        <label for='open'>
           Open Now?
           <input
             name='open'
@@ -159,11 +158,12 @@ class PreferenceForm extends React.Component {
     const lat = parseFloat(this.state.latitude);
     const lng = parseFloat(this.state.longitude);
     const diningExp = this.state.dining_experience;
+    const openNow = this.state.open;
     const priceLevelWeight = 2;
     const diningExpWeight = 4;
     const radiusWeight = 3;
 
-    const promises = this.makePromisesArray(cuisineTypes, lat, lng, radius);
+    const promises = this.makePromisesArray(cuisineTypes, lat, lng, radius, openNow);
 
     Promise.all(promises)
       // This gives us the list of restaurants.
@@ -220,7 +220,8 @@ class PreferenceForm extends React.Component {
    *  Returns an array of promises of calls to the Google Places API.
    *  One promise is created for every cuisine type.
    */
-  makePromisesArray(cuisineTypes, lat, lng, radius) {
+  makePromisesArray(cuisineTypes, lat, lng, radius, openNow) {
+    // TODO: replace API key
     const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const textSearchBaseUrl =
@@ -231,7 +232,10 @@ class PreferenceForm extends React.Component {
       searchParams.append('query', cuisineType + ' restaurant');
       searchParams.append('location', lat + ',' + lng);
       searchParams.append('radius', radius);
-      searchParams.append('key', apiKey);
+      if (openNow) {
+        searchParams.append('opennow', openNow);
+      }
+      searchParams.append('key', apiKey);      
       promises.push(fetch(proxyUrl + textSearchBaseUrl + searchParams));
     }
     return promises;
