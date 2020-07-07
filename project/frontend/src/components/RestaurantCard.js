@@ -22,10 +22,12 @@ function RestaurantCard(props) {
   const { restaurant, details } = props;
 
   const photoUrls = details.result.photos.map(
-    (photo) => 'https://maps.googleapis.com/maps/api/place/photo?photoreference=' +
-      photo.photo_reference + '&key=AIzaSyC0Q4CyO-BM4M5jPvL3ayJ09RfymZYQjhs&maxwidth=344'
+    (photo) =>
+      'https://maps.googleapis.com/maps/api/place/photo?photoreference=' +
+      photo.photo_reference +
+      '&key=AIzaSyC0Q4CyO-BM4M5jPvL3ayJ09RfymZYQjhs&maxwidth=344'
   );
-  
+
   return (
     <div className='restaurant-card'>
       <ImageSlider images={photoUrls} />
@@ -36,11 +38,14 @@ function RestaurantCard(props) {
           numRatings={restaurant.key.numRatings}
         />
         <p className='restaurant-type'>
-          {'$'.repeat(restaurant.key.priceLevel)} • {restaurant.key.placeTypes.join(', ')}
+          {'$'.repeat(restaurant.key.priceLevel)} •{' '}
+          {restaurant.key.placeTypes.join(', ')}
         </p>
         <div className='restaurant-detail-container'>
-          <img src={Clock} alt='Clock icon'/>
-          <span>{details.result.opening_hours.open_now ? 'Open' : 'Closed'}</span>
+          <img src={Clock} alt='Clock icon' />
+          <span>
+            {details.result.opening_hours.open_now ? 'Open' : 'Closed'}
+          </span>
         </div>
         <div className='restaurant-detail-container'>
           <img src={Place} alt='Place marker icon' />
