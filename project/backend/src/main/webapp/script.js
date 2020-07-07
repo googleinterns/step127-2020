@@ -14,7 +14,8 @@
 
 /* exported getRecommendation */
 function getRecommendation() {
-  const cuisineType = document.getElementById('cuisine').value;
+  const cuisineTypes = [];
+  cuisineTypes.push(document.getElementById('cuisine').value);
   const milesRadius = parseInt(document.getElementById('distance').value);
   const radius = milesToMeters(milesRadius);
   const priceLevel = parseInt(document.getElementById('price-level').value);
@@ -24,20 +25,19 @@ function getRecommendation() {
   const priceLevelWeight = 2;
   const diningExpWeight = 4;
   const radiusWeight = 3;
-  const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
-  const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-  const textSearchBaseUrl =
-    'https://maps.googleapis.com/maps/api/place/textsearch/json?';
-  const searchParams = new URLSearchParams();
-  searchParams.append('query', cuisineType + ' restaurant');
-  searchParams.append('location', lat + ',' + lng);
-  searchParams.append('radius', radius);
-  searchParams.append('key', apiKey);
-  fetch(proxyUrl + textSearchBaseUrl + searchParams)
+
+  const promises = makePromisesArray(cuisineTypes, lat, lng, radius);
+
+  Promise.all(promises)
     // This gives us the list of restaurants.
-    .then((response) => response.json())
+    .then((responses) =>
+      Promise.all(responses.map((response) => response.json()))
+    )
     .then((data) => {
-      const restaurants = data.results;
+      let restaurants = [];
+      for (const restaurant of data) {
+        restaurants = restaurants.concat(restaurant.results);
+      }
       fetch('/recommendation', {
         method: 'POST',
         headers: {
@@ -46,7 +46,6 @@ function getRecommendation() {
         body: JSON.stringify({
           restaurants,
           preferences: {
-            cuisineType,
             currLocation: {
               lat,
               lng,
@@ -76,6 +75,27 @@ function getRecommendation() {
           }
         });
     });
+}
+
+/**
+ *  Returns an array of promises of calls to the Google Places API.
+ *  One promise is created for every cuisine type.
+ */
+function makePromisesArray(cuisineTypes, lat, lng, radius) {
+  const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
+  const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+  const textSearchBaseUrl =
+    'https://maps.googleapis.com/maps/api/place/textsearch/json?';
+  const promises = [];
+  for (const cuisineType of cuisineTypes) {
+    const searchParams = new URLSearchParams();
+    searchParams.append('query', cuisineType + ' restaurant');
+    searchParams.append('location', lat + ',' + lng);
+    searchParams.append('radius', radius);
+    searchParams.append('key', apiKey);
+    promises.push(fetch(proxyUrl + textSearchBaseUrl + searchParams));
+  }
+  return promises;
 }
 
 function milesToMeters(numMiles) {
