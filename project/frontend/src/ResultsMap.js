@@ -1,7 +1,5 @@
-import './ResultsMap.css';
-
-import React from 'react';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
+import React from 'react';
 
 const mapStyle = {
   border: 'thin solid black',
