@@ -184,7 +184,13 @@ function ImageSlider(props) {
         style={{ left: state.left + 'px' }}
         {...handlers}>
         {props.images.map((image, index) => (
-          <img key={index} className='slide' src={image} draggable='false' />
+          <img
+            key={index}
+            className='slide'
+            src={image}
+            draggable='false'
+            alt='Restaurant photographs'
+          />
         ))}
       </div>
       <img
