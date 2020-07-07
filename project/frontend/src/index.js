@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
 import Footer from './pages/Footer.js';
+import MapContainer from './ResultsMap.js';
 
 import * as serviceWorker from './serviceWorker';
 
@@ -15,6 +16,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Switch>
+        <Route path='/mapRoute'>
+          <MapContainer />
+        </Route>
         <Route path='/'>
           <Header />
           <HomePage />
