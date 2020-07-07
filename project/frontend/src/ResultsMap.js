@@ -1,5 +1,6 @@
 import React from 'react';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
+import './ResultsMap.css';
 
 // TODO: add the CSS styling file
 const mapStyles = {
