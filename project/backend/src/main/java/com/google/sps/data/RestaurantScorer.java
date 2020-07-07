@@ -26,7 +26,7 @@ public final class RestaurantScorer {
   public static double score(Restaurant restaurant, JSONObject preferences,
       DescriptiveStatistics statistics) throws JSONException {
     double score = 0;
-    int maxPoints = 1;  // add 1 because rating score has an upper bound of 1
+    int maxPoints = 1; // add 1 because rating score has an upper bound of 1
     if (preferences.has("priceLevel")) {
       int priceLevelWeight = preferences.getJSONObject("priceLevel").getInt("weight");
       maxPoints += priceLevelWeight;
@@ -38,7 +38,7 @@ public final class RestaurantScorer {
       int diningExpWeight = preferences.getJSONObject("diningExp").getInt("weight");
       maxPoints += diningExpWeight;
       if (restaurant.getPlaceTypes().contains(
-          preferences.getJSONObject("diningExp").getString("pref"))) {
+              preferences.getJSONObject("diningExp").getString("pref"))) {
         score += diningExpWeight;
       }
     }
@@ -46,7 +46,7 @@ public final class RestaurantScorer {
       int radiusWeight = preferences.getJSONObject("radius").getInt("weight");
       maxPoints += radiusWeight;
       Map<String, Double> currLocation =
-        GSON.fromJson(preferences.getJSONObject("currLocation").toString(), HashMap.class);
+          GSON.fromJson(preferences.getJSONObject("currLocation").toString(), HashMap.class);
 
       double distMeters = distanceInMeters(currLocation, restaurant.getLatLngCoords());
       double prefDistMeters = preferences.getJSONObject("radius").getDouble("pref");
@@ -54,7 +54,8 @@ public final class RestaurantScorer {
       if (distMeters <= prefDistMeters) {
         score += radiusWeight;
       } else {
-        double percentDistDiff = (roundMetersToMiles(distMeters) - roundMetersToMiles(prefDistMeters))
+        double percentDistDiff =
+            (roundMetersToMiles(distMeters) - roundMetersToMiles(prefDistMeters))
             / roundMetersToMiles(prefDistMeters);
         score -= percentDistDiff * radiusWeight;
       }

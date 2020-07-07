@@ -198,7 +198,7 @@ class PreferenceForm extends React.Component {
       currLocation: {
         lat,
         lng,
-      }
+      },
     };
     const milesRadius = parseInt(this.state.distance);
     const radiusWeight = 3;
@@ -206,7 +206,7 @@ class PreferenceForm extends React.Component {
       preferences['radius'] = {
         pref: this.milesToMeters(milesRadius),
         weight: radiusWeight,
-      }
+      };
     }
     const priceLevel = parseInt(this.state.price_level);
     const priceLevelWeight = 2;
@@ -214,7 +214,7 @@ class PreferenceForm extends React.Component {
       preferences['priceLevel'] = {
         pref: priceLevel,
         weight: priceLevelWeight,
-      }
+      };
     }
     const diningExp = this.state.dining_experience;
     const diningExpWeight = 4;
@@ -222,7 +222,7 @@ class PreferenceForm extends React.Component {
       preferences['diningExp'] = {
         pref: diningExp,
         weight: diningExpWeight,
-      }
+      };
     }
     return preferences;
   }
@@ -248,14 +248,17 @@ class PreferenceForm extends React.Component {
     for (const cuisineType of cuisineTypes) {
       const searchParams = new URLSearchParams();
       searchParams.append('query', cuisineType + 'restaurant');
-      searchParams.append('location', this.state.latitude + ',' + this.state.longitude);
+      searchParams.append(
+        'location',
+        this.state.latitude + ',' + this.state.longitude
+      );
       if (this.state.radius) {
         searchParams.append('radius', this.state.radius);
       }
       if (this.state.open) {
         searchParams.append('opennow', this.state.open);
       }
-      searchParams.append('key', apiKey);      
+      searchParams.append('key', apiKey);
       promises.push(fetch(proxyUrl + textSearchBaseUrl + searchParams));
     }
     return promises;
