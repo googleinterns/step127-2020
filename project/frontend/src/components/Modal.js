@@ -19,20 +19,17 @@ import React from 'react';
  *     is dismissed by touching modal backdrop.
  */
 function Modal(props) {
-  const {open, top, right, bottom, left, onDismiss} = props;
-  
-  const backdropStyle = {display: open ? 'block' : 'none'};
-  const modalStyle = {top, right, bottom, left};
-  
+  const { open, top, right, bottom, left, onDismiss } = props;
+
+  const backdropStyle = { display: open ? 'block' : 'none' };
+  const modalStyle = { top, right, bottom, left };
+
   const dontDismiss = (event) => {
     event.stopPropagation();
   };
 
   return (
-    <div
-      className='modal-backdrop'
-      onClick={onDismiss}
-      style={backdropStyle}>
+    <div className='modal-backdrop' onClick={onDismiss} style={backdropStyle}>
       <div className='modal' onClick={dontDismiss} style={modalStyle}>
         {props.children}
       </div>

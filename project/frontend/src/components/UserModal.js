@@ -5,14 +5,10 @@ import React from 'react';
 import Modal from '../components/Modal.js';
 
 function UserModal(props) {
-  const {isModalOpen, toggleModal, user, signOut} = props;
-  
+  const { isModalOpen, toggleModal, user, signOut } = props;
+
   return (
-    <Modal
-      open={isModalOpen}
-      onDismiss={toggleModal}
-      top='64px'
-      right='16px'>
+    <Modal open={isModalOpen} onDismiss={toggleModal} top='64px' right='16px'>
       <img
         className='profile-pic large'
         src={user.getImageUrl()}
