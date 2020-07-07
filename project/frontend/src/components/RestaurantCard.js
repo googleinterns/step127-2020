@@ -3,43 +3,23 @@ import './RestaurantCard.css';
 import React from 'react';
 
 import ImageSlider from './ImageSlider.js';
+import RatingStars from './RatingStars.js';
 
-import Star from '../assets/star.svg';
-import HalfStar from '../assets/star_half.svg';
-import EmptyStar from '../assets/star_border.svg';
 import Place from '../assets/place.svg';
 import Globe from '../assets/globe.svg';
 import Phone from '../assets/phone.svg';
 import Clock from '../assets/clock.svg';
 
-function RatingStars(props) {
-  const stars = [];
-  for (let average = props.avgRating; average > 0; average--) {
-    stars.push((average >= 1) ? 1 : 0.5);
-  }
-  while (stars.length < 5) {
-    stars.push(0);
-  }
-  
-  return (
-    <div className='rating-stars-container'>
-      {stars.map((star, index) => (
-        <img
-          key={index}
-          src={(star === 1.0) ? Star : (star === 0.5) ? HalfStar : EmptyStar}
-          width='15'
-          height='15'
-          alt='Rating star'
-        />
-      ))}
-      <span>{props.avgRating} ({props.numRatings})</span>
-    </div>
-  );
-}
-
+/**
+ * A card displaying a restaurant's basic information.
+ *
+ * @param {!Object<string, *>} props.restaurant An object containing basic restaurant
+ *     information.
+ * @param {!Object<string, *>} props.details An object containing detailed restaurant
+ *     information.
+ */
 function RestaurantCard(props) {
-  const restaurant = props.restaurant;
-  const details = props.details;
+  const { restaurant, details } = props;
 
   const photoUrls = details.result.photos.map(
     (photo) => 'https://maps.googleapis.com/maps/api/place/photo?photoreference=' +
