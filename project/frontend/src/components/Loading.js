@@ -3,7 +3,7 @@ import './Loading.css';
 import React from 'react';
 
 /**
- * An animated loading icon.
+ * A small, animated loading icon.
  */
 function Loading(props) {
   return (

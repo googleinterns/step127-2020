@@ -15,30 +15,21 @@ import React from 'react';
  *     of this modal.
  * @param {string} props.left Space from the left of the viewport to the left
  *     of this modal.
- * @param {function(): undefined} props.onDismiss Optional callback for when modal
- *     is dismissed by touching modal backdrop.
+ * @param {function(): undefined} props.onDismiss Callback for when modal is
+ *     dismissed by touching modal backdrop, should update props.open to false.
  */
 function Modal(props) {
+  const { open, top, right, bottom, left, onDismiss } = props;
+
+  const backdropStyle = { display: open ? 'block' : 'none' };
+  const modalStyle = { top, right, bottom, left };
+
   const dontDismiss = (event) => {
     event.stopPropagation();
   };
 
-  const backdropStyle = {
-    display: props.open ? 'block' : 'none',
-  };
-
-  const modalStyle = {
-    top: props.top,
-    right: props.right,
-    bottom: props.bottom,
-    left: props.left,
-  };
-
   return (
-    <div
-      className='modal-backdrop'
-      onClick={props.onDismiss}
-      style={backdropStyle}>
+    <div className='modal-backdrop' onClick={onDismiss} style={backdropStyle}>
       <div className='modal' onClick={dontDismiss} style={modalStyle}>
         {props.children}
       </div>
