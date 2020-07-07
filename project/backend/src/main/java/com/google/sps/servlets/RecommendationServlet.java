@@ -33,6 +33,7 @@ public class RecommendationServlet extends HttpServlet {
     String body = request.getReader().readLine();
     response.setContentType("application/json");
     try {
+      System.out.println(body);
       JSONObject reqBody = new JSONObject(body);
       Map<Restaurant, Double> restaurantScores = scoreRestaurants(
           reqBody.getJSONArray("restaurants"), reqBody.getJSONObject("preferences"));

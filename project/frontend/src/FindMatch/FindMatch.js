@@ -37,7 +37,7 @@ class PreferenceForm extends React.Component {
   }
 
   render() {
-    const cuisines = ['Italian', 'Mexican', 'Indian'];
+    const cuisines = ['Italian ', 'Mexican ', 'Indian '];
     const distances_in_miles = {
       '1 mile': 1,
       '5 miles': 5,
@@ -52,7 +52,7 @@ class PreferenceForm extends React.Component {
     const prices = { Low: 1, Medium: 2, High: 3, 'Very High': 4 };
     return (
       <form onSubmit={this.handleSubmit}>
-        <label for='cuisine'>
+        <label htmlFor='cuisine'>
           What cuisine?
           <select
             className='cuisine-type'
@@ -69,7 +69,7 @@ class PreferenceForm extends React.Component {
             ;
           </select>
         </label>
-        <label for='distance'>
+        <label htmlFor='distance'>
           Distance?
           <select
             name='distance'
@@ -84,7 +84,7 @@ class PreferenceForm extends React.Component {
             ;
           </select>
         </label>
-        <label for='dining_experience'>
+        <label htmlFor='dining_experience'>
           Dining Experience
           <select
             name='dining_experience'
@@ -99,7 +99,7 @@ class PreferenceForm extends React.Component {
             ;
           </select>
         </label>
-        <label for='price_level'>
+        <label htmlFor='price_level'>
           Price Level
           <select
             name='price_level'
@@ -114,7 +114,7 @@ class PreferenceForm extends React.Component {
             ;
           </select>
         </label>
-        <label for='latitude'>
+        <label htmlFor='latitude'>
           Latitude
           <input
             type='number'
@@ -125,7 +125,7 @@ class PreferenceForm extends React.Component {
             required
           />
         </label>
-        <label for='longitude'>
+        <label htmlFor='longitude'>
           Longitude
           <input
             type='number'
@@ -136,7 +136,7 @@ class PreferenceForm extends React.Component {
             required
           />
         </label>
-        <label for='open'>
+        <label htmlFor='open'>
           Open Now?
           <input
             name='open'
@@ -151,19 +151,8 @@ class PreferenceForm extends React.Component {
   }
 
   getRecommendation() {
-    const cuisineTypes = this.state.cuisine;
-    const milesRadius = parseInt(this.state.distance);
-    const radius = this.milesToMeters(milesRadius);
-    const priceLevel = parseInt(this.state.price_level);
-    const lat = parseFloat(this.state.latitude);
-    const lng = parseFloat(this.state.longitude);
-    const diningExp = this.state.dining_experience;
-    const openNow = this.state.open;
-    const priceLevelWeight = 2;
-    const diningExpWeight = 4;
-    const radiusWeight = 3;
-
-    const promises = this.makePromisesArray(cuisineTypes, lat, lng, radius, openNow);
+    const promises = this.makePromisesArray();
+    const preferences = this.makePrefsBody();
 
     Promise.all(promises)
       // This gives us the list of restaurants.
@@ -184,24 +173,7 @@ class PreferenceForm extends React.Component {
           },
           body: JSON.stringify({
             restaurants,
-            preferences: {
-              currLocation: {
-                lat,
-                lng,
-              },
-              radius: {
-                pref: radius,
-                weight: radiusWeight,
-              },
-              priceLevel: {
-                pref: priceLevel,
-                weight: priceLevelWeight,
-              },
-              diningExp: {
-                pref: diningExp,
-                weight: diningExpWeight,
-              },
-            },
+            preferences,
           }),
         })
           .then((response) => response.text())
@@ -217,23 +189,71 @@ class PreferenceForm extends React.Component {
   }
 
   /**
+   * Creates and returns an object to be used in the request body sent to the servlet.
+   */
+  makePrefsBody() {
+    const lat = parseFloat(this.state.latitude);
+    const lng = parseFloat(this.state.longitude);
+    const preferences = {
+      currLocation: {
+        lat,
+        lng,
+      }
+    };
+    const milesRadius = parseInt(this.state.distance);
+    const radiusWeight = 3;
+    if (milesRadius) {
+      preferences['radius'] = {
+        pref: this.milesToMeters(milesRadius),
+        weight: radiusWeight,
+      }
+    }
+    const priceLevel = parseInt(this.state.price_level);
+    const priceLevelWeight = 2;
+    if (priceLevel) {
+      preferences['priceLevel'] = {
+        pref: priceLevel,
+        weight: priceLevelWeight,
+      }
+    }
+    const diningExp = this.state.dining_experience;
+    const diningExpWeight = 4;
+    if (diningExp) {
+      preferences['diningExp'] = {
+        pref: diningExp,
+        weight: diningExpWeight,
+      }
+    }
+    return preferences;
+  }
+
+  /**
    *  Returns an array of promises of calls to the Google Places API.
    *  One promise is created for every cuisine type.
+   *  If no cuisines are specified, only one promise is created.
    */
-  makePromisesArray(cuisineTypes, lat, lng, radius, openNow) {
+  makePromisesArray() {
     // TODO: replace API key
     const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const textSearchBaseUrl =
       'https://maps.googleapis.com/maps/api/place/textsearch/json?';
     const promises = [];
+    const cuisineTypes = this.state.cuisine;
+    // Make sure we still create a promise even if no cuisine type is specified.
+    // This will make the text search query just "restaurant" without specifying a cuisine.
+    if (cuisineTypes.length === 0) {
+      cuisineTypes.push('');
+    }
     for (const cuisineType of cuisineTypes) {
       const searchParams = new URLSearchParams();
-      searchParams.append('query', cuisineType + ' restaurant');
-      searchParams.append('location', lat + ',' + lng);
-      searchParams.append('radius', radius);
-      if (openNow) {
-        searchParams.append('opennow', openNow);
+      searchParams.append('query', cuisineType + 'restaurant');
+      searchParams.append('location', this.state.latitude + ',' + this.state.longitude);
+      if (this.state.radius) {
+        searchParams.append('radius', this.state.radius);
+      }
+      if (this.state.open) {
+        searchParams.append('opennow', this.state.open);
       }
       searchParams.append('key', apiKey);      
       promises.push(fetch(proxyUrl + textSearchBaseUrl + searchParams));
