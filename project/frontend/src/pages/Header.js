@@ -39,7 +39,7 @@ function Header(props) {
       </div>
     );
   }
-  
+
   return (
     <div id='header'>
       <button className='sign-in' onClick={authContext.signIn}>
