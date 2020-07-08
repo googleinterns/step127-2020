@@ -9,20 +9,25 @@ import Authentication from './components/Authentication.js';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
 import Footer from './pages/Footer.js';
-
 import RestaurantCard from './components/RestaurantCard.js';
+import RestaurantCardDeck from './components/RestaurantCardDeck.js';
 
 import * as serviceWorker from './serviceWorker';
 
 // TODO: remove
 import { restaurant, details } from './components/SampleRestaurant.js';
+const cards = Array(10).fill({restaurant, details});
 
 ReactDOM.render(
   <React.StrictMode>
     <Authentication>
       <Router>
         <Switch>
-          <Route path='/test'>
+          <Route path='/deck'>
+            <RestaurantCardDeck cards={cards} />
+          </Route>
+          
+          <Route path='/card'>
             <RestaurantCard restaurant={restaurant} details={details} />
           </Route>
 
