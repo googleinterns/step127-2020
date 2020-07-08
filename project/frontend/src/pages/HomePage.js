@@ -12,7 +12,7 @@ function HomePage() {
           <button>Location</button>
           <div>
             <button>Swipe Match</button>
-            <button>Find My Match</button>
+            <button onClick={() =>  window.location.href='/find-match'}>Find My Match</button>
           </div>
         </div>
       </div>

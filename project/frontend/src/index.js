@@ -8,19 +8,19 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
 import Footer from './pages/Footer.js';
+import PreferenceForm from './FindMatch/FindMatch.js';
 
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
+      <Header />
       <Switch>
-        <Route path='/'>
-          <Header />
-          <HomePage />
-          <Footer />
-        </Route>
+        <Route exact path='/' component={HomePage} />
+        <Route path='/find-match' component={PreferenceForm} />
       </Switch>
+      <Footer />
     </Router>
   </React.StrictMode>,
   document.getElementById('root')
