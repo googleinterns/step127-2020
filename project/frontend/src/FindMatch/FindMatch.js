@@ -5,11 +5,11 @@ class PreferenceForm extends React.Component {
     super(props);
     this.state = {
       cuisine: [],
-      distance: '',
-      dining_experience: '',
-      price_level: '',
-      latitude: '',
-      longitude: '',
+      distance: null,
+      dining_experience: null,
+      price_level: null,
+      latitude: null,
+      longitude: null,
       open: true,
     };
     this.changeState = this.changeState.bind(this);

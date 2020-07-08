@@ -27,14 +27,14 @@ public final class RestaurantScorer {
       DescriptiveStatistics statistics) throws JSONException {
     double score = 0;
     int maxPoints = 1; // add 1 because rating score has an upper bound of 1
-    if (preferences.has("priceLevel")) {
+    if (!preferences.isNull("priceLevel")) {
       int priceLevelWeight = preferences.getJSONObject("priceLevel").getInt("weight");
       maxPoints += priceLevelWeight;
       if (restaurant.getPriceLevel() == preferences.getJSONObject("priceLevel").getInt("pref")) {
         score += priceLevelWeight;
       }
     }
-    if (preferences.has("diningExp")) {
+    if (!preferences.isNull("diningExp")) {
       int diningExpWeight = preferences.getJSONObject("diningExp").getInt("weight");
       maxPoints += diningExpWeight;
       if (restaurant.getPlaceTypes().contains(
@@ -42,7 +42,7 @@ public final class RestaurantScorer {
         score += diningExpWeight;
       }
     }
-    if (preferences.has("radius")) {
+    if (!preferences.isNull("radius")) {
       int radiusWeight = preferences.getJSONObject("radius").getInt("weight");
       maxPoints += radiusWeight;
       Map<String, Double> currLocation =
