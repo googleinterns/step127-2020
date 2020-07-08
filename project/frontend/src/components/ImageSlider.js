@@ -147,7 +147,7 @@ function reducer(state, action) {
  */
 function ImageSlider(props) {
   const images = props.images;
-  
+
   const [areControlsVisible, setAreControlsVisible] = useState(false);
 
   const [state, dispatch] = useReducer(reducer, {
