@@ -192,15 +192,22 @@ class PreferenceForm extends React.Component {
    * Creates and returns an object to be used in the request body sent to the servlet.
    */
   makePrefsBody() {
-    const lat = parseFloat(this.state.latitude);
-    const lng = parseFloat(this.state.longitude);
+    const {
+      distance,
+      dining_experience,
+      price_level,
+      latitude,
+      longitude,
+    } = this.state;
+    const lat = parseFloat(latitude);
+    const lng = parseFloat(longitude);
     const preferences = {
       currLocation: {
         lat,
         lng,
       },
     };
-    const milesRadius = parseInt(this.state.distance);
+    const milesRadius = parseInt(distance);
     const radiusWeight = 3;
     if (milesRadius) {
       preferences['radius'] = {
@@ -208,7 +215,7 @@ class PreferenceForm extends React.Component {
         weight: radiusWeight,
       };
     }
-    const priceLevel = parseInt(this.state.price_level);
+    const priceLevel = parseInt(price_level);
     const priceLevelWeight = 2;
     if (priceLevel) {
       preferences['priceLevel'] = {
@@ -216,7 +223,7 @@ class PreferenceForm extends React.Component {
         weight: priceLevelWeight,
       };
     }
-    const diningExp = this.state.dining_experience;
+    const diningExp = dining_experience;
     const diningExpWeight = 4;
     if (diningExp) {
       preferences['diningExp'] = {
@@ -233,13 +240,14 @@ class PreferenceForm extends React.Component {
    *  If no cuisines are specified, only one promise is created.
    */
   makePromisesArray() {
+    const { cuisine, distance, latitude, longitude, open } = this.state;
     // TODO: replace API key
     const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const textSearchBaseUrl =
       'https://maps.googleapis.com/maps/api/place/textsearch/json?';
     const promises = [];
-    const cuisineTypes = this.state.cuisine;
+    const cuisineTypes = cuisine;
     // Make sure we still create a promise even if no cuisine type is specified.
     // This will make the text search query just "restaurant" without specifying a cuisine.
     if (cuisineTypes.length === 0) {
@@ -248,15 +256,12 @@ class PreferenceForm extends React.Component {
     for (const cuisineType of cuisineTypes) {
       const searchParams = new URLSearchParams();
       searchParams.append('query', cuisineType + 'restaurant');
-      searchParams.append(
-        'location',
-        this.state.latitude + ',' + this.state.longitude
-      );
-      if (this.state.radius) {
-        searchParams.append('radius', this.state.radius);
+      searchParams.append('location', latitude + ',' + longitude);
+      if (distance) {
+        searchParams.append('radius', distance);
       }
-      if (this.state.open) {
-        searchParams.append('opennow', this.state.open);
+      if (open) {
+        searchParams.append('opennow', open);
       }
       searchParams.append('key', apiKey);
       promises.push(fetch(proxyUrl + textSearchBaseUrl + searchParams));
