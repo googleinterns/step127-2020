@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+import Authentication from './components/Authentication.js';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
 import Footer from './pages/Footer.js';
@@ -14,14 +15,17 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <Header />
-      <Switch>
-        <Route exact path='/' component={HomePage} />
-        <Route path='/find-match' component={PreferenceForm} />
-      </Switch>
-      <Footer />
-    </Router>
+
+    <Authentication>
+      <Router>
+        <Header />
+        <Switch>
+          <Route exact path='/' component={HomePage} />
+          <Route path='/find-match' component={PreferenceForm} />
+        </Switch>
+        <Footer />
+      </Router>
+    </Authentication>
   </React.StrictMode>,
   document.getElementById('root')
 );
