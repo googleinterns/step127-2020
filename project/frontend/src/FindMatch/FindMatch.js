@@ -5,11 +5,22 @@ class PreferenceForm extends React.Component {
     super(props);
     this.state = {
       cuisine: [],
-      distance: null,
-      dining_experience: null,
-      price_level: null,
-      latitude: null,
-      longitude: null,
+      radius: {
+        pref: null,
+        weight: 3,
+      },
+      diningExp: {
+        pref: null,
+        weight: 3,
+      },
+      priceLevel: {
+        pref: null,
+        weight: 3,
+      },
+      currLocation: {
+        lat: null,
+        lng: null,
+      },
       open: true,
     };
     this.changeState = this.changeState.bind(this);
@@ -18,17 +29,24 @@ class PreferenceForm extends React.Component {
 
   // Updates the state of the input element so it holds the chosen value.
   changeState(event) {
-    let value;
+    const field = this.state[event.target.name];
     if (event.target.name === 'cuisine') {
       const cuisineList = this.state.cuisine;
       cuisineList.push(event.target.value);
-      value = cuisineList;
+      this.setState({ [event.target.name]: cuisineList });
     } else if (event.target.name === 'open') {
-      value = event.target.checked;
+      this.setState({ [event.target.name]: event.target.checked });
+    } else if (event.target.name === 'currLocation') {
+      field[event.target.id] = parseFloat(event.target.value);
+      this.setState({ [event.target.name]: field });
+    } else if (event.target.name === 'diningExp') {
+      field['pref'] = event.target.value;
+      this.setState({ [event.target.name]: field })
     } else {
-      value = event.target.value;
+      field['pref'] = parseInt(event.target.value);
+      this.setState({ [event.target.name]: field })
     }
-    this.setState({ [event.target.name]: value });
+
   }
 
   handleSubmit(event) {
@@ -69,13 +87,13 @@ class PreferenceForm extends React.Component {
             ;
           </select>
         </label>
-        <label htmlFor='distance'>
+        <label htmlFor='radius'>
           Distance?
           <select
-            name='distance'
-            id='distance'
+            name='radius'
+            id='radius'
             onChange={this.changeState}
-            value={this.state.distance}>
+            value={this.state.radius}>
             {Object.entries(distances_in_miles).map(([label, value]) => (
               <option key={label} value={value}>
                 {label}
@@ -84,13 +102,13 @@ class PreferenceForm extends React.Component {
             ;
           </select>
         </label>
-        <label htmlFor='dining_experience'>
+        <label htmlFor='diningExp'>
           Dining Experience
           <select
-            name='dining_experience'
-            id='dining_experience'
+            name='diningExp'
+            id='diningExp'
             onChange={this.changeState}
-            value={this.state.dining_experience}>
+            value={this.state.diningExp}>
             {Object.entries(dining_experiences).map(([label, apiValue]) => (
               <option key={label} value={apiValue}>
                 {label}
@@ -99,13 +117,13 @@ class PreferenceForm extends React.Component {
             ;
           </select>
         </label>
-        <label htmlFor='price_level'>
+        <label htmlFor='priceLevel'>
           Price Level
           <select
-            name='price_level'
-            id='price_level'
+            name='priceLevel'
+            id='priceLevel'
             onChange={this.changeState}
-            value={this.state.price_level}>
+            value={this.state.priceLevel}>
             {Object.entries(prices).map(([level, intLevel]) => (
               <option key={level} value={intLevel}>
                 {level}
@@ -114,24 +132,24 @@ class PreferenceForm extends React.Component {
             ;
           </select>
         </label>
-        <label htmlFor='latitude'>
+        <label htmlFor='lat'>
           Latitude
           <input
             type='number'
-            id='latitude'
-            name='latitude'
-            value={this.state.latitude}
+            id='lat'
+            name='currLocation'
+            value={this.state.lat}
             onChange={this.changeState}
             required
           />
         </label>
-        <label htmlFor='longitude'>
+        <label htmlFor='lng'>
           Longitude
           <input
             type='number'
-            id='longitude'
-            name='longitude'
-            value={this.state.longitude}
+            id='lng'
+            name='currLocation'
+            value={this.state.lng}
             onChange={this.changeState}
             required
           />
@@ -152,7 +170,6 @@ class PreferenceForm extends React.Component {
 
   getRecommendation() {
     const promises = this.makePromisesArray();
-    const preferences = this.makePrefsBody();
 
     Promise.all(promises)
       // This gives us the list of restaurants.
@@ -173,7 +190,7 @@ class PreferenceForm extends React.Component {
           },
           body: JSON.stringify({
             restaurants,
-            preferences,
+            preferences: this.state,
           }),
         })
           .then((response) => response.text())
@@ -189,58 +206,12 @@ class PreferenceForm extends React.Component {
   }
 
   /**
-   * Creates and returns an object to be used in the request body sent to the servlet.
-   */
-  makePrefsBody() {
-    const {
-      distance,
-      dining_experience,
-      price_level,
-      latitude,
-      longitude,
-    } = this.state;
-    const lat = parseFloat(latitude);
-    const lng = parseFloat(longitude);
-    const preferences = {
-      currLocation: {
-        lat,
-        lng,
-      },
-    };
-    const milesRadius = parseInt(distance);
-    const radiusWeight = 3;
-    if (milesRadius) {
-      preferences['radius'] = {
-        pref: this.milesToMeters(milesRadius),
-        weight: radiusWeight,
-      };
-    }
-    const priceLevel = parseInt(price_level);
-    const priceLevelWeight = 2;
-    if (priceLevel) {
-      preferences['priceLevel'] = {
-        pref: priceLevel,
-        weight: priceLevelWeight,
-      };
-    }
-    const diningExp = dining_experience;
-    const diningExpWeight = 4;
-    if (diningExp) {
-      preferences['diningExp'] = {
-        pref: diningExp,
-        weight: diningExpWeight,
-      };
-    }
-    return preferences;
-  }
-
-  /**
    *  Returns an array of promises of calls to the Google Places API.
    *  One promise is created for every cuisine type.
    *  If no cuisines are specified, only one promise is created.
    */
   makePromisesArray() {
-    const { cuisine, distance, latitude, longitude, open } = this.state;
+    const { cuisine, radius, currLocation, open } = this.state;
     // TODO: replace API key
     const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
@@ -256,9 +227,9 @@ class PreferenceForm extends React.Component {
     for (const cuisineType of cuisineTypes) {
       const searchParams = new URLSearchParams();
       searchParams.append('query', cuisineType + 'restaurant');
-      searchParams.append('location', latitude + ',' + longitude);
-      if (distance) {
-        searchParams.append('radius', distance);
+      searchParams.append('location', currLocation.lat + ',' + currLocation.lng);
+      if (radius.pref) {
+        searchParams.append('radius', this.milesToMeters(this.state.radius.pref));
       }
       if (open) {
         searchParams.append('opennow', open);
