@@ -165,6 +165,16 @@ class PreferenceForm extends React.Component {
           restaurants = restaurants.concat(restaurant.results);
         }
 
+        if (restaurants.length === 0) {
+          let message = "We can't find any restaurants near you";
+          if (this.state.open) {
+            message += ' that are currently open';
+          }
+          message += '. Please try changing your preferences.';
+          alert(message);
+          return;
+        }
+
         fetch('/api/recommendation', {
           method: 'POST',
           headers: {
@@ -238,6 +248,11 @@ class PreferenceForm extends React.Component {
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const textSearchBaseUrl =
       'https://maps.googleapis.com/maps/api/place/textsearch/json?';
+    const options = {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    };
     const promises = [];
     const cuisineTypes = this.state.cuisine;
     // Make sure we still create a promise even if no cuisine type is specified.
@@ -259,7 +274,9 @@ class PreferenceForm extends React.Component {
         searchParams.append('opennow', this.state.open);
       }
       searchParams.append('key', apiKey);
-      promises.push(fetch(proxyUrl + textSearchBaseUrl + searchParams));
+      promises.push(
+        fetch(proxyUrl + textSearchBaseUrl + searchParams, options)
+      );
     }
     return promises;
   }
