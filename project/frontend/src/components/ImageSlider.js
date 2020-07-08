@@ -28,7 +28,6 @@ const width = 344;
 /**
  * A reducer for the ImageSlider component. Updates ImageSlider state
  * based on the previous state and a specified action.
- *
  */
 function reducer(state, action) {
   switch (action.type) {
@@ -138,14 +137,24 @@ function reducer(state, action) {
   }
 }
 
+/**
+ * An image slider component for use within the RestaurantCard component.
+ * Provides an image view that may be dragged (with touch or mouse) to
+ * reveal more images.
+ *
+ * @param {!Array<string>} props.images An array of image URLs pointing to the
+ *     images that should be displayed in this slider.
+ */
 function ImageSlider(props) {
+  const images = props.images;
+  
   const [areControlsVisible, setAreControlsVisible] = useState(false);
 
   const [state, dispatch] = useReducer(reducer, {
     left: 0,
     lastLeft: 0,
     slide: 0,
-    slideCount: props.images.length,
+    slideCount: images.length,
   });
 
   const handleSwipedUpOrDown = (event) => {
@@ -183,7 +192,7 @@ function ImageSlider(props) {
         className={`slider-wrapper ${state.shifting ? 'shifting' : ''}`}
         style={{ left: state.left + 'px' }}
         {...handlers}>
-        {props.images.map((image, index) => (
+        {images.map((image, index) => (
           <img
             key={index}
             className='slide'
