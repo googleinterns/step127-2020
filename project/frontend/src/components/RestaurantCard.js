@@ -25,7 +25,9 @@ function RestaurantCard(props) {
     (photo) =>
       'https://maps.googleapis.com/maps/api/place/photo?photoreference=' +
       photo.photo_reference +
-      '&key=AIzaSyC0Q4CyO-BM4M5jPvL3ayJ09RfymZYQjhs&maxwidth=344'
+      '&key=' +
+      process.env.REACT_APP_GOOGLE_API_KEY +
+      '&maxwidth=344'
   );
 
   return (
