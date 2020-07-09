@@ -1,5 +1,7 @@
 import React from 'react';
 import getRecommendation from '../scripts/recommendation_script.js';
+import { makeStyles } from '@material-ui/core/styles';
+import Slider from '@material-ui/core/Slider';
 
 class PreferenceForm extends React.Component {
   constructor(props) {
@@ -40,11 +42,11 @@ class PreferenceForm extends React.Component {
     } else if (event.target.name === 'currLocation') {
       field[event.target.id] = parseFloat(event.target.value);
       this.setState({ [event.target.name]: field });
-    } else if (event.target.name === 'diningExp') {
-      field['pref'] = event.target.value;
+    } else if (event.target.name === 'diningExp' && event.target.className === 'pref') {
+      field[event.target.className] =  event.target.value;
       this.setState({ [event.target.name]: field });
     } else {
-      field['pref'] = parseInt(event.target.value);
+      field[event.target.className] = parseInt(event.target.value);
       this.setState({ [event.target.name]: field });
     }
   }
@@ -91,7 +93,7 @@ class PreferenceForm extends React.Component {
           Distance?
           <select
             name='radius'
-            id='radius'
+            className='pref'
             onChange={this.changeState}
             value={this.state.radius}>
             {Object.entries(distances_in_miles).map(([label, value]) => (
@@ -101,27 +103,49 @@ class PreferenceForm extends React.Component {
             ))}
             ;
           </select>
+          Importance
+          <input 
+            name='radius' 
+            className='weight'
+            onChange={this.changeState}
+            value={this.state.radius.weight}
+            type='number'
+            min={1}
+            max={5}
+            step={1}
+          />
         </label>
         <label htmlFor='diningExp'>
           Dining Experience
-          <select
-            name='diningExp'
-            id='diningExp'
+            <select
+              name='diningExp'
+              className='pref'
+              onChange={this.changeState}
+              value={this.state.diningExp}>
+              {Object.entries(dining_experiences).map(([label, apiValue]) => (
+                <option key={label} value={apiValue}>
+                  {label}
+                </option>
+              ))}
+              ;
+            </select>
+          Importance
+          <input 
+            name='diningExp' 
+            className='weight'
             onChange={this.changeState}
-            value={this.state.diningExp}>
-            {Object.entries(dining_experiences).map(([label, apiValue]) => (
-              <option key={label} value={apiValue}>
-                {label}
-              </option>
-            ))}
-            ;
-          </select>
+            value={this.state.diningExp.weight}
+            type='number'
+            min={1}
+            max={5}
+            step={1}
+          />
         </label>
         <label htmlFor='priceLevel'>
           Price Level
           <select
             name='priceLevel'
-            id='priceLevel'
+            className='pref'
             onChange={this.changeState}
             value={this.state.priceLevel}>
             {Object.entries(prices).map(([level, intLevel]) => (
@@ -131,6 +155,17 @@ class PreferenceForm extends React.Component {
             ))}
             ;
           </select>
+          Importance
+          <input 
+            name='priceLevel' 
+            className='weight'
+            onChange={this.changeState}
+            value={this.state.priceLevel.weight}
+            type='number'
+            min={1}
+            max={5}
+            step={1}
+          />
         </label>
         <label htmlFor='lat'>
           Latitude
