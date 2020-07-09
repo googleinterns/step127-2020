@@ -9,7 +9,7 @@ import Authentication from './components/Authentication.js';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
 import Footer from './pages/Footer.js';
-import PreferenceForm from './FindMatch/FindMatch.js';
+import PreferenceForm from './components/PreferenceForm.js';
 
 import * as serviceWorker from './serviceWorker';
 
