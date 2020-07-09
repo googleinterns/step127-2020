@@ -1,5 +1,5 @@
 import React from 'react';
-import getRecommendation from './Recommender.js';
+import getRecommendation from '../scripts/recommendation_script.js';
 
 class PreferenceForm extends React.Component {
   constructor(props) {
