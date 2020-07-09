@@ -1,6 +1,7 @@
 import './HomePage.css';
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function HomePage() {
   return (
@@ -12,9 +13,9 @@ function HomePage() {
           <button>Location</button>
           <div>
             <button>Swipe Match</button>
-            <button onClick={() => (window.location.href = '/find-match')}>
-              Find My Match
-            </button>
+            <Link to='/find-match'>
+              <button>Find My Match</button>
+            </Link>
           </div>
         </div>
       </div>
