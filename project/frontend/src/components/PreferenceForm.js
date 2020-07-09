@@ -63,11 +63,11 @@ class PreferenceForm extends React.Component {
       '25 miles': 25,
     };
     const diningExperiences = {
-      'Takeout': 'meal_takeaway',
-      'Delivery': 'meal_delivery',
+      Takeout: 'meal_takeaway',
+      Delivery: 'meal_delivery',
       'Eat In': 'restaurant',
     };
-    const prices = { 'Low': 1, 'Medium': 2, 'High': 3, 'Very High': 4 };
+    const prices = { Low: 1, Medium: 2, High: 3, 'Very High': 4 };
     return (
       <form onSubmit={this.handleSubmit}>
         <label htmlFor='cuisine'>
