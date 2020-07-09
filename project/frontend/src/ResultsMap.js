@@ -8,17 +8,9 @@ const mapStyle = {
 };
 
 function MapContainer(props) {
-  const coords = {lat:, lng: };
+  const coords = { lat: 40.837, lng: -73.865 };
   return (
-    <Map
-      google={props.google}
-      zoom={14}
-      style={mapStyle}
-      center={{
-        lat: -1.2884,
-        lng: 36.8233,
-      }}
-    />
+    <Map google={props.google} zoom={14} style={mapStyle} center={coords} />
   );
 }
 
