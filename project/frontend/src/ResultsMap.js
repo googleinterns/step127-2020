@@ -21,15 +21,13 @@ export class MapContainer extends React.Component {
   }
 
   render() {
+    const { lat, lng } = this.state;
     return (
       <Map
         google={this.props.google}
         zoom={14}
         style={mapStyle}
-        center={{
-          lat: this.state.lat,
-          lng: this.state.lng,
-        }}
+        center={(lat, lng)}
       />
     );
   }
