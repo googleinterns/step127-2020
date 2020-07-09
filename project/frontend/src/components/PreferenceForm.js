@@ -50,7 +50,13 @@ class PreferenceForm extends React.Component {
   }
 
   handleSubmit(event) {
-    getRecommendation(/* preferences= */ this.state);
+    const propHistory = this.props.history;
+    getRecommendation(/* preferences= */ this.state, function(response) {
+      propHistory.push({
+        pathname: '/match-results', 
+        data: response,
+      });
+    });
     event.preventDefault();
   }
 
