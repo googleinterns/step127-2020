@@ -79,8 +79,13 @@ function RestaurantCard(props) {
         <div
           ref={collapsible}
           className='restaurant-collapsible'
-          style={{height: !collapsibleMaxHeight.current ? '' : collapsed ? '0px' : collapsibleMaxHeight.current + 'px'}}
-        >
+          style={{
+            height: !collapsibleMaxHeight.current
+              ? ''
+              : collapsed
+              ? '0px'
+              : collapsibleMaxHeight.current + 'px',
+          }}>
           <p className='restaurant-type'>
             {'$'.repeat(restaurant.key.priceLevel)} •{' '}
             {restaurant.key.placeTypes.join(', ')}
