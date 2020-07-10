@@ -9,6 +9,7 @@ import Authentication from './components/Authentication.js';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
 import Footer from './pages/Footer.js';
+import PreferenceForm from './components/PreferenceForm.js';
 
 import * as serviceWorker from './serviceWorker';
 
@@ -16,13 +17,12 @@ ReactDOM.render(
   <React.StrictMode>
     <Authentication>
       <Router>
+        <Header />
         <Switch>
-          <Route path='/'>
-            <Header />
-            <HomePage />
-            <Footer />
-          </Route>
+          <Route exact path='/' component={HomePage} />
+          <Route path='/find-match' component={PreferenceForm} />
         </Switch>
+        <Footer />
       </Router>
     </Authentication>
   </React.StrictMode>,
