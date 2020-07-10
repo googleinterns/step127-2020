@@ -24,7 +24,9 @@ import * as serviceWorker from './serviceWorker';
 import generateRestaurant from './components/SampleRestaurant.js';
 const cards = [];
 for (let i = 0; i < 20; i++) {
-  cards.push(generateRestaurant('Amarena ' + i, 'apr75h4bni2pf98h4inujnksjrliu34' + i));
+  cards.push(
+    generateRestaurant('Amarena ' + i, 'apr75h4bni2pf98h4inujnksjrliu34' + i)
+  );
 }
 
 ReactDOM.render(
@@ -33,7 +35,6 @@ ReactDOM.render(
       <Router>
         <Header />
         <Switch>
-          
           <Route path='/deck'>
             <div className='container'>
               <div className='row'>
@@ -46,7 +47,7 @@ ReactDOM.render(
               </div>
             </div>
           </Route>
-          
+
           <Route path='/card'>
             <RestaurantCard {...generateRestaurant()} />
           </Route>
@@ -55,7 +56,6 @@ ReactDOM.render(
           <Route path='/match-results' component={MatchResults} />
           <Route path='/mapRoute' component={MapContainer} />
           <Route path='/' component={HomePage} />
-          
         </Switch>
         <Footer />
       </Router>
