@@ -9,7 +9,7 @@ import Authentication from './components/Authentication.js';
 import Footer from './pages/Footer.js';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
-import MapContainer from './ResultsMap.js';
+import MapContainer from './components/ResultsMap.js';
 import MatchResults from './pages/MatchResults.js';
 import PreferenceForm from './components/PreferenceForm.js';
 
