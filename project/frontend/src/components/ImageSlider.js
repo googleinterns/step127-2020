@@ -144,9 +144,11 @@ function reducer(state, action) {
  *
  * @param {!Array<string>} props.images An array of image URLs pointing to the
  *     images that should be displayed in this slider.
+ * @param {boolean=} props.collapsed An optional control over whether this slider
+ *     is in a collapsed or full view (default: false).
  */
 function ImageSlider(props) {
-  const images = props.images;
+  const { images, collapsed = false }  = props;
 
   const [areControlsVisible, setAreControlsVisible] = useState(false);
 
@@ -187,7 +189,8 @@ function ImageSlider(props) {
     <div
       className='slider'
       onMouseEnter={() => setAreControlsVisible(true)}
-      onMouseLeave={() => setAreControlsVisible(false)}>
+      onMouseLeave={() => setAreControlsVisible(false)}
+      style={{height: collapsed ? '0px' : '200px'}}>
       <div
         className={`slider-wrapper ${state.shifting ? 'shifting' : ''}`}
         style={{ left: state.left + 'px' }}
@@ -197,6 +200,7 @@ function ImageSlider(props) {
             key={index}
             className='slide'
             src={image}
+            style={{height: collapsed ? '0px' : '200px'}}
             draggable='false'
             alt='Restaurant photographs'
           />
