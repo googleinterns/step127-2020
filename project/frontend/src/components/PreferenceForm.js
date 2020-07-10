@@ -25,7 +25,6 @@ class PreferenceForm extends React.Component {
       open: true,
     };
     this.changeState = this.changeState.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   // Updates the state of the input element so it holds the chosen value.
