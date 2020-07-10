@@ -23,15 +23,35 @@ import React from 'react';
  *     centered; false otherwise (default: false).
  */
 function Modal(props) {
-  const { open, top, right, bottom, left, onDismiss, center, centerHorizontal } = props;
+  const {
+    open,
+    top,
+    right,
+    bottom,
+    left,
+    onDismiss,
+    center,
+    centerHorizontal,
+  } = props;
 
   const backdropStyle = { height: open ? '' : '0px' };
-  
+
   let modalStyle = { opacity: open ? 1 : 0 };
   if (center) {
-    modalStyle = { top: '50%', left: '50%', transform: 'translate(-50%, -50%)', ...modalStyle };
+    modalStyle = {
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      ...modalStyle,
+    };
   } else if (centerHorizontal) {
-    modalStyle = { top, bottom, left: '50%', transform: 'translateX(-50%)', ...modalStyle };
+    modalStyle = {
+      top,
+      bottom,
+      left: '50%',
+      transform: 'translateX(-50%)',
+      ...modalStyle,
+    };
   } else {
     modalStyle = { top, right, bottom, left, ...modalStyle };
   }

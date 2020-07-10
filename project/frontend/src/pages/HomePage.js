@@ -11,8 +11,8 @@ function HomePage() {
   const togglePreferenceForm = () => {
     setIsPreferenceFormOpen((prev) => !prev);
   };
-  
-  return ([
+
+  return [
     <div key='home-page' className='container u-full-width'>
       <div className='row'>
         <div id='welcome' className='column'>
@@ -84,7 +84,7 @@ function HomePage() {
       bottom='64px'>
       <PreferenceForm />
     </Modal>,
-  ]);
+  ];
 }
 
 export default HomePage;
