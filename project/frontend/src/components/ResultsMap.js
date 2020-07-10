@@ -11,12 +11,19 @@ function MapContainer(props) {
   // Declare all the states for this functional component
   const [activeMarker, changeMarker] = useState({});
   const [showInfoWindow, changeInfoVisibility] = useState(false);
+  // const [selectedPlace, changePlace] = useState({});
 
   const coords = { lat: 40.837, lng: -73.865 };
 
   const onMarkerClick = (props, marker, event) => {
     changeMarker(marker);
     changeInfoVisibility(true);
+  };
+
+  const onClose = (props) => {
+    if (showInfoWindow) {
+      changeInfoVisibility(false);
+    }
   };
 
   return (
@@ -34,7 +41,7 @@ function MapContainer(props) {
       <InfoWindow
         marker={activeMarker}
         visible={showInfoWindow}
-        onClose={changeInfoVisibility(false)}>
+        onClose={onClose}>
         <div>
           <h5>{'Your #1 Match'}</h5>
         </div>
