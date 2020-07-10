@@ -11,11 +11,10 @@ function MapContainer(props) {
   // Declare all the states for this functional component
   const [activeMarker, changeMarker] = useState({});
   const [showInfoWindow, changeInfoVisibility] = useState(false);
-  // const [selectedPlace, changePlace] = useState({});
 
   const coords = { lat: 40.837, lng: -73.865 };
 
-  const onMarkerClick = (props, marker, event) => {
+  const onMarkerClick = (props, marker) => {
     changeMarker(marker);
     changeInfoVisibility(true);
   };
