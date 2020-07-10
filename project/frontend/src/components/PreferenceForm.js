@@ -59,6 +59,17 @@ class PreferenceForm extends React.Component {
     event.preventDefault();
   }
 
+  getSlider(attrName) {
+    return (
+      <div style={{ width: 200, padding: 20}}>
+        <Slider
+          defaultValue={3} min={1} step={1} max={5} graduated progress
+          onChange={(val) => this.changeWeightState(attrName, val)}
+        />
+      </div>
+    );
+  }
+
   render() {
     const cuisines = ['Italian ', 'Mexican ', 'Indian '];
     const distances_in_miles = {
@@ -108,12 +119,7 @@ class PreferenceForm extends React.Component {
           </select>
           <br />
           Importance
-          <div style={{ width: 200, padding: 20}}>
-            <Slider
-              defaultValue={3} min={1} step={1} max={5} graduated progress
-              onChange={(val) => this.changeWeightState('radius', val)}
-            />
-          </div>
+          {this.getSlider('radius')}
         </label>
         <label htmlFor='diningExp'>
           Dining Experience
@@ -131,12 +137,7 @@ class PreferenceForm extends React.Component {
           </select>
           <br />
           Importance
-          <div style={{ width: 200, padding: 20}}>
-            <Slider
-              defaultValue={3} min={1} step={1} max={5} graduated progress
-              onChange={(val) => this.changeWeightState('diningExp', val)}
-            />
-          </div>
+          {this.getSlider('diningExp')}
         </label>
         <label htmlFor='priceLevel'>
           Price Level
@@ -154,12 +155,7 @@ class PreferenceForm extends React.Component {
           </select>
           <br />
           Importance
-          <div style={{ width: 200, padding: 20}}>
-            <Slider
-              defaultValue={3} min={1} step={1} max={5} graduated progress
-              onChange={(val) => this.changeWeightState('priceLevel', val)}
-            />
-          </div>
+          {this.getSlider('priceLevel')}
         </label>
         <label htmlFor='lat'>
           Latitude
