@@ -18,7 +18,7 @@ import RestaurantCard from './components/RestaurantCard.js';
 import * as serviceWorker from './serviceWorker';
 
 // TODO: remove
-import { restaurant, details } from './components/SampleRestaurant.js';
+import generateRestaurant from './components/SampleRestaurant.js';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -26,10 +26,14 @@ ReactDOM.render(
       <Router>
         <Header />
         <Switch>
+          <Route path='/card'>
+            <RestaurantCard {...generateRestaurant()} />
+          </Route> 
+          
           <Route path='/find-match' component={PreferenceForm} />
           <Route path='/match-results' component={MatchResults} />
           <Route path='/mapRoute' component={MapContainer} />
-          <Route exact path='/' component={HomePage} /> 
+          <Route path='/' component={HomePage} />
         </Switch>
         <Footer />
       </Router>
