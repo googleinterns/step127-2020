@@ -22,7 +22,6 @@ ReactDOM.render(
         <Header />
         <Switch>
           <Route exact path='/' component={HomePage} />
-          <Route path='/find-match' component={PreferenceForm} />
           <Route path='/match-results' component={MatchResults} />
           <Route path='/mapRoute' component={MapContainer} />
         </Switch>
