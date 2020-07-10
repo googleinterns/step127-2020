@@ -28,113 +28,76 @@ const width = 344;
 /**
  * A reducer for the ImageSlider component. Updates ImageSlider state
  * based on the previous state and a specified action.
+ *
+ * @param {!Object<string, *>} previous The previous state.
+ * @param {!Action} action An action type that may determine how the
+ *     state is updated.
  */
-function reducer(state, action) {
+function reducer(previous, action) {
+  let { left, lastLeft, slide, slideCount, shifting } = previous;
+
   switch (action.type) {
-    case Action.SWIPING: {
-      let newLeft = state.lastLeft + action.deltaX;
-      const minLeft = (state.slideCount - 1) * -width;
+    case Action.SWIPING:
+      const minLeft = (slideCount - 1) * -width;
       const maxLeft = 0.0;
-      newLeft = Math.min(Math.max(newLeft, minLeft), maxLeft);
+      left = Math.min(Math.max(lastLeft + action.deltaX, minLeft), maxLeft);
+      shifting = false;
 
       // Update the current slide if user slides
       // passed multiple slides in one motion.
-      let newSlide = state.slide;
       const dir = action.deltaX > 0 ? 'right' : 'left';
       if (dir === 'left') {
-        if (newLeft <= (state.slide + 1) * -width) {
-          newSlide++;
-        } else if (newLeft > state.slide * -width) {
-          newSlide--;
+        if (left <= (slide + 1) * -width) {
+          slide++;
+        } else if (left > slide * -width) {
+          slide--;
         }
       } else {
-        if (newLeft >= (state.slide - 1) * -width) {
-          newSlide--;
-        } else if (newLeft < state.slide * -width) {
-          newSlide++;
+        if (left >= (slide - 1) * -width) {
+          slide--;
+        } else if (left < slide * -width) {
+          slide++;
         }
       }
-
-      return {
-        left: newLeft,
-        lastLeft: state.lastLeft,
-        slide: newSlide,
-        slideCount: state.slideCount,
-      };
-    }
-    case Action.SWIPED_LEFT: {
-      let newSlide = state.slide;
-
+      break;
+    case Action.SWIPED_LEFT:
       // Spring slider back to current slide or to next
       // slide depending on how far the user slid.
-      if (newSlide < state.slideCount - 1) {
-        if (
-          Math.abs(state.left) % width > width / 2 ||
-          action.velocity >= 0.5
-        ) {
-          newSlide++;
+      if (slide < slideCount - 1) {
+        if (Math.abs(left) % width > width / 2 || action.velocity >= 0.5) {
+          slide++;
         }
       }
-
-      const newLeft = newSlide * -width;
-      return {
-        left: newLeft,
-        lastLeft: newLeft,
-        slide: newSlide,
-        slideCount: state.slideCount,
-        shifting: true,
-      };
-    }
-    case Action.SWIPED_RIGHT: {
-      let newSlide = state.slide;
-
+      break;
+    case Action.SWIPED_RIGHT:
       // Spring slider back to current slide or to previous
       // slide depending on how far the user slid.
-      if (newSlide > 0) {
+      if (slide > 0) {
         if (
-          width - (Math.abs(state.left) % width) > width / 2 ||
+          width - (Math.abs(left) % width) > width / 2 ||
           action.velocity >= 0.5
         ) {
-          newSlide--;
+          slide--;
         }
       }
-
-      const newLeft = newSlide * -width;
-      return {
-        left: newLeft,
-        lastLeft: newLeft,
-        slide: newSlide,
-        slideCount: state.slideCount,
-        shifting: true,
-      };
-    }
-    case Action.PREV_SLIDE: {
-      const newSlide = state.slide > 0 ? state.slide - 1 : state.slide;
-      const newLeft = newSlide * -width;
-      return {
-        left: newLeft,
-        lastLeft: newLeft,
-        slide: newSlide,
-        slideCount: state.slideCount,
-        shifting: true,
-      };
-    }
-    case Action.NEXT_SLIDE: {
-      const newSlide =
-        state.slide < state.slideCount - 1 ? state.slide + 1 : state.slide;
-      const newLeft = newSlide * -width;
-      return {
-        left: newLeft,
-        lastLeft: newLeft,
-        slide: newSlide,
-        slideCount: state.slideCount,
-        shifting: true,
-      };
-    }
-    default: {
+      break;
+    case Action.PREV_SLIDE:
+      if (slide > 0) slide--;
+      break;
+    case Action.NEXT_SLIDE:
+      if (slide < slideCount - 1) slide++;
+      break;
+    default:
       throw new Error();
-    }
   }
+
+  if (action.type !== Action.SWIPING) {
+    left = slide * -width;
+    lastLeft = left;
+    shifting = true;
+  }
+
+  return { left, lastLeft, slide, slideCount, shifting };
 }
 
 /**

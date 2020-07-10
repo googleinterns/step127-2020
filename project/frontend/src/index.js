@@ -33,7 +33,7 @@ ReactDOM.render(
       <Router>
         <Header />
         <Switch>
-
+          
           <Route path='/deck'>
             <div className='container'>
               <div className='row'>
@@ -55,7 +55,7 @@ ReactDOM.render(
           <Route path='/match-results' component={MatchResults} />
           <Route path='/mapRoute' component={MapContainer} />
           <Route path='/' component={HomePage} />
-
+          
         </Switch>
         <Footer />
       </Router>
