@@ -25,34 +25,41 @@ public final class RestaurantScorer {
   /** Returns the percent match for a restaurant to a set of user preferences. */
   public static double score(Restaurant restaurant, JSONObject preferences,
       DescriptiveStatistics statistics) throws JSONException {
-    int preferredPriceLevel = preferences.getJSONObject("priceLevel").getInt("pref");
-    String preferredDiningExp = preferences.getJSONObject("diningExp").getString("pref");
-    int priceLevelWeight = preferences.getJSONObject("priceLevel").getInt("weight");
-    int diningExpWeight = preferences.getJSONObject("diningExp").getInt("weight");
-    int radiusWeight = preferences.getJSONObject("radius").getInt("weight");
-    int maxPoints = priceLevelWeight + diningExpWeight + radiusWeight
-        + 1; // add 1 because rating score has an upper bound of 1
-    Map<String, Double> currLocation =
-        GSON.fromJson(preferences.getJSONObject("currLocation").toString(), HashMap.class);
     double score = 0;
-    double restaurantRating = restaurant.getAvgRating();
-    double distMeters = distanceInMeters(currLocation, restaurant.getLatLngCoords());
-    double prefDistMeters = preferences.getJSONObject("radius").getDouble("pref");
+    int maxPoints = 1; // add 1 because rating score has an upper bound of 1
+    if (isValidField(preferences, "priceLevel")) {
+      int priceLevelWeight = preferences.getJSONObject("priceLevel").getInt("weight");
+      maxPoints += priceLevelWeight;
+      if (restaurant.getPriceLevel() == preferences.getJSONObject("priceLevel").getInt("pref")) {
+        score += priceLevelWeight;
+      }
+    }
+    if (isValidField(preferences, "diningExp")) {
+      int diningExpWeight = preferences.getJSONObject("diningExp").getInt("weight");
+      maxPoints += diningExpWeight;
+      if (restaurant.getPlaceTypes().contains(
+              preferences.getJSONObject("diningExp").getString("pref"))) {
+        score += diningExpWeight;
+      }
+    }
+    if (isValidField(preferences, "radius")) {
+      int radiusWeight = preferences.getJSONObject("radius").getInt("weight");
+      maxPoints += radiusWeight;
+      Map<String, Double> currLocation =
+          GSON.fromJson(preferences.getJSONObject("currLocation").toString(), HashMap.class);
 
-    if (restaurant.getPriceLevel() == preferences.getJSONObject("priceLevel").getInt("pref")) {
-      score += priceLevelWeight;
+      double distMiles = distanceInMiles(currLocation, restaurant.getLatLngCoords());
+      double prefDistMiles = preferences.getJSONObject("radius").getDouble("pref");
+
+      if (distMiles <= prefDistMiles) {
+        score += radiusWeight;
+      } else {
+        double percentDistDiff = (distMiles - prefDistMiles) / prefDistMiles;
+        score -= percentDistDiff * radiusWeight;
+      }
     }
-    if (restaurant.getPlaceTypes().contains(
-            preferences.getJSONObject("diningExp").getString("pref"))) {
-      score += diningExpWeight;
-    }
-    if (distMeters <= prefDistMeters) {
-      score += radiusWeight;
-    } else {
-      double percentDistDiff = (roundMetersToMiles(distMeters) - roundMetersToMiles(prefDistMeters))
-          / roundMetersToMiles(prefDistMeters);
-      score -= percentDistDiff * radiusWeight;
-    }
+
+    double restaurantRating = restaurant.getAvgRating();
     // Adds points to the score if the rating is > MID_RATING, subtracts points if
     // rating is < MID_RATING.
     boolean hasRating = restaurantRating != -1;
@@ -83,10 +90,10 @@ public final class RestaurantScorer {
   }
 
   /**
-   * Calculates the distance in meters between two sets of lat long coordinates using the Haversine
+   * Calculates the distance in miles between two sets of lat long coordinates using the Haversine
    * formula.
    */
-  private static double distanceInMeters(
+  private static double distanceInMiles(
       Map<String, Double> currCoords, Map<String, Double> placeCoords) {
     double latDiff = Math.toRadians(placeCoords.get("lat") - currCoords.get("lat"));
     double lngDiff = Math.toRadians(placeCoords.get("lng") - currCoords.get("lng"));
@@ -95,12 +102,12 @@ public final class RestaurantScorer {
             * Math.cos(Math.toRadians(placeCoords.get("lat"))) * Math.pow(Math.sin(lngDiff / 2), 2);
     double angleInRadians = 2 * Math.atan2(Math.sqrt(point), Math.sqrt(1 - point));
     double distInMeters = EARTH_RADIUS_METERS * angleInRadians;
-    return distInMeters;
+    return metersToMiles(distInMeters);
   }
 
   /** Converts meters to miles and rounds to the nearest mile. */
-  private static long roundMetersToMiles(double numMeters) {
-    return Math.round(numMeters / 1609.34);
+  private static double metersToMiles(double numMeters) {
+    return numMeters / 1609.34;
   }
 
   /** Skews ratings so that ratings with a lower number of ratings are weighed less. */
@@ -111,5 +118,9 @@ public final class RestaurantScorer {
     double totalPoints = numInitialRatings * MID_RATING + avgRating * numRatings;
     double weightedRating = totalPoints / totalRatings;
     return (weightedRating - MID_RATING) / MAX_RATING;
+  }
+
+  private static boolean isValidField(JSONObject obj, String key) throws JSONException {
+    return !obj.isNull(key) && !obj.getJSONObject(key).isNull("pref");
   }
 }
