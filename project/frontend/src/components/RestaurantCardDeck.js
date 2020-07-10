@@ -11,7 +11,8 @@ function RestaurantCardDeck(props) {
   const renderedCard = useRef(null);
 
   useLayoutEffect(() => {
-    deckWrapper.current.style.height = (renderedCard.current.offsetHeight + 64) + 'px';
+    deckWrapper.current.style.height =
+      renderedCard.current.offsetHeight + 64 + 'px';
     deckWrapper.current.style.width = renderedCard.current.offsetWidth + 'px';
   }, []);
 
@@ -22,14 +23,14 @@ function RestaurantCardDeck(props) {
     }
 
     const relativeIndex = index - currentCardIndex;
-    
+
     const style = {
       position: 'absolute',
-      top: (relativeIndex < 4) ? (relativeIndex * 24) + 'px' : '72px',
+      top: relativeIndex < 4 ? relativeIndex * 24 + 'px' : '72px',
       left: '0px',
-      opacity: (relativeIndex < 3) ? 1 : 0,
+      opacity: relativeIndex < 3 ? 1 : 0,
       zIndex: props.cards.length - index,
-      transform: `scale(${Math.min(1 - (relativeIndex / 20), 1.0)}) rotate(0deg)`,
+      transform: `scale(${Math.min(1 - relativeIndex / 20, 1.0)}) rotate(0deg)`,
       transition: 'all 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)',
     };
 
@@ -56,8 +57,12 @@ function RestaurantCardDeck(props) {
         {cards}
       </div>
       <div>
-        <button onClick={() => setCurrentCardIndex((prev) => prev - 1)}>Previous</button>
-        <button onClick={() => setCurrentCardIndex((prev) => prev + 1)}>Next</button>
+        <button onClick={() => setCurrentCardIndex((prev) => prev - 1)}>
+          Previous
+        </button>
+        <button onClick={() => setCurrentCardIndex((prev) => prev + 1)}>
+          Next
+        </button>
       </div>
     </div>
   );
