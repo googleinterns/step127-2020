@@ -11,7 +11,7 @@ function MapContainer(props) {
   const coords = { lat: 40.837, lng: -73.865 };
   return (
     <Map
-      ari-label={'A Google Map with your Matches!'}
+      aria-label={'A Google Map with your Matches!'}
       google={props.google}
       zoom={14}
       style={mapStyle}
