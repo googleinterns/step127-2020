@@ -21,9 +21,9 @@ ReactDOM.render(
       <Router>
         <Header />
         <Switch>
-          <Route exact path='/' component={HomePage} />
-          <Route path='/match-results' component={MatchResults} />
+          <Route path='/match-results' component={MatchResultsPage} />
           <Route path='/mapRoute' component={MapContainer} />
+          <Route path='/' component={HomePage} />
         </Switch>
         <Footer />
       </Router>
