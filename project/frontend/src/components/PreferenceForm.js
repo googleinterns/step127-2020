@@ -1,5 +1,5 @@
 import React from 'react';
-import getRecommendation from '../scripts/recommendation_script.js';
+import { Link } from 'react-router-dom';
 
 class PreferenceForm extends React.Component {
   constructor(props) {
@@ -50,13 +50,6 @@ class PreferenceForm extends React.Component {
   }
 
   handleSubmit(event) {
-    const propHistory = this.props.history;
-    getRecommendation(/* preferences= */ this.state, function (response) {
-      propHistory.push({
-        pathname: '/match-results',
-        data: response,
-      });
-    });
     event.preventDefault();
   }
 
@@ -169,7 +162,9 @@ class PreferenceForm extends React.Component {
             onChange={this.changeState}
           />
         </label>
-        <button type='submit'>Submit</button>
+        <Link to={{ pathname: '/match-results', state: this.state }}>
+          <button type='submit'>Submit</button>
+        </Link>
       </form>
     );
   }
