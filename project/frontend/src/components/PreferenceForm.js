@@ -43,15 +43,18 @@ class PreferenceForm extends React.Component {
       field[event.target.id] = parseFloat(event.target.value);
       this.setState({ [event.target.name]: field });
     } else {
-      field['pref'] = event.target.name === 'diningExp' ? event.target.value : parseInt(event.target.value);
+      field['pref'] =
+        event.target.name === 'diningExp'
+          ? event.target.value
+          : parseInt(event.target.value);
       this.setState({ [event.target.name]: field });
-    } 
+    }
   }
 
   changeWeightState(attrName, value) {
     const field = this.state[attrName];
     field['weight'] = value;
-    this.setState({ [attrName]: field});
+    this.setState({ [attrName]: field });
   }
 
   handleSubmit(event) {
@@ -67,9 +70,14 @@ class PreferenceForm extends React.Component {
 
   getSlider(attrName) {
     return (
-      <div style={{ width: 200, padding: 20}}>
+      <div style={{ width: 200, padding: 20 }}>
         <Slider
-          defaultValue={3} min={1} step={1} max={5} graduated progress
+          defaultValue={3}
+          min={1}
+          step={1}
+          max={5}
+          graduated
+          progress
           onChange={(val) => this.changeWeightState(attrName, val)}
         />
       </div>
