@@ -1,10 +1,13 @@
 /**
  * Generates a sample restaurant using the specified name and id.
- * 
+ *
  * @param {string=} name An optional name for the generated restaurant (default: 'Amarena').
  * @param {string=} id An optional id for the generated restaurant (default: 'apr75h4bni2pf98h4inujnksjrliu34')
  */
-function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrliu34') {
+function generateRestaurant(
+  name = 'Amarena',
+  id = 'apr75h4bni2pf98h4inujnksjrliu34'
+) {
   const restaurant = {
     hash: 123456789,
     key: {
@@ -74,7 +77,7 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
         },
       ],
       adr_address:
-      '\u003cspan class="street-address"\u003e2162 Larkin St\u003c/span\u003e, \u003cspan class="locality"\u003eSan Francisco\u003c/span\u003e, \u003cspan class="region"\u003eCA\u003c/span\u003e \u003cspan class="postal-code"\u003e94109-1722\u003c/span\u003e, \u003cspan class="country-name"\u003eUSA\u003c/span\u003e',
+        '\u003cspan class="street-address"\u003e2162 Larkin St\u003c/span\u003e, \u003cspan class="locality"\u003eSan Francisco\u003c/span\u003e, \u003cspan class="region"\u003eCA\u003c/span\u003e \u003cspan class="postal-code"\u003e94109-1722\u003c/span\u003e, \u003cspan class="country-name"\u003eUSA\u003c/span\u003e',
       business_status: 'OPERATIONAL',
       formatted_address: '2162 Larkin St, San Francisco, CA 94109, USA',
       formatted_phone_number: '(415) 447-0441',
@@ -94,7 +97,8 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
           },
         },
       },
-      icon: 'https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png',
+      icon:
+        'https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png',
       id: '394fe5688fb066dad735948bc6152f4459041ad4',
       international_phone_number: '+1 415-447-0441',
       name: name,
@@ -189,7 +193,7 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
             '\u003ca href="https://maps.google.com/maps/contrib/108731905933622470331"\u003eAndrea Vaccari\u003c/a\u003e',
           ],
           photo_reference:
-          'CmRaAAAASAKisnItimqoFBogZN4zEeSXoIaia_-rAuADA2Opl7-ePRuX8pgZCK2bZjT_vAPviAbehbERAmX16rD2sH0evxzXPJ6pQjPLQZ7P81_en3Jfgw2SHU46LTrYoILKl4auEhD1pmQFcfl5f9Xzi0LHYyPuGhRKRDITY8NUadb6qbx4G2AqXJUfoA',
+            'CmRaAAAASAKisnItimqoFBogZN4zEeSXoIaia_-rAuADA2Opl7-ePRuX8pgZCK2bZjT_vAPviAbehbERAmX16rD2sH0evxzXPJ6pQjPLQZ7P81_en3Jfgw2SHU46LTrYoILKl4auEhD1pmQFcfl5f9Xzi0LHYyPuGhRKRDITY8NUadb6qbx4G2AqXJUfoA',
           width: 750,
         },
         {
@@ -198,7 +202,7 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
             '\u003ca href="https://maps.google.com/maps/contrib/112098088022384364406"\u003eMatt Savage\u003c/a\u003e',
           ],
           photo_reference:
-          'CmRaAAAA2573IA-Zvt3mNoouwwLuAVl9xVxJEeHuhJ8WDF6S8ToqN_z2PPKU0OK3RCqprQERJIxpb2rbthBHoHFX5ibn5SOiJx0KbAM9cUY80UsB2dFT8wzGzmYlCUBu6ZClEWEgEhCBc3-jbYMCXiQohCpDExZnGhQdFE4jN8dfm7hOBveddUHYcjFs9Q',
+            'CmRaAAAA2573IA-Zvt3mNoouwwLuAVl9xVxJEeHuhJ8WDF6S8ToqN_z2PPKU0OK3RCqprQERJIxpb2rbthBHoHFX5ibn5SOiJx0KbAM9cUY80UsB2dFT8wzGzmYlCUBu6ZClEWEgEhCBc3-jbYMCXiQohCpDExZnGhQdFE4jN8dfm7hOBveddUHYcjFs9Q',
           width: 4032,
         },
         {
@@ -207,7 +211,7 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
             '\u003ca href="https://maps.google.com/maps/contrib/110002710205356499705"\u003eJoyce Larkins\u003c/a\u003e',
           ],
           photo_reference:
-          'CmRaAAAAxDt2Jje555G1737-2ugp7uCRvQIANGnHgzdtLabWUJdeWut4wfyU6buxv756stOYgTtrfrglcXOATwbmgbF_nSWtS_01WemFpG_JxY7OlPM22oulJLR30blZW3VzNIDNEhANNbtVA97vsMqi_w_LIUDaGhQ9YiPkzQgfqhtjjfkRzAhFLVWTbQ',
+            'CmRaAAAAxDt2Jje555G1737-2ugp7uCRvQIANGnHgzdtLabWUJdeWut4wfyU6buxv756stOYgTtrfrglcXOATwbmgbF_nSWtS_01WemFpG_JxY7OlPM22oulJLR30blZW3VzNIDNEhANNbtVA97vsMqi_w_LIUDaGhQ9YiPkzQgfqhtjjfkRzAhFLVWTbQ',
           width: 4032,
         },
         {
@@ -216,7 +220,7 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
             '\u003ca href="https://maps.google.com/maps/contrib/108928488771304067165"\u003eMariya Datsenko\u003c/a\u003e',
           ],
           photo_reference:
-          'CmRaAAAA8x1RtUUA2Ny7kN3-8kuroy7Yw2V0NisSC6zXpd53e0Kj1671sbW4hW5ItYlrKjEz4BH3hAJmpF7bdBWNROewOh80JEGDnb1mw83XDUGVTfg9sm3FscIsKKFqEnU02gWeEhAxgVVEQXkCS_jTG9CtUHiVGhQUVQ-eruvy1dMda2wARNLEOsMORA',
+            'CmRaAAAA8x1RtUUA2Ny7kN3-8kuroy7Yw2V0NisSC6zXpd53e0Kj1671sbW4hW5ItYlrKjEz4BH3hAJmpF7bdBWNROewOh80JEGDnb1mw83XDUGVTfg9sm3FscIsKKFqEnU02gWeEhAxgVVEQXkCS_jTG9CtUHiVGhQUVQ-eruvy1dMda2wARNLEOsMORA',
           width: 4032,
         },
         {
@@ -225,7 +229,7 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
             '\u003ca href="https://maps.google.com/maps/contrib/105227371495893283480"\u003eThomas McGinniss\u003c/a\u003e',
           ],
           photo_reference:
-          'CmRaAAAATv5jdHqCIFxA5jF6v05vEtnVm9N0Uwrt-G0ZclfDtTGsI6Ym9LiHIitRJ2djtVkmMGKqMw8EZ8pd5weZ_rFqfIFTNkje903u_zmrzSmgFFqkrfIv8juykBfKRIctwG02EhA5LhVWuRiPko_IOndYCi0iGhQvOZtqMYgPh-GvZ_7HWWpNtyBk-Q',
+            'CmRaAAAATv5jdHqCIFxA5jF6v05vEtnVm9N0Uwrt-G0ZclfDtTGsI6Ym9LiHIitRJ2djtVkmMGKqMw8EZ8pd5weZ_rFqfIFTNkje903u_zmrzSmgFFqkrfIv8juykBfKRIctwG02EhA5LhVWuRiPko_IOndYCi0iGhQvOZtqMYgPh-GvZ_7HWWpNtyBk-Q',
           width: 3036,
         },
         {
@@ -234,7 +238,7 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
             '\u003ca href="https://maps.google.com/maps/contrib/110002710205356499705"\u003eJoyce Larkins\u003c/a\u003e',
           ],
           photo_reference:
-          'CmRaAAAA7W2IRKvGWmcK3MM0Q-yagHvJQLOLIc1Oimmocaq2w4dRRCUEafgtBZn3gANHMqVr2b6Od8JRtppL0aZDxlX81JEAP8ZVvj2-2io6CPXJqqdJDUUlOXFbck1UqQ_p5C0fEhCkOlm0ojMWcUZGltY55B4qGhRo7P94xx7lV7h_OLVDsPehjzr7vg',
+            'CmRaAAAA7W2IRKvGWmcK3MM0Q-yagHvJQLOLIc1Oimmocaq2w4dRRCUEafgtBZn3gANHMqVr2b6Od8JRtppL0aZDxlX81JEAP8ZVvj2-2io6CPXJqqdJDUUlOXFbck1UqQ_p5C0fEhCkOlm0ojMWcUZGltY55B4qGhRo7P94xx7lV7h_OLVDsPehjzr7vg',
           width: 3024,
         },
         {
@@ -243,7 +247,7 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
             '\u003ca href="https://maps.google.com/maps/contrib/102606313942136077920"\u003eMargie Ballou\u003c/a\u003e',
           ],
           photo_reference:
-          'CmRaAAAACaEDBfK46jxAlgG7d5R2obBIz8HJEd8FXmZxHyoWcUXj79eXeoeTZSP0bgwoVh__dNDgOgscNkbVkVIUvGd8c3nKOVD1i6iINCTH1VdDIUwCRn41fpZQCGz9iXVb9V7aEhBhqv2-no8Q81cGM1aIEjm_GhR9Bb9OB839JdSmx-9GbvtvfBWtvQ',
+            'CmRaAAAACaEDBfK46jxAlgG7d5R2obBIz8HJEd8FXmZxHyoWcUXj79eXeoeTZSP0bgwoVh__dNDgOgscNkbVkVIUvGd8c3nKOVD1i6iINCTH1VdDIUwCRn41fpZQCGz9iXVb9V7aEhBhqv2-no8Q81cGM1aIEjm_GhR9Bb9OB839JdSmx-9GbvtvfBWtvQ',
           width: 3456,
         },
         {
@@ -252,7 +256,7 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
             '\u003ca href="https://maps.google.com/maps/contrib/101221773467748681736"\u003eKarishma Burnside\u003c/a\u003e',
           ],
           photo_reference:
-          'CmRaAAAAptOzR5_eOaTS1FTXw5OKWsu0Bjf-vOL6y1avF9eqUCxxdOQ4nd_fUYZV2IfWZy2rd3n3_DYgy1x9T9D5c9kl291yoo7jliORYyTTMA9f1_QMWiHDdKE1VijuIYklcO4_EhAAcyrM2zevPNiPoYZKGyQ2GhT_KszLHG9SYTc5wYecCC1kihp7SQ',
+            'CmRaAAAAptOzR5_eOaTS1FTXw5OKWsu0Bjf-vOL6y1avF9eqUCxxdOQ4nd_fUYZV2IfWZy2rd3n3_DYgy1x9T9D5c9kl291yoo7jliORYyTTMA9f1_QMWiHDdKE1VijuIYklcO4_EhAAcyrM2zevPNiPoYZKGyQ2GhT_KszLHG9SYTc5wYecCC1kihp7SQ',
           width: 1960,
         },
         {
@@ -261,7 +265,7 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
             '\u003ca href="https://maps.google.com/maps/contrib/110002710205356499705"\u003eJoyce Larkins\u003c/a\u003e',
           ],
           photo_reference:
-          'CmRaAAAAGLZY8b8RZkd4EUkyoqBP9lzyOm_6VjheDClVx9xNBNdXRMgYRs2aHPj-fAVDcW3604Cx_P75MIP-TN1Jb3kPTcTo92kPXnLyFEK0grU_wCJJFIwhTyCD7fEqrsTRCDR6EhDD_B3UNNNMPKZdK6oMh0pGGhT7AhTez0nMxPFbKApX7cfEInLPuQ',
+            'CmRaAAAAGLZY8b8RZkd4EUkyoqBP9lzyOm_6VjheDClVx9xNBNdXRMgYRs2aHPj-fAVDcW3604Cx_P75MIP-TN1Jb3kPTcTo92kPXnLyFEK0grU_wCJJFIwhTyCD7fEqrsTRCDR6EhDD_B3UNNNMPKZdK6oMh0pGGhT7AhTez0nMxPFbKApX7cfEInLPuQ',
           width: 4032,
         },
         {
@@ -270,7 +274,7 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
             '\u003ca href="https://maps.google.com/maps/contrib/112098088022384364406"\u003eMatt Savage\u003c/a\u003e',
           ],
           photo_reference:
-          'CmRaAAAArI-03yECdAP0uqAsh5hETP3o1XIEqjZaUfuVORIjrO_Q_3ztL59H9OrpAshDxvlSYuuheGjOexXeFbb0oOXC99ut8EOz5Vd9miltvEqnG8FyZc3IjzKWw_ZVmNGocVQjEhDfD-b1IDEOCSJWQlhsHJiBGhRUfDJ-feGx57kmqLaeLOFJyKoTBw',
+            'CmRaAAAArI-03yECdAP0uqAsh5hETP3o1XIEqjZaUfuVORIjrO_Q_3ztL59H9OrpAshDxvlSYuuheGjOexXeFbb0oOXC99ut8EOz5Vd9miltvEqnG8FyZc3IjzKWw_ZVmNGocVQjEhDfD-b1IDEOCSJWQlhsHJiBGhRUfDJ-feGx57kmqLaeLOFJyKoTBw',
           width: 4032,
         },
       ],
@@ -286,66 +290,66 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
         {
           author_name: '900Chestnut Manager',
           author_url:
-          'https://www.google.com/maps/contrib/112249260857403347935/reviews',
+            'https://www.google.com/maps/contrib/112249260857403347935/reviews',
           language: 'en',
           profile_photo_url:
-          'https://lh5.ggpht.com/-E5awQXoquFE/AAAAAAAAAAI/AAAAAAAAAAA/RvOswjgKSpk/s128-c0x00000000-cc-rp-mo/photo.jpg',
+            'https://lh5.ggpht.com/-E5awQXoquFE/AAAAAAAAAAI/AAAAAAAAAAA/RvOswjgKSpk/s128-c0x00000000-cc-rp-mo/photo.jpg',
           rating: 4,
           relative_time_description: '3 months ago',
           text:
-          "Cozy yet a little clichéd, this is a reliable neighborhood standby for Italian. A large part of their charm comes from the setting -- a restaurant that sits neatly in an otherwise VERY residential area -- so it's more about the experience than the meal. There are no standouts here, but it's a great place for making good memories. Plan on a nice walk through Russian Hill after dinner to cap off the evening.",
+            "Cozy yet a little clichéd, this is a reliable neighborhood standby for Italian. A large part of their charm comes from the setting -- a restaurant that sits neatly in an otherwise VERY residential area -- so it's more about the experience than the meal. There are no standouts here, but it's a great place for making good memories. Plan on a nice walk through Russian Hill after dinner to cap off the evening.",
           time: 1586326022,
         },
         {
           author_name: 'Margie Ballou',
           author_url:
-          'https://www.google.com/maps/contrib/102606313942136077920/reviews',
+            'https://www.google.com/maps/contrib/102606313942136077920/reviews',
           language: 'en',
           profile_photo_url:
-          'https://lh5.ggpht.com/-lLwcJfHvYm0/AAAAAAAAAAI/AAAAAAAAAAA/-yXcdFHpEf8/s128-c0x00000000-cc-rp-mo/photo.jpg',
+            'https://lh5.ggpht.com/-lLwcJfHvYm0/AAAAAAAAAAI/AAAAAAAAAAA/-yXcdFHpEf8/s128-c0x00000000-cc-rp-mo/photo.jpg',
           rating: 5,
           relative_time_description: '7 months ago',
           text:
-          'It was so lovely! Great food and service. Would highly recommend it!!!',
+            'It was so lovely! Great food and service. Would highly recommend it!!!',
           time: 1575352638,
         },
         {
           author_name: 'Casey Caster',
           author_url:
-          'https://www.google.com/maps/contrib/103968932258262745501/reviews',
+            'https://www.google.com/maps/contrib/103968932258262745501/reviews',
           language: 'en',
           profile_photo_url:
-          'https://lh4.ggpht.com/-d9XIHsRSCro/AAAAAAAAAAI/AAAAAAAAAAA/UP7wA8Uxxf8/s128-c0x00000000-cc-rp-mo-ba3/photo.jpg',
+            'https://lh4.ggpht.com/-d9XIHsRSCro/AAAAAAAAAAI/AAAAAAAAAAA/UP7wA8Uxxf8/s128-c0x00000000-cc-rp-mo-ba3/photo.jpg',
           rating: 5,
           relative_time_description: '4 months ago',
           text:
-          "Great Italian food!  The owner is amazing and has the best wines.  Ask him, he'll tell you.  Everything on the menu is worth trying, so come back often.",
+            "Great Italian food!  The owner is amazing and has the best wines.  Ask him, he'll tell you.  Everything on the menu is worth trying, so come back often.",
           time: 1582217835,
         },
         {
           author_name: 'Michael Coleman',
           author_url:
-          'https://www.google.com/maps/contrib/112148150231498339791/reviews',
+            'https://www.google.com/maps/contrib/112148150231498339791/reviews',
           language: 'en',
           profile_photo_url:
-          'https://lh4.ggpht.com/-MX5N4QfmCXA/AAAAAAAAAAI/AAAAAAAAAAA/p6X7wN2kTy0/s128-c0x00000000-cc-rp-mo-ba4/photo.jpg',
+            'https://lh4.ggpht.com/-MX5N4QfmCXA/AAAAAAAAAAI/AAAAAAAAAAA/p6X7wN2kTy0/s128-c0x00000000-cc-rp-mo-ba4/photo.jpg',
           rating: 5,
           relative_time_description: '2 years ago',
           text:
-          'Went here for the first time yesterday. The food and atmosphere were great. Perfect for our little romantic birthday dinner.\n\nHighly recommend the butternut squash ravioli and the carpaccio! \n\nOwner and staff were very nice and accommodating. We will be returning.',
+            'Went here for the first time yesterday. The food and atmosphere were great. Perfect for our little romantic birthday dinner.\n\nHighly recommend the butternut squash ravioli and the carpaccio! \n\nOwner and staff were very nice and accommodating. We will be returning.',
           time: 1528240379,
         },
         {
           author_name: 'Farshid Ketabchi',
           author_url:
-          'https://www.google.com/maps/contrib/114507403291431416220/reviews',
+            'https://www.google.com/maps/contrib/114507403291431416220/reviews',
           language: 'en',
           profile_photo_url:
-          'https://lh5.ggpht.com/-0TwyHI16kHM/AAAAAAAAAAI/AAAAAAAAAAA/mqQaDESMvWk/s128-c0x00000000-cc-rp-mo-ba4/photo.jpg',
+            'https://lh5.ggpht.com/-0TwyHI16kHM/AAAAAAAAAAI/AAAAAAAAAAA/mqQaDESMvWk/s128-c0x00000000-cc-rp-mo-ba4/photo.jpg',
           rating: 5,
           relative_time_description: 'a year ago',
           text:
-          'Cozy and romantic neighborhood Italian restaurant in Russian Hill with authentic pasta dishes and friendly service. It was nice to return here after many years to celebrate the birthday of a friend.',
+            'Cozy and romantic neighborhood Italian restaurant in Russian Hill with authentic pasta dishes and friendly service. It was nice to return here after many years to celebrate the birthday of a friend.',
           time: 1539710533,
         },
       ],
@@ -359,7 +363,7 @@ function generateRestaurant(name = 'Amarena', id = 'apr75h4bni2pf98h4inujnksjrli
     },
     status: 'OK',
   };
-  
+
   return { restaurant, details };
 }
 
