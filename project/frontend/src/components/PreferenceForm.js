@@ -1,7 +1,7 @@
 import React from 'react';
 import getRecommendation from '../scripts/recommendation_script.js';
-import { makeStyles } from '@material-ui/core/styles';
-import Slider from '@material-ui/core/Slider';
+import { Slider } from 'rsuite';
+import 'rsuite/dist/styles/rsuite-default.css';
 
 class PreferenceForm extends React.Component {
   constructor(props) {
@@ -42,13 +42,16 @@ class PreferenceForm extends React.Component {
     } else if (event.target.name === 'currLocation') {
       field[event.target.id] = parseFloat(event.target.value);
       this.setState({ [event.target.name]: field });
-    } else if (event.target.name === 'diningExp' && event.target.className === 'pref') {
-      field[event.target.className] =  event.target.value;
-      this.setState({ [event.target.name]: field });
     } else {
-      field[event.target.className] = parseInt(event.target.value);
+      field['pref'] = event.target.name === 'diningExp' ? event.target.value : parseInt(event.target.value);
       this.setState({ [event.target.name]: field });
-    }
+    } 
+  }
+
+  changeWeightState(attrName, value) {
+    const field = this.state[attrName];
+    field['weight'] = value;
+    this.setState({ attrName: field});
   }
 
   handleSubmit(event) {
@@ -103,43 +106,37 @@ class PreferenceForm extends React.Component {
             ))}
             ;
           </select>
+          <br />
           Importance
-          <input 
-            name='radius' 
-            className='weight'
-            onChange={this.changeState}
-            value={this.state.radius.weight}
-            type='number'
-            min={1}
-            max={5}
-            step={1}
-          />
+          <div style={{ width: 200, padding: 20}}>
+            <Slider
+              defaultValue={3} min={1} step={1} max={5} graduated progress
+              onChange={(val) => this.changeWeightState('radius', val)}
+            />
+          </div>
         </label>
         <label htmlFor='diningExp'>
           Dining Experience
-            <select
-              name='diningExp'
-              className='pref'
-              onChange={this.changeState}
-              value={this.state.diningExp}>
-              {Object.entries(dining_experiences).map(([label, apiValue]) => (
-                <option key={label} value={apiValue}>
-                  {label}
-                </option>
-              ))}
-              ;
-            </select>
-          Importance
-          <input 
-            name='diningExp' 
-            className='weight'
+          <select
+            name='diningExp'
+            className='pref'
             onChange={this.changeState}
-            value={this.state.diningExp.weight}
-            type='number'
-            min={1}
-            max={5}
-            step={1}
-          />
+            value={this.state.diningExp}>
+            {Object.entries(dining_experiences).map(([label, apiValue]) => (
+              <option key={label} value={apiValue}>
+                {label}
+              </option>
+            ))}
+            ;
+          </select>
+          <br />
+          Importance
+          <div style={{ width: 200, padding: 20}}>
+            <Slider
+              defaultValue={3} min={1} step={1} max={5} graduated progress
+              onChange={(val) => this.changeWeightState('diningExp', val)}
+            />
+          </div>
         </label>
         <label htmlFor='priceLevel'>
           Price Level
@@ -155,17 +152,14 @@ class PreferenceForm extends React.Component {
             ))}
             ;
           </select>
+          <br />
           Importance
-          <input 
-            name='priceLevel' 
-            className='weight'
-            onChange={this.changeState}
-            value={this.state.priceLevel.weight}
-            type='number'
-            min={1}
-            max={5}
-            step={1}
-          />
+          <div style={{ width: 200, padding: 20}}>
+            <Slider
+              defaultValue={3} min={1} step={1} max={5} graduated progress
+              onChange={(val) => this.changeWeightState('priceLevel', val)}
+            />
+          </div>
         </label>
         <label htmlFor='lat'>
           Latitude
