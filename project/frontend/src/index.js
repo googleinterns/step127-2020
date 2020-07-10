@@ -11,12 +11,16 @@ import HomePage from './pages/HomePage.js';
 import Footer from './pages/Footer.js';
 import RestaurantCard from './components/RestaurantCard.js';
 import RestaurantCardDeck from './components/RestaurantCardDeck.js';
+import RestaurantCardStack from './components/RestaurantCardStack.js';
 
 import * as serviceWorker from './serviceWorker';
 
 // TODO: remove
-import { restaurant, details } from './components/SampleRestaurant.js';
-const cards = Array(10).fill({restaurant, details});
+import generateRestaurant from './components/SampleRestaurant.js';
+const cards = [];
+for (let i = 0; i < 20; i++) {
+  cards.push(generateRestaurant('Amarena ' + i, 'apr75h4bni2pf98h4inujnksjrliu34' + i));
+}
 
 ReactDOM.render(
   <React.StrictMode>
@@ -24,11 +28,20 @@ ReactDOM.render(
       <Router>
         <Switch>
           <Route path='/deck'>
-            <RestaurantCardDeck cards={cards} />
+            <div className='container'>
+              <div className='row'>
+                <div className='one-half column'>
+                  <RestaurantCardDeck cards={cards} />
+                </div>
+                <div className='one-half column'>
+                  <RestaurantCardStack cards={cards} />
+                </div>
+              </div>
+            </div>
           </Route>
           
           <Route path='/card'>
-            <RestaurantCard restaurant={restaurant} details={details} />
+            <RestaurantCard {...generateRestaurant()} />
           </Route>
 
           <Route path='/'>
