@@ -35,7 +35,8 @@
   height: 24px;
   margin-top: -12px;
   cursor: pointer;
-  transition: opacity 0.25s cubic-bezier(0.35, 0.91, 0.33, 0.97), transform 0.25s cubic-bezier(0.35, 0.91, 0.33, 0.97);
+  transition: opacity 0.25s cubic-bezier(0.35, 0.91, 0.33, 0.97),
+    transform 0.25s cubic-bezier(0.35, 0.91, 0.33, 0.97);
   background-color: rgba(255, 255, 255, 0.33);
   border-radius: 4px;
 }
