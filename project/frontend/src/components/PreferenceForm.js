@@ -51,9 +51,9 @@ class PreferenceForm extends React.Component {
 
   handleSubmit(event) {
     const propHistory = this.props.history;
-    getRecommendation(/* preferences= */ this.state, function(response) {
+    getRecommendation(/* preferences= */ this.state, function (response) {
       propHistory.push({
-        pathname: '/match-results', 
+        pathname: '/match-results',
         data: response,
       });
     });
