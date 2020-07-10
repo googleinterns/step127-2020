@@ -23,7 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /** Servlet that provides a restaurant recommendation. */
-@WebServlet("/recommendation")
+@WebServlet("/api/recommendation")
 public class RecommendationServlet extends HttpServlet {
   private final Gson gson = new Gson();
   private static final Logger LOGGER = Logger.getLogger(RecommendationServlet.class.getName());

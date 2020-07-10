@@ -11,6 +11,14 @@
   z-index: 5;
 }
 
-.header-button {
+.profile-pic {
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  margin: 0px 16px 0px 0px;
+  cursor: pointer;
+}
+
+.sign-in {
   margin: 0px 16px 0px 0px;
 }

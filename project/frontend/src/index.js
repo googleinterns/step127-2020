@@ -5,27 +5,30 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+import Authentication from './components/Authentication.js';
+import Footer from './pages/Footer.js';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
-import Footer from './pages/Footer.js';
 import MapContainer from './ResultsMap.js';
+import MatchResults from './pages/MatchResults.js';
+import PreferenceForm from './components/PreferenceForm.js';
 
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <Switch>
-        <Route path='/mapRoute'>
-          <MapContainer />
-        </Route>
-        <Route path='/'>
-          <Header />
-          <HomePage />
-          <Footer />
-        </Route>
-      </Switch>
-    </Router>
+    <Authentication>
+      <Router>
+        <Header />
+        <Switch>
+          <Route exact path='/' component={HomePage} />
+          <Route path='/find-match' component={PreferenceForm} />
+          <Route path='/match-results' component={MatchResults} />
+          <Route path='/mapRoute' component={MapContainer} />
+        </Switch>
+        <Footer />
+      </Router>
+    </Authentication>
   </React.StrictMode>,
   document.getElementById('root')
 );

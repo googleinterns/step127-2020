@@ -2,7 +2,10 @@
 # Put specific cases at the top.
 dispatch:
 # Route the urls that point to the Java backend's API calls
- - url: "*/api/*"
+ - url: "*/api*"
+   service: backend
+# Route the urls that point to the Java backend's authentication calls
+ - url: "*/user*"
    service: backend
 # Route all other urls to the React.js frontend
  - url: "*/*"
