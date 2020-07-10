@@ -15,6 +15,7 @@ export default function getRecommendation(preferences) {
         }
         message +=
           ' and match your preferences. Please try changing your preferences.';
+        // TODO: create NoResults page that would be rendered here.
         alert(message);
         return;
       }
