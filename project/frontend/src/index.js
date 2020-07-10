@@ -28,8 +28,8 @@ ReactDOM.render(
         <Switch>
           <Route path='/card'>
             <RestaurantCard {...generateRestaurant()} />
-          </Route> 
-          
+          </Route>
+
           <Route path='/find-match' component={PreferenceForm} />
           <Route path='/match-results' component={MatchResults} />
           <Route path='/mapRoute' component={MapContainer} />
