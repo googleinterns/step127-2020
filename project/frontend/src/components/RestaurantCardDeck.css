@@ -1,3 +1,14 @@
 .restaurant-card-deck {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px;
+}
+
+.restaurant-card-deck button:first-of-type {
+  margin-right: 16px;
+}
+
+.restaurant-card-deck-wrapper {
   position: relative;
 }
