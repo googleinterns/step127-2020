@@ -18,7 +18,7 @@ import RestaurantCard from './components/RestaurantCard.js';
 import * as serviceWorker from './serviceWorker';
 
 // TODO: remove
-import generateRestaurant from './components/SampleRestaurant.js';
+import { restaurant, details } from './components/SampleRestaurant.js';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -27,7 +27,7 @@ ReactDOM.render(
         <Header />
         <Switch>
           <Route path='/card'>
-            <RestaurantCard {...generateRestaurant()} />
+            <RestaurantCard restaurant={restaurant} details={details} />
           </Route>
 
           <Route path='/find-match' component={PreferenceForm} />
