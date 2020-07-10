@@ -6,11 +6,12 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Authentication from './components/Authentication.js';
+import Footer from './pages/Footer.js';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
-import Footer from './pages/Footer.js';
-import PreferenceForm from './components/PreferenceForm.js';
+import MapContainer from './components/ResultsMap.js';
 import MatchResults from './pages/MatchResults.js';
+import PreferenceForm from './components/PreferenceForm.js';
 
 import * as serviceWorker from './serviceWorker';
 
@@ -23,6 +24,7 @@ ReactDOM.render(
           <Route exact path='/' component={HomePage} />
           <Route path='/find-match' component={PreferenceForm} />
           <Route path='/match-results' component={MatchResults} />
+          <Route path='/mapRoute' component={MapContainer} />
         </Switch>
         <Footer />
       </Router>
