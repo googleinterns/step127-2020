@@ -1,21 +1,27 @@
 import './HomePage.css';
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+
+import Modal from '../components/Modal.js';
+import PreferenceForm from '../components/PreferenceForm.js';
 
 function HomePage() {
-  return (
-    <div className='container u-full-width'>
+  const [isPreferenceFormOpen, setIsPreferenceFormOpen] = useState(false);
+
+  const togglePreferenceForm = () => {
+    setIsPreferenceFormOpen((prev) => !prev);
+  };
+  
+  return ([
+    <div key='home-page' className='container u-full-width'>
       <div className='row'>
         <div id='welcome' className='column'>
           <h1 id='logo'>[LOGO]</h1>
           <h4>Discover your restaurant match</h4>
           <button>Location</button>
           <div>
+            <button onClick={togglePreferenceForm}>Find My Match</button>
             <button>Swipe Match</button>
-            <Link to='/find-match'>
-              <button>Find My Match</button>
-            </Link>
           </div>
         </div>
       </div>
@@ -68,8 +74,17 @@ function HomePage() {
         <h4>Have any feedback?</h4>
         <button>Let us know</button>
       </div>
-    </div>
-  );
+    </div>,
+    <Modal
+      key='preference-form'
+      open={isPreferenceFormOpen}
+      onDismiss={togglePreferenceForm}
+      centerHorizontal={true}
+      top='64px'
+      bottom='64px'>
+      <PreferenceForm />
+    </Modal>,
+  ]);
 }
 
 export default HomePage;
