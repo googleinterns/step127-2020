@@ -55,7 +55,13 @@ class PreferenceForm extends React.Component {
   }
 
   handleSubmit(event) {
-    getRecommendation(/* preferences= */ this.state);
+    const propHistory = this.props.history;
+    getRecommendation(/* preferences= */ this.state, function (response) {
+      propHistory.push({
+        pathname: '/match-results',
+        data: response,
+      });
+    });
     event.preventDefault();
   }
 
@@ -72,13 +78,13 @@ class PreferenceForm extends React.Component {
 
   render() {
     const cuisines = ['Italian ', 'Mexican ', 'Indian '];
-    const distances_in_miles = {
+    const distancesInMiles = {
       '1 mile': 1,
       '5 miles': 5,
       '10 miles': 10,
       '25 miles': 25,
     };
-    const dining_experiences = {
+    const diningExperiences = {
       Takeout: 'meal_takeaway',
       Delivery: 'meal_delivery',
       'Eat In': 'restaurant',
@@ -110,7 +116,7 @@ class PreferenceForm extends React.Component {
             className='pref'
             onChange={this.changeState}
             value={this.state.radius}>
-            {Object.entries(distances_in_miles).map(([label, value]) => (
+            {Object.entries(distancesInMiles).map(([label, value]) => (
               <option key={label} value={value}>
                 {label}
               </option>
@@ -128,7 +134,7 @@ class PreferenceForm extends React.Component {
             className='pref'
             onChange={this.changeState}
             value={this.state.diningExp}>
-            {Object.entries(dining_experiences).map(([label, apiValue]) => (
+            {Object.entries(diningExperiences).map(([label, apiValue]) => (
               <option key={label} value={apiValue}>
                 {label}
               </option>
