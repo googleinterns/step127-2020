@@ -35,12 +35,13 @@ function MapContainer(props) {
       <Marker
         onClick={onMarkerClick}
         name={'Your #1 Match'}
-        aria-label={'Your #1 Match'}
+        aria-label={'Your #1 Match Marker'}
       />
       <InfoWindow
         marker={activeMarker}
         visible={showInfoWindow}
-        onClose={onClose}>
+        onClose={onClose}
+        aria-label={'Your #1 Match Info Window'}>
         <div>
           <h5>{'Your #1 Match'}</h5>
         </div>
