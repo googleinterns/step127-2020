@@ -49,10 +49,6 @@ class PreferenceForm extends React.Component {
     }
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-  }
-
   render() {
     const cuisines = ['Italian ', 'Mexican ', 'Indian '];
     const distancesInMiles = {
@@ -163,7 +159,7 @@ class PreferenceForm extends React.Component {
           />
         </label>
         <Link to={{ pathname: '/match-results', state: this.state }}>
-          <button type='submit'>Submit</button>
+          <button>Submit</button>
         </Link>
       </form>
     );
