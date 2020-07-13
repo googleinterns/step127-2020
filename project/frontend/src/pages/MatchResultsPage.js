@@ -1,7 +1,7 @@
 import React from 'react';
 
 function MatchResultsPage(props) {
-  console.log(props.location.state);
+  // Form state is in `props.location.state`.
 
   return <p>Results page content goes here.</p>;
 }
