@@ -11,8 +11,7 @@ function MapContainer(props) {
   const [activeMarker, changeMarker] = useState({});
   const [showInfoWindow, changeInfoVisibility] = useState(false);
   const restaurant = props.restaurant;
-
-  const coords = { lat: 40.837, lng: -73.865 };
+  const matchCoords = restaurant[0].key.latLngCoords;
 
   const onMarkerClick = (props, marker) => {
     changeMarker(marker);
@@ -25,18 +24,29 @@ function MapContainer(props) {
     }
   };
 
+  const createMarkers = () => {
+    let markers = [];
+    for (let i = 0; i < 4; i++) {
+      const coords = restaurant[i].key.latLngCoords;
+      markers.push(
+        <Marker
+          onClick={onMarkerClick}
+          position={coords}
+          name={'Your #' + toString(i + 1) + ' Match'}
+        />
+      );
+    }
+    return markers;
+  };
+
   return (
     <Map
       aria-label={'A Google Map with your Matches!'}
       google={props.google}
-      zoom={14}
+      zoom={10}
       style={mapStyle}
-      initialCenter={coords}>
-      <Marker
-        onClick={onMarkerClick}
-        name={'Your #1 Match'}
-        aria-label={'Your #1 Match Marker'}
-      />
+      initialCenter={matchCoords}>
+      {createMarkers()}
       <InfoWindow
         marker={activeMarker}
         visible={showInfoWindow}

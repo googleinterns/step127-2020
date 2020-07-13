@@ -1,5 +1,5 @@
 import React from 'react';
-import MapContainer from './components/ResultsMap.js';
+import MapContainer from '../components/ResultsMap.js';
 
 class MatchResults extends React.Component {
   render() {
@@ -10,6 +10,7 @@ class MatchResults extends React.Component {
     // `key` has data about the restaurant (name, location, etc.).
     // `value` is the percent match for that restaurant.
     console.log(resultsList);
+    console.log('yaga');
     return <MapContainer restaurant={resultsList} />;
   }
 }
