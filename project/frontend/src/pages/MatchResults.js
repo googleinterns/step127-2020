@@ -9,8 +9,6 @@ class MatchResults extends React.Component {
     // Each restaurant is an object with fields: hash, key, value
     // `key` has data about the restaurant (name, location, etc.).
     // `value` is the percent match for that restaurant.
-    console.log(resultsList);
-    console.log('yaga');
     return <MapContainer restaurant={resultsList} />;
   }
 }
