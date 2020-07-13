@@ -71,7 +71,13 @@ function RestaurantCard(props) {
     <div className='restaurant-card' style={style}>
       <ImageSlider images={photoUrls} collapsed={collapsed} />
       <div className='restaurant-content'>
-        <h5 className={`restaurant-name ${(collapsed && collapsibleMaxHeight.current ? 'collapsed' : '')}`} ref={restaurantName}>{restaurant.key.name}</h5>
+        <h5
+          className={`restaurant-name ${
+            collapsed && collapsibleMaxHeight.current ? 'collapsed' : ''
+          }`}
+          ref={restaurantName}>
+          {restaurant.key.name}
+        </h5>
         <RatingStars
           avgRating={restaurant.key.avgRating}
           numRatings={restaurant.key.numRatings}
