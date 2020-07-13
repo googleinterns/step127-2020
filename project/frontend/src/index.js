@@ -11,7 +11,7 @@ import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
 
 import MapContainer from './components/ResultsMap.js';
-import MatchResults from './pages/MatchResults.js';
+import MatchResultsPage from './pages/MatchResultsPage.js';
 import PreferenceForm from './components/PreferenceForm.js';
 
 import RestaurantCard from './components/RestaurantCard.js';
@@ -63,7 +63,7 @@ ReactDOM.render(
           </Route>
 
           <Route path='/find-match' component={PreferenceForm} />
-          <Route path='/match-results' component={MatchResults} />
+          <Route path='/match-results' component={MatchResultsPage} />
           <Route path='/mapRoute' component={MapContainer} />
           <Route path='/' component={HomePage} />
         </Switch>
