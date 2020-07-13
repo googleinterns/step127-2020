@@ -8,19 +8,20 @@ export default function getRecommendation(preferences, callback) {
     )
     .then((data) => {
       let restaurants = [];
+      for (const restaurant of data) {
+        restaurants = restaurants.concat(restaurant.results);
+      }
+
       if (restaurants.length === 0) {
         let message = "We can't find any restaurants near you";
-        if (this.state.open) {
+        if (preferences.open) {
           message += ' that are currently open';
         }
         message +=
-          ' and match your preferences. Please try changing your preferences.';
+          ' that match your preferences. Please try changing your preferences.';
         // TODO: create NoResults page that would be rendered here.
         alert(message);
         return;
-      }
-      for (const restaurant of data) {
-        restaurants = restaurants.concat(restaurant.results);
       }
 
       fetch('/api/recommendation', {
