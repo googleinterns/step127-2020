@@ -26,7 +26,8 @@ function MapContainer(props) {
 
   const createMarkers = () => {
     let markers = [];
-    for (let i = 0; i < 4; i++) {
+    const numOfMarkers = 4;
+    for (let i = 0; i < numOfMarkers; i++) {
       const coords = restaurant[i].key.latLngCoords;
       markers.push(
         <Marker
