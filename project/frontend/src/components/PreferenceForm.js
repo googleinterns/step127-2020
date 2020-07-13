@@ -9,7 +9,7 @@ class PreferenceForm extends React.Component {
     this.state = {
       cuisine: [],
       radius: {
-        pref: 0,
+        pref: '',
         weight: 3,
       },
       diningExp: {
@@ -39,7 +39,7 @@ class PreferenceForm extends React.Component {
       this.setState({ [event.target.name]: cuisineList });
     } else if (event.target.name === 'open') {
       this.setState({ [event.target.name]: event.target.checked });
-    } else if (event.target.name === 'currLocation') {
+    } else if (event.target.name === 'currLocation' && event.target.value) {
       field[event.target.id] = parseFloat(event.target.value);
       this.setState({ [event.target.name]: field });
     } else {
@@ -126,7 +126,7 @@ class PreferenceForm extends React.Component {
             className='pref'
             onChange={this.changeState}
             value={this.state.radius.pref}>
-            <option label='Select...' key='default' value={0} />
+            <option label='Select...' key='default' value={''} />
             {Object.entries(distancesInMiles).map(([label, value]) => (
               <option label={label} key={label} value={value} />
             ))}
