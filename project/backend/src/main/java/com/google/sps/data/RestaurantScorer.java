@@ -15,9 +15,6 @@ public final class RestaurantScorer {
   private static final int MAX_RATING = 5;
   private static final int MID_RATING = 3;
   private static final Logger LOGGER = Logger.getLogger(RestaurantScorer.class.getName());
-  // Number of "dummy ratings" that will be used to calculate the rating score.
-  // Arbitrary value will be replaced by a value based on the average num ratings.
-  private static final int NUM_INITIAL_RATINGS = 20;
   private static final Gson GSON = new Gson();
   /** Class should not be instantiated. */
   private RestaurantScorer() {}
@@ -27,14 +24,14 @@ public final class RestaurantScorer {
       DescriptiveStatistics statistics) throws JSONException {
     double score = 0;
     int maxPoints = 1; // add 1 because rating score has an upper bound of 1
-    if (isValidField(preferences, "priceLevel")) {
+    if (isValidIntField(preferences, "priceLevel")) {
       int priceLevelWeight = preferences.getJSONObject("priceLevel").getInt("weight");
       maxPoints += priceLevelWeight;
       if (restaurant.getPriceLevel() == preferences.getJSONObject("priceLevel").getInt("pref")) {
         score += priceLevelWeight;
       }
     }
-    if (isValidField(preferences, "diningExp")) {
+    if (isValidStringField(preferences, "diningExp")) {
       int diningExpWeight = preferences.getJSONObject("diningExp").getInt("weight");
       maxPoints += diningExpWeight;
       if (restaurant.getPlaceTypes().contains(
@@ -42,7 +39,7 @@ public final class RestaurantScorer {
         score += diningExpWeight;
       }
     }
-    if (isValidField(preferences, "radius")) {
+    if (isValidIntField(preferences, "radius")) {
       int radiusWeight = preferences.getJSONObject("radius").getInt("weight");
       maxPoints += radiusWeight;
       Map<String, Double> currLocation =
@@ -120,7 +117,20 @@ public final class RestaurantScorer {
     return (weightedRating - MID_RATING) / MAX_RATING;
   }
 
-  private static boolean isValidField(JSONObject obj, String key) throws JSONException {
-    return !obj.isNull(key) && !obj.getJSONObject(key).isNull("pref");
+  private static boolean isValidIntField(JSONObject obj, String key) {
+    try {
+      obj.getJSONObject(key).getInt("pref");
+      return true;
+    } catch (JSONException e) {
+      return false;
+    }
+  }
+
+  private static boolean isValidStringField(JSONObject obj, String key) {
+    try {
+      return !obj.getJSONObject(key).getString("pref").equals("");
+    } catch (JSONException e) {
+      return false;
+    }
   }
 }
