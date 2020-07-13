@@ -176,9 +176,9 @@ function ImageSlider(props) {
   // slider is a child of a flexbox parent (RestaurantCard) which may give this slider
   // a smaller height if the text content of the RestaurantCard requires more vertical
   // space (line wrapping from long name, address, website, etc.).
-  // The layoutEffect also updates the collapsible elements height according to the
-  // value of `collapsed` before painting so there is no flicker even though an initially
-  // collapsed card will be first rendered at full height.
+  // The layoutEffect also updates the slider's height according to the value of
+  // `collapsed` before painting so there is no flicker even though an initially
+  // collapsed slider will be first rendered at full height.
   //
   // This is all necessary to avoid hardcoding the maximum height of the slider when
   // animating between collapsed and uncollapsed states so that animation timing is
