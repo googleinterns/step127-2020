@@ -26,7 +26,7 @@ const Action = {
 function reducer(previous, action) {
   let index = previous.index;
   const history = previous.history;
-  
+
   switch (action.type) {
     case Action.INTERESTED:
     case Action.NOT_INTERESTED:
@@ -34,7 +34,8 @@ function reducer(previous, action) {
       history[index] = action.type;
       index++;
       break;
-    default: // Action.BACK
+    default:
+      // Action.BACK
       if (index > 0) index--;
       break;
   }
@@ -44,7 +45,7 @@ function reducer(previous, action) {
 
 /**
  * A navigable deck of restaurant cards.
- * 
+ *
  * @param {!Array<Object<string, *>>} props.cards A list of restaurant objects whose
  * data will be displayed in RestaurantCard components within this stack.
  */
@@ -58,10 +59,11 @@ function RestaurantCardDeck(props) {
   const minScaleFactor = 0.9;
   const numberOfVisibleCards = 3;
   const offsetBetweenCards = 24;
-  const transitionString = 'top 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
-        'left 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
-        'transform 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
-        'opacity 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
+  const transitionString =
+    'top 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
+    'left 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
+    'transform 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
+    'opacity 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
   const cards = props.cards.map((card, index) => {
     if (index < state.index - 7 || index > state.index + 7) {
       return null;
@@ -70,12 +72,18 @@ function RestaurantCardDeck(props) {
     const relativeIndex = index - state.index;
     const style = {
       position: 'absolute',
-      top: Math.min(relativeIndex, numberOfVisibleCards - 1) * offsetBetweenCards + 'px',
+      top:
+        Math.min(relativeIndex, numberOfVisibleCards - 1) * offsetBetweenCards +
+        'px',
       left: '0px',
       opacity: relativeIndex < numberOfVisibleCards ? 1 : 0,
       zIndex: props.cards.length - index,
-      transform: 'scale(' +
-        Math.min(Math.max(1 - relativeIndex / 20, minScaleFactor), maxScaleFactor) +
+      transform:
+        'scale(' +
+        Math.min(
+          Math.max(1 - relativeIndex / 20, minScaleFactor),
+          maxScaleFactor
+        ) +
         ') rotate(0deg)',
       transition: transitionString,
     };
@@ -83,7 +91,7 @@ function RestaurantCardDeck(props) {
     if (relativeIndex < 0) {
       style.top = '-100px';
       style.left = state.history[index] * 700 + 'px';
-      style.transform += ' rotate(' + (state.history[index] * 45) + 'deg)';
+      style.transform += ' rotate(' + state.history[index] * 45 + 'deg)';
       style.opacity = state.history[index] === Action.NEUTRAL ? 0 : 1;
     }
 
@@ -99,9 +107,7 @@ function RestaurantCardDeck(props) {
 
   return (
     <div className='restaurant-card-deck'>
-      <div className='restaurant-card-deck-wrapper'>
-        {cards}
-      </div>
+      <div className='restaurant-card-deck-wrapper'>{cards}</div>
       <div className='control-container'>
         <button onClick={() => dispatch({ type: Action.NOT_INTERESTED })}>
           Not Interested
@@ -113,9 +119,7 @@ function RestaurantCardDeck(props) {
       <button onClick={() => dispatch({ type: Action.NEUTRAL })}>
         Neutral
       </button>
-      <button onClick={() => dispatch({ type: Action.BACK })}>
-        Back
-      </button>
+      <button onClick={() => dispatch({ type: Action.BACK })}>Back</button>
     </div>
   );
 }
