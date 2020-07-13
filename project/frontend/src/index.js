@@ -24,7 +24,19 @@ import * as serviceWorker from './serviceWorker';
 import generateRestaurant from './components/SampleRestaurant.js';
 const cards = [];
 for (let i = 0; i < 20; i++) {
-  cards.push(generateRestaurant('Amarena ' + i, 'apr75h4bni2pf98h4inujnksjrliu34' + i));
+  const data = generateRestaurant(
+    'Amarena ' + i,
+    'apr75h4bni2pf98h4inujnksjrliu34' + i
+  );
+  if (i === 3) {
+    data.restaurant.key.name += ' Of the California State of the US';
+  } else if (i === 4) {
+    data.restaurant.key.address = '123 Main Street';
+  } else if (i === 7) {
+    data.details.result.website +=
+      '?somethingextra=123&antherthing=1234567890&type=json';
+  }
+  cards.push(data);
 }
 
 ReactDOM.render(
@@ -33,7 +45,6 @@ ReactDOM.render(
       <Router>
         <Header />
         <Switch>
-          
           <Route path='/deck'>
             <div className='container'>
               <div className='row'>
@@ -46,7 +57,7 @@ ReactDOM.render(
               </div>
             </div>
           </Route>
-          
+
           <Route path='/card'>
             <RestaurantCard {...generateRestaurant()} />
           </Route>
@@ -55,7 +66,6 @@ ReactDOM.render(
           <Route path='/match-results' component={MatchResults} />
           <Route path='/mapRoute' component={MapContainer} />
           <Route path='/' component={HomePage} />
-          
         </Switch>
         <Footer />
       </Router>

@@ -5,15 +5,20 @@
   padding: 32px;
 }
 
-.restaurant-card-stack button {
+.restaurant-card-stack-wrapper {
+  position: relative;
+  width: 344px;
+  height: 791px;
+}
+
+.control-container {
+  margin-top: 32px;
+}
+
+.control-container button {
   margin-right: 16px;
 }
 
-.restaurant-card-stack button:last-of-type {
+.control-container button:last-of-type {
   margin-right: 0px;
 }
-
-.restaurant-card-stack-wrapper {
-  position: relative;
-}
-

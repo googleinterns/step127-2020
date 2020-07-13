@@ -1,78 +1,86 @@
 import './RestaurantCardStack.css';
 
-import React, { useState, useLayoutEffect, useRef, useReducer } from 'react';
+import React, { useState } from 'react';
 
 import RestaurantCard from './RestaurantCard.js';
 
+/**
+ * A navigable stack of restaurant cards.
+ *
+ * @param {!Array<Object<string, *>>} props.cards A list of restaurant objects whose
+ * data will be displayed in RestaurantCard components within this stack.
+ */
 function RestaurantCardStack(props) {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
 
-  const stackWrapper = useRef(null);
-  const cardHeight = useRef(0);
-  const cardRefs = useRef(new Array(props.cards.length));
-  
-  useLayoutEffect(() => {
-    console.log('using layout effect');
-    cardHeight.current = cardRefs.current[0].offsetHeight;
-    stackWrapper.current.style.height = (cardHeight.current + 192) + 'px';
-    stackWrapper.current.style.width = cardRefs.current[currentCardIndex].offsetWidth + 'px';
-
-    for (let i = currentCardIndex + 1; i < cardRefs.current.length; i++) {
-      const card = cardRefs.current[i];
-      if (card) {
-        card.style.top = (+card.style.top.slice(0, -2) + cardHeight.current) + 'px';
-      }
-    }
-  }, []);
-
+  const maxScaleFactor = 1.0;
+  const minScaleFactor = 0.85;
+  const numberOfCollapsedCards = 3;
+  const uncollapsedCardHeight = 487;
+  const offsetBetweenCollapsedCards = 24;
+  const offsetBeforeUncollapsedCard = 152;
+  const transitionString =
+    'top 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
+    'opacity 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
+    'transform 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
   const cards = props.cards.map((card, index) => {
-    // Render only the 15 cards around the current card index.
     if (index < currentCardIndex - 7 || index > currentCardIndex + 7) {
       return null;
     }
 
     const relativeIndex = index - currentCardIndex;
-    
+    const relativeIndexAbs = Math.abs(relativeIndex);
+    const offset =
+      relativeIndex === 0
+        ? offsetBeforeUncollapsedCard
+        : relativeIndex > 0
+        ? offsetBeforeUncollapsedCard +
+          uncollapsedCardHeight +
+          Math.min(relativeIndex, numberOfCollapsedCards) *
+            offsetBetweenCollapsedCards
+        : Math.max(numberOfCollapsedCards + relativeIndex, 0) *
+          offsetBetweenCollapsedCards;
+    const top = offset + 'px';
+    const opacity = relativeIndexAbs <= numberOfCollapsedCards ? 1 : 0;
+    const zIndex = props.cards.length - relativeIndexAbs;
+    const transform =
+      'scale(' +
+      Math.min(
+        Math.max(1 - relativeIndexAbs / 20, minScaleFactor),
+        maxScaleFactor
+      ) +
+      ')';
+    const transition = transitionString;
     const style = {
       position: 'absolute',
-      top: (relativeIndex < 5) ? (cardHeight.current + relativeIndex * 24) + 'px' : (cardHeight.current + 72) + 'px',
-      left: '0px',
-      opacity: (relativeIndex < 4) ? 1 : 0,
-      zIndex: props.cards.length - index,
-      transform: `scale(${Math.min(1 - (relativeIndex / 20), 1.0)}) rotate(0deg)`,
-      transition: (cardHeight.current === 0.0) ? '' : 'all 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)',
+      top,
+      opacity,
+      zIndex,
+      transform,
+      transition,
     };
 
-    if (relativeIndex === 0) {
-      style.top = '0px';
-    } else if (relativeIndex < 0) {
-      style.top = '-100px';
-      style.left = '-700px';
-      style.transform += ' rotate(-45deg)';
-    }
-    
-    const collapsed = (index <= currentCardIndex) ? false : true;
-    
     return (
       <RestaurantCard
-        parentRef={(el) => cardRefs.current[index] = el}
         key={card.restaurant.key.id}
         style={style}
         restaurant={card.restaurant}
         details={card.details}
-        collapsed={collapsed}
+        collapsed={index !== currentCardIndex}
       />
     );
   });
 
   return (
     <div className='restaurant-card-stack'>
-      <div ref={stackWrapper} className='restaurant-card-stack-wrapper'>
-        {cards}
-      </div>
-      <div>
-        <button onClick={() => setCurrentCardIndex((prev) => prev - 1)}>Previous</button>
-        <button onClick={() => setCurrentCardIndex((prev) => prev + 1)}>Next</button>
+      <div className='restaurant-card-stack-wrapper'>{cards}</div>
+      <div className='control-container'>
+        <button onClick={() => setCurrentCardIndex((prev) => prev - 1)}>
+          Previous
+        </button>
+        <button onClick={() => setCurrentCardIndex((prev) => prev + 1)}>
+          Next
+        </button>
       </div>
     </div>
   );

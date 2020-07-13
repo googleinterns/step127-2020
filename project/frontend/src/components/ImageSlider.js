@@ -1,6 +1,6 @@
 import './ImageSlider.css';
 
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useRef, useLayoutEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
 import Next from '../assets/next.svg';
@@ -111,7 +111,7 @@ function reducer(previous, action) {
  *     is in a collapsed or full view (default: false).
  */
 function ImageSlider(props) {
-  const { images, collapsed = false }  = props;
+  const { images, collapsed = false } = props;
 
   const [areControlsVisible, setAreControlsVisible] = useState(false);
 
@@ -148,12 +148,61 @@ function ImageSlider(props) {
     preventDefaultTouchmoveEvent: true,
   });
 
+  const slider = useRef(null);
+  const sliderMaxHeight = useRef(null);
+
+  useLayoutEffect(() => {
+    sliderMaxHeight.current = slider.current.offsetHeight;
+    if (collapsed) {
+      slider.current.style.height = '0px';
+    } else {
+      slider.current.style.height = sliderMaxHeight.current + 'px';
+    }
+    // We only want this effect to run once (the very first time this component
+    // is laid out) so that we may capture the uncollapsed height of this slider
+    // and save it to a persistent ref (sliderMaxHeight).
+    // Adding `collapsed` to the dependency array below, as eslint would have us do,
+    // would cause the value of `sliderMaxHeight` to be updated to 0px when the
+    // slider goes from a collapsed -> uncollapsed state.
+    //
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // On the first render event of this component, the slider will be rendered with
+  // a default full height of 200px regardless of whether `collapsed` is true or false.
+  // This allows the full height to be captured in the above layoutEffect before this
+  // component is painted to the screen.
+  // This full height may actually be less than the explicitly set 200px because this
+  // slider is a child of a flexbox parent (RestaurantCard) which may give this slider
+  // a smaller height if the text content of the RestaurantCard requires more vertical
+  // space (line wrapping from long name, address, website, etc.).
+  // The layoutEffect also updates the slider's height according to the value of
+  // `collapsed` before painting so there is no flicker even though an initially
+  // collapsed slider will be first rendered at full height.
+  //
+  // This is all necessary to avoid hardcoding the maximum height of the slider when
+  // animating between collapsed and uncollapsed states so that animation timing is
+  // consistent between RestaurantCards with different content heights. The variable
+  // height of this slider also allows the RestaurantCard total height to be constant
+  // across all RestaurantCards regardless of line wrapping in text content.
+  const sliderStyle = {
+    height: !sliderMaxHeight.current
+      ? '200px'
+      : collapsed
+      ? '0px'
+      : sliderMaxHeight.current,
+    transition: !sliderMaxHeight.current
+      ? 'none'
+      : 'height 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)',
+  };
+
   return (
     <div
       className='slider'
+      ref={slider}
       onMouseEnter={() => setAreControlsVisible(true)}
       onMouseLeave={() => setAreControlsVisible(false)}
-      style={{height: collapsed ? '0px' : '200px'}}>
+      style={sliderStyle}>
       <div
         className={`slider-wrapper ${state.shifting ? 'shifting' : ''}`}
         style={{ left: state.left + 'px' }}
@@ -163,7 +212,6 @@ function ImageSlider(props) {
             key={index}
             className='slide'
             src={image}
-            style={{height: collapsed ? '0px' : '200px'}}
             draggable='false'
             alt='Restaurant photographs'
           />
