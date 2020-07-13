@@ -3,10 +3,10 @@
   width: 344px;
   overflow: hidden;
   background-color: brown;
-  transition: height 0.2s cubic-bezier(0.35, 0.91, 0.33, 0.97);
 }
 
 .slider-wrapper {
+  height: 100%;
   position: absolute;
   white-space: nowrap;
 }
@@ -18,10 +18,10 @@
 .slide {
   display: inline-block;
   width: 344px;
+  height: inherit;
   cursor: grab;
   object-fit: cover;
   object-position: 50% 50%;
-  transition: height 0.2s cubic-bezier(0.35, 0.91, 0.33, 0.97);
 }
 
 .slide:active {
