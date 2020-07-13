@@ -18,6 +18,7 @@ const Action = {
   NEXT_SLIDE: 4,
 };
 
+// TODO: Scale RestaurantCard dimensions based on screen size.
 /**
  * The default width of a slide.
  *
