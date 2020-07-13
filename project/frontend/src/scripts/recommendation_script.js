@@ -54,6 +54,7 @@ export default function getRecommendation(preferences, callback) {
  */
 function makePromisesArray(preferences) {
   const { cuisine, radius, currLocation, open } = preferences;
+  const defaultRadius = 50000; // this is the max radius allowed for text search.
   // TODO: replace API key
   const apiKey = 'AIzaSyBBqtlu5Y3Og7lzC1WI9SFHZr2gJ4iDdTc';
   const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
@@ -72,6 +73,8 @@ function makePromisesArray(preferences) {
     searchParams.append('location', currLocation.lat + ',' + currLocation.lng);
     if (radius.pref) {
       searchParams.append('radius', milesToMeters(radius.pref));
+    } else {
+      searchParams.append('radius', defaultRadius)
     }
     if (open) {
       searchParams.append('opennow', open);

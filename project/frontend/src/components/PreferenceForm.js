@@ -9,7 +9,7 @@ class PreferenceForm extends React.Component {
     this.state = {
       cuisine: [],
       radius: {
-        pref: 50, // default to 50 mile radius so that results in the area 
+        pref: '',
         weight: 3,
       },
       diningExp: {
@@ -126,7 +126,7 @@ class PreferenceForm extends React.Component {
             className='pref'
             onChange={this.changeState}
             value={this.state.radius.pref}>
-            <option label='Select...' key='default' value={50} />
+            <option label='Select...' key='default' value={''} />
             {Object.entries(distancesInMiles).map(([label, value]) => (
               <option label={label} key={label} value={value} />
             ))}

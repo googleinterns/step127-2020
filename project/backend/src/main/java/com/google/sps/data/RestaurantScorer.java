@@ -112,7 +112,7 @@ public final class RestaurantScorer {
   /** Skews ratings so that ratings with a lower number of ratings are weighed less. */
   private static double calculateRatingScore(
       double avgRating, int numRatings, DescriptiveStatistics statistics) {
-    int numInitialRatings = (int) Math.round(statistics.getPercentile(10));
+    int numInitialRatings = (int) Math.round(statistics.getMean() / 5);
     int totalRatings = numInitialRatings + numRatings;
     double totalPoints = numInitialRatings * MID_RATING + avgRating * numRatings;
     double weightedRating = totalPoints / totalRatings;
