@@ -9,20 +9,20 @@ class PreferenceForm extends React.Component {
     this.state = {
       cuisine: [],
       radius: {
-        pref: null,
+        pref: 0,
         weight: 3,
       },
       diningExp: {
-        pref: null,
+        pref: '',
         weight: 3,
       },
       priceLevel: {
-        pref: null,
+        pref: '',
         weight: 3,
       },
       currLocation: {
-        lat: null,
-        lng: null,
+        lat: '',
+        lng: '',
       },
       open: true,
     };
@@ -49,6 +49,7 @@ class PreferenceForm extends React.Component {
           : parseInt(event.target.value);
       this.setState({ [event.target.name]: field });
     }
+    console.log(this.state);
   }
 
   changeWeightState(attrName, value) {
@@ -72,13 +73,14 @@ class PreferenceForm extends React.Component {
     return (
       <div style={{ width: 200, padding: 20 }}>
         <Slider
-          defaultValue={3}
+          defaultValue={this.state[attrName]['weight']}
           min={1}
           step={1}
           max={5}
           graduated
           progress
           onChange={(val) => this.changeWeightState(attrName, val)}
+          disabled={!Boolean(this.state[attrName]['pref'])}
         />
       </div>
     );
@@ -123,11 +125,10 @@ class PreferenceForm extends React.Component {
             name='radius'
             className='pref'
             onChange={this.changeState}
-            value={this.state.radius}>
+            value={this.state.radius.pref}>
+            <option label='Select...' key='default' value={0} />
             {Object.entries(distancesInMiles).map(([label, value]) => (
-              <option key={label} value={value}>
-                {label}
-              </option>
+              <option label={label} key={label} value={value} />
             ))}
             ;
           </select>
@@ -141,11 +142,10 @@ class PreferenceForm extends React.Component {
             name='diningExp'
             className='pref'
             onChange={this.changeState}
-            value={this.state.diningExp}>
+            value={this.state.diningExp.pref}>
+            <option label='Select...' key='default' value={''} />
             {Object.entries(diningExperiences).map(([label, apiValue]) => (
-              <option key={label} value={apiValue}>
-                {label}
-              </option>
+              <option label={label} key={label} value={apiValue} />
             ))}
             ;
           </select>
@@ -159,11 +159,10 @@ class PreferenceForm extends React.Component {
             name='priceLevel'
             className='pref'
             onChange={this.changeState}
-            value={this.state.priceLevel}>
+            value={this.state.priceLevel.pref}>
+            <option label='Select...' key='default' value={''} />
             {Object.entries(prices).map(([level, intLevel]) => (
-              <option key={level} value={intLevel}>
-                {level}
-              </option>
+              <option label={level} key={level} value={intLevel} />
             ))}
             ;
           </select>
