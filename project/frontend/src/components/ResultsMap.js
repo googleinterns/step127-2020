@@ -8,7 +8,6 @@ const mapStyle = {
 };
 
 function MapContainer(props) {
-  // Declare all the states for this functional component
   const [activeMarker, changeMarker] = useState({});
   const [showInfoWindow, changeInfoVisibility] = useState(false);
 
