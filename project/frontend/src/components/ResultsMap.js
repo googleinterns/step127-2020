@@ -10,6 +10,7 @@ const mapStyle = {
 function MapContainer(props) {
   const [activeMarker, changeMarker] = useState({});
   const [showInfoWindow, changeInfoVisibility] = useState(false);
+  const restaurant = props.restaurant;
 
   const coords = { lat: 40.837, lng: -73.865 };
 
