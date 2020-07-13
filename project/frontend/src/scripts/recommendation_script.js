@@ -12,6 +12,18 @@ export default function getRecommendation(preferences, callback) {
         restaurants = restaurants.concat(restaurant.results);
       }
 
+      if (restaurants.length === 0) {
+        let message = "We can't find any restaurants near you";
+        if (preferences.open) {
+          message += ' that are currently open';
+        }
+        message +=
+          ' that match your preferences. Please try changing your preferences.';
+        // TODO: create NoResults page that would be rendered here.
+        alert(message);
+        return;
+      }
+
       fetch('/api/recommendation', {
         method: 'POST',
         headers: {
