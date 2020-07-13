@@ -1,3 +1,4 @@
+import 'rsuite/dist/styles/rsuite-default.css';
 import './css/normalize.css';
 import './css/skeleton.css';
 

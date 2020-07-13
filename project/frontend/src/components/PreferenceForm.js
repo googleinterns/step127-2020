@@ -1,5 +1,3 @@
-import 'rsuite/dist/styles/rsuite-default.css';
-
 import React from 'react';
 
 import { Link } from 'react-router-dom';
