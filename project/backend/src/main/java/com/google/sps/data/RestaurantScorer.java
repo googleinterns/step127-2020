@@ -64,6 +64,8 @@ public final class RestaurantScorer {
       score += calculateRatingScore(restaurantRating, restaurant.getNumRatings(), statistics);
     }
     double percentMatch = score / maxPoints;
+    System.out.println("score:" + score);
+    System.out.println("maxPoints:" + maxPoints);
     return percentMatch;
   }
 
@@ -114,7 +116,7 @@ public final class RestaurantScorer {
     int totalRatings = numInitialRatings + numRatings;
     double totalPoints = numInitialRatings * MID_RATING + avgRating * numRatings;
     double weightedRating = totalPoints / totalRatings;
-    return (weightedRating - MID_RATING) / MAX_RATING;
+    return (weightedRating - MID_RATING) / (MAX_RATING - MID_RATING);
   }
 
   private static boolean isValidIntField(JSONObject obj, String key) {
