@@ -150,7 +150,7 @@ function ImageSlider(props) {
 
   const slider = useRef(null);
   const sliderMaxHeight = useRef(null);
-  
+
   useLayoutEffect(() => {
     sliderMaxHeight.current = slider.current.offsetHeight;
     if (collapsed) {
@@ -186,9 +186,14 @@ function ImageSlider(props) {
   // height of this slider also allows the RestaurantCard total height to be constant
   // across all RestaurantCards regardless of line wrapping in text content.
   const sliderStyle = {
-    height: !sliderMaxHeight.current ? '200px' : collapsed ? '0px' : sliderMaxHeight.current,
-    transition: !sliderMaxHeight.current ? 'none' :
-      'height 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)',
+    height: !sliderMaxHeight.current
+      ? '200px'
+      : collapsed
+      ? '0px'
+      : sliderMaxHeight.current,
+    transition: !sliderMaxHeight.current
+      ? 'none'
+      : 'height 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)',
   };
 
   return (
