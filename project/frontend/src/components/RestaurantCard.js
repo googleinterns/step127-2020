@@ -19,13 +19,11 @@ import Clock from '../assets/clock.svg';
  *     information.
  * @param {?Object<string, *>} props.style An optional style object to be applied
  *     to the parent container of this component.
- * @param {!Object<string, *>} props.parentRef An optional ref to be passed to the
- *     parent container of this component.
  * @param {boolean=} props.collapsed An optional control over whether this card is in
  *     a collapsed or full view (default: false).
  */
 function RestaurantCard(props) {
-  const { restaurant, details, style, parentRef, collapsed = false } = props;
+  const { restaurant, details, style, collapsed = false } = props;
 
   const photoUrls = details.result.photos.map(
     (photo) =>
@@ -38,11 +36,13 @@ function RestaurantCard(props) {
 
   const collapsible = useRef(null);
   const collapsibleMaxHeight = useRef(null);
+  const restaurantName = useRef(null);
 
   useLayoutEffect(() => {
     collapsibleMaxHeight.current = collapsible.current.offsetHeight;
     if (collapsed) {
       collapsible.current.style.height = '0px';
+      restaurantName.current.classList.add('collapsed');
     } else {
       collapsible.current.style.height = collapsibleMaxHeight.current + 'px';
     }
@@ -68,10 +68,10 @@ function RestaurantCard(props) {
   // elements, as their height may vary due to word wrapping within the collapsible
   // elements (e.g. long addresses or website urls).
   return (
-    <div ref={parentRef} className='restaurant-card' style={style}>
+    <div className='restaurant-card' style={style}>
       <ImageSlider images={photoUrls} collapsed={collapsed} />
       <div className='restaurant-content'>
-        <h5 className='restaurant-name'>{restaurant.key.name}</h5>
+        <h5 className={`restaurant-name ${(collapsed && collapsibleMaxHeight.current ? 'collapsed' : '')}`} ref={restaurantName}>{restaurant.key.name}</h5>
         <RatingStars
           avgRating={restaurant.key.avgRating}
           numRatings={restaurant.key.numRatings}
