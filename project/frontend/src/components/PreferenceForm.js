@@ -103,8 +103,8 @@ class PreferenceForm extends React.Component {
     const prices = { Low: 1, Medium: 2, High: 3, 'Very High': 4 };
     return (
       <form onSubmit={this.handleSubmit}>
-        <label htmlFor='location-finder'>Search for your location here</label>
-        <LocationFinder sendData={this.getLocationData} />
+        <label htmlFor='location-finder'>Search for your location here
+        <LocationFinder sendData={this.getLocationData} /></label>
         <label htmlFor='cuisine'>
           What cuisine?
           <select
