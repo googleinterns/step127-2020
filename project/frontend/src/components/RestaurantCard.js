@@ -25,14 +25,14 @@ import Clock from '../assets/clock.svg';
 function RestaurantCard(props) {
   const { restaurant, details, style, collapsed = false } = props;
 
-  const photoUrls = details.result.photos.map(
+  const photoUrls = (details) ? details.result.photos.map(
     (photo) =>
       'https://maps.googleapis.com/maps/api/place/photo?photoreference=' +
       photo.photo_reference +
       '&key=' +
       process.env.REACT_APP_GOOGLE_API_KEY +
       '&maxwidth=344'
-  );
+  ) : ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
 
   const collapsible = useRef(null);
   const collapsibleMaxHeight = useRef(null);
@@ -67,6 +67,9 @@ function RestaurantCard(props) {
   // This is all necessary to avoid hardcoding the maximum height of the collapsible
   // elements, as their height may vary due to word wrapping within the collapsible
   // elements (e.g. long addresses or website urls).
+  const open = details ? details.result.opening_hours.open_now ? 'Open' : 'Closed' : 'loading';
+  const website = details ? details.result.website : 'loading';
+  const phone = details ? details.result.formatted_phone_number : 'loading';
   return (
     <div className='restaurant-card' style={style}>
       <ImageSlider images={photoUrls} collapsed={collapsed} />
@@ -98,9 +101,7 @@ function RestaurantCard(props) {
           </p>
           <div className='restaurant-detail-container'>
             <img src={Clock} alt='Clock icon' />
-            <span>
-              {details.result.opening_hours.open_now ? 'Open' : 'Closed'}
-            </span>
+            <span>{open}</span>
           </div>
           <div className='restaurant-detail-container'>
             <img src={Place} alt='Place marker icon' />
@@ -108,11 +109,11 @@ function RestaurantCard(props) {
           </div>
           <div className='restaurant-detail-container'>
             <img src={Globe} alt='Globe icon' />
-            <span>{details.result.website}</span>
+            <span>{website}</span>
           </div>
           <div className='restaurant-detail-container'>
             <img src={Phone} alt='Phone icon' />
-            <span>{details.result.formatted_phone_number}</span>
+            <span>{phone}</span>
           </div>
         </div>
       </div>
