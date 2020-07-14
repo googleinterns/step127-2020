@@ -73,7 +73,11 @@ function RestaurantCard(props) {
   const photoUrls = (details) ? details.result.photos.map(
     (photo) => photo.getUrl({ maxWidth: 344 })
   ) : ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
-  const open = details ? details.result.opening_hours.isOpen() ? 'Open' : 'Closed' : 'loading';
+  const open = details
+        ? details.result.opening_hours.isOpen()
+        ? 'Open'
+        : 'Closed'
+        : 'loading';
   const website = details ? details.result.website : 'loading';
   const phone = details ? details.result.formatted_phone_number : 'loading';
   return (
