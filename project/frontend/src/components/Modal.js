@@ -30,8 +30,8 @@ function Modal(props) {
     bottom,
     left,
     onDismiss,
-    center,
-    centerHorizontal,
+    center = false,
+    centerHorizontal = false,
   } = props;
 
   const backdropStyle = { height: open ? '' : '0px' };
