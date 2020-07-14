@@ -58,7 +58,7 @@ function RestaurantCardDeck(props) {
   const minScaleFactor = 0.9;
   const numberOfRenderedCards = 7;
   const numberOfVisibleCards = 3;
-  const offsetBetweenCards = 24;
+  const offsetPxBetweenCards = 24;
   const transitionString =
     'top 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'left 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
@@ -74,7 +74,7 @@ function RestaurantCardDeck(props) {
     const style = {
       position: 'absolute',
       top:
-        Math.min(relativeIndex, numberOfVisibleCards - 1) * offsetBetweenCards +
+        Math.min(relativeIndex, numberOfVisibleCards - 1) * offsetPxBetweenCards +
         'px',
       left: '0px',
       opacity: relativeIndex < numberOfVisibleCards ? 1 : 0,

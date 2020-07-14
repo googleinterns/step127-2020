@@ -17,9 +17,9 @@ function RestaurantCardStack(props) {
   const minScaleFactor = 0.85;
   const numberOfRenderedCards = 7;
   const numberOfCollapsedCards = 3;
-  const uncollapsedCardHeight = 487;
-  const offsetBetweenCollapsedCards = 24;
-  const offsetBeforeUncollapsedCard = 152;
+  const uncollapsedCardHeightPx = 487;
+  const offsetPxBetweenCollapsedCards = 24;
+  const offsetPxBeforeUncollapsedCard = 152;
   const transitionString =
     'top 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'opacity 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
@@ -34,14 +34,14 @@ function RestaurantCardStack(props) {
     const relativeIndexAbs = Math.abs(relativeIndex);
     const offset =
       relativeIndex === 0
-        ? offsetBeforeUncollapsedCard
+        ? offsetPxBeforeUncollapsedCard
         : relativeIndex > 0
-        ? offsetBeforeUncollapsedCard +
-          uncollapsedCardHeight +
+        ? offsetPxBeforeUncollapsedCard +
+          uncollapsedCardHeightPx +
           Math.min(relativeIndex, numberOfCollapsedCards) *
-            offsetBetweenCollapsedCards
+            offsetPxBetweenCollapsedCards
         : Math.max(numberOfCollapsedCards + relativeIndex, 0) *
-          offsetBetweenCollapsedCards;
+          offsetPxBetweenCollapsedCards;
     const top = offset + 'px';
     const opacity = relativeIndexAbs <= numberOfCollapsedCards ? 1 : 0;
     const zIndex = props.cards.length - relativeIndexAbs;
