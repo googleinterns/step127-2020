@@ -20,6 +20,7 @@ import * as serviceWorker from './serviceWorker';
 // TODO: remove
 import { restaurant, details } from './components/SampleRestaurant.js';
 
+// TODO: Use Redirect component
 ReactDOM.render(
   <React.StrictMode>
     <Authentication>
