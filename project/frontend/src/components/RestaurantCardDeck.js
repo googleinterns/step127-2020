@@ -34,10 +34,9 @@ function reducer(previous, action) {
       history[index] = action.type;
       index++;
       break;
+    case Action.BACK:
     default:
-      // Action.BACK
       if (index > 0) index--;
-      break;
   }
 
   return { index, history };
