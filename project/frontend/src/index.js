@@ -22,9 +22,9 @@ import * as serviceWorker from './serviceWorker';
 
 // TODO: remove
 import generateRestaurant from './components/SampleRestaurant.js';
-const numberOfCards = 20;
+const numberOfCardsToGenerate = 20;
 const cards = [];
-for (let i = 0; i < numberOfCards; i++) {
+for (let i = 0; i < numberOfCardsToGenerate; i++) {
   const data = generateRestaurant(
     'Amarena ' + i,
     'apr75h4bni2pf98h4inujnksjrliu34' + i
