@@ -1,3 +1,4 @@
+import 'rsuite/dist/styles/rsuite-default.css';
 import './css/normalize.css';
 import './css/skeleton.css';
 
@@ -14,6 +15,10 @@ import PreferenceForm from './components/PreferenceForm.js';
 
 import * as serviceWorker from './serviceWorker';
 
+// TODO: remove
+import { restaurant, details } from './components/SampleRestaurant.js';
+
+// TODO: Use Redirect component
 ReactDOM.render(
   <React.StrictMode>
     <Authentication>
