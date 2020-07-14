@@ -18,6 +18,7 @@ const Action = {
   NEXT_SLIDE: 4,
 };
 
+// TODO: Scale RestaurantCard dimensions based on screen size.
 /**
  * The default width of a slide.
  *
@@ -25,6 +26,7 @@ const Action = {
  */
 const width = 344;
 
+// TODO: Move reducer to its own file.
 /**
  * A reducer for the ImageSlider component. Updates ImageSlider state
  * based on the previous state and a specified action.

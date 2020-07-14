@@ -1,3 +1,4 @@
+import 'rsuite/dist/styles/rsuite-default.css';
 import './css/normalize.css';
 import './css/skeleton.css';
 
@@ -12,7 +13,6 @@ import HomePage from './pages/HomePage.js';
 
 import MapContainer from './components/ResultsMap.js';
 import MatchResultsPage from './pages/MatchResultsPage.js';
-import PreferenceForm from './components/PreferenceForm.js';
 
 import RestaurantCard from './components/RestaurantCard.js';
 import RestaurantCardDeck from './components/RestaurantCardDeck.js';
@@ -22,8 +22,9 @@ import * as serviceWorker from './serviceWorker';
 
 // TODO: remove
 import generateRestaurant from './components/SampleRestaurant.js';
+const numberOfCardsToGenerate = 20;
 const cards = [];
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < numberOfCardsToGenerate; i++) {
   const data = generateRestaurant(
     'Amarena ' + i,
     'apr75h4bni2pf98h4inujnksjrliu34' + i
@@ -39,6 +40,7 @@ for (let i = 0; i < 20; i++) {
   cards.push(data);
 }
 
+// TODO: Use Redirect component
 ReactDOM.render(
   <React.StrictMode>
     <Authentication>
@@ -62,7 +64,6 @@ ReactDOM.render(
             <RestaurantCard {...generateRestaurant()} />
           </Route>
 
-          <Route path='/find-match' component={PreferenceForm} />
           <Route path='/match-results' component={MatchResultsPage} />
           <Route path='/mapRoute' component={MapContainer} />
           <Route path='/' component={HomePage} />

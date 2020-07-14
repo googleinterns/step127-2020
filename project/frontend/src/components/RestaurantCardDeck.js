@@ -34,10 +34,9 @@ function reducer(previous, action) {
       history[index] = action.type;
       index++;
       break;
+    case Action.BACK:
     default:
-      // Action.BACK
       if (index > 0) index--;
-      break;
   }
 
   return { index, history };
@@ -57,15 +56,19 @@ function RestaurantCardDeck(props) {
 
   const maxScaleFactor = 1.0;
   const minScaleFactor = 0.9;
+  const numberOfRenderedCards = 7;
   const numberOfVisibleCards = 3;
-  const offsetBetweenCards = 24;
+  const offsetPxBetweenCards = 24;
   const transitionString =
     'top 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'left 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'transform 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'opacity 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
   const cards = props.cards.map((card, index) => {
-    if (index < state.index - 7 || index > state.index + 7) {
+    if (
+      index < state.index - numberOfRenderedCards ||
+      index > state.index + numberOfRenderedCards
+    ) {
       return null;
     }
 
@@ -73,7 +76,8 @@ function RestaurantCardDeck(props) {
     const style = {
       position: 'absolute',
       top:
-        Math.min(relativeIndex, numberOfVisibleCards - 1) * offsetBetweenCards +
+        Math.min(relativeIndex, numberOfVisibleCards - 1) *
+          offsetPxBetweenCards +
         'px',
       left: '0px',
       opacity: relativeIndex < numberOfVisibleCards ? 1 : 0,
