@@ -64,8 +64,6 @@ public final class RestaurantScorer {
       score += calculateRatingScore(restaurantRating, restaurant.getNumRatings(), statistics);
     }
     double percentMatch = score / maxPoints;
-    System.out.println("score:" + score);
-    System.out.println("maxPoints:" + maxPoints);
     return percentMatch;
   }
 

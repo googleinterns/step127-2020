@@ -49,7 +49,6 @@ class PreferenceForm extends React.Component {
           : parseInt(event.target.value);
       this.setState({ [event.target.name]: field });
     }
-    console.log(this.state);
   }
 
   changeWeightState(attrName, value) {
