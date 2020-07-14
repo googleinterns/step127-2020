@@ -65,8 +65,10 @@ function RestaurantCardDeck(props) {
     'transform 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'opacity 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
   const cards = props.cards.map((card, index) => {
-    if (index < state.index - numberOfRenderedCards ||
-        index > state.index + numberOfRenderedCards) {
+    if (
+      index < state.index - numberOfRenderedCards ||
+      index > state.index + numberOfRenderedCards
+    ) {
       return null;
     }
 
@@ -74,7 +76,8 @@ function RestaurantCardDeck(props) {
     const style = {
       position: 'absolute',
       top:
-        Math.min(relativeIndex, numberOfVisibleCards - 1) * offsetPxBetweenCards +
+        Math.min(relativeIndex, numberOfVisibleCards - 1) *
+          offsetPxBetweenCards +
         'px',
       left: '0px',
       opacity: relativeIndex < numberOfVisibleCards ? 1 : 0,

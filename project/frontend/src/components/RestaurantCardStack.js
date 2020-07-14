@@ -25,8 +25,10 @@ function RestaurantCardStack(props) {
     'opacity 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'transform 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
   const cards = props.cards.map((card, index) => {
-    if (index < currentCardIndex - numberOfRenderedCards ||
-        index > currentCardIndex + numberOfRenderedCards) {
+    if (
+      index < currentCardIndex - numberOfRenderedCards ||
+      index > currentCardIndex + numberOfRenderedCards
+    ) {
       return null;
     }
 
@@ -37,14 +39,17 @@ function RestaurantCardStack(props) {
     if (relativeIndex === 0) {
       offset = offsetPxBeforeUncollapsedCard;
     } else if (relativeIndex < 0) {
-      offset = Math.max(numberOfCollapsedCards + relativeIndex, 0) *
+      offset =
+        Math.max(numberOfCollapsedCards + relativeIndex, 0) *
         offsetPxBetweenCollapsedCards;
     } else {
-      offset = offsetPxBeforeUncollapsedCard + uncollapsedCardHeightPx +
+      offset =
+        offsetPxBeforeUncollapsedCard +
+        uncollapsedCardHeightPx +
         Math.min(relativeIndex, numberOfCollapsedCards) *
-        offsetPxBetweenCollapsedCards;
+          offsetPxBetweenCollapsedCards;
     }
-    
+
     const top = offset + 'px';
     const opacity = relativeIndexAbs <= numberOfCollapsedCards ? 1 : 0;
     const zIndex = props.cards.length - relativeIndexAbs;
