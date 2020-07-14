@@ -1,6 +1,12 @@
 import './ImageSlider.css';
 
-import React, { useState, useReducer, useRef, useEffect, useLayoutEffect } from 'react';
+import React, {
+  useState,
+  useReducer,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+} from 'react';
 import { useSwipeable } from 'react-swipeable';
 
 import Next from '../assets/next.svg';
