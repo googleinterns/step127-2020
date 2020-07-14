@@ -39,21 +39,17 @@ class LocationFinder extends React.Component {
         }
         const currLocation = location.results[0].geometry.location;
         const locationName = location.results[0].formatted_address;
-        this.props.sendData({ currLocation, locationName, });
+        this.props.sendData({ currLocation, locationName });
       });
   }
 
   render() {
-    return(
+    return (
       <form onSubmit={this.handleSubmit}>
-        <input
-          name='location'
-          onChange={this.changeState}
-        />
+        <input name='location' onChange={this.changeState} />
         <button onClick={this.handleSubmit}>Find Location</button>
       </form>
     );
   }
-  
 }
 export default LocationFinder;
