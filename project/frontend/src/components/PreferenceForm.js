@@ -1,4 +1,5 @@
 import React from 'react';
+import LocationFinder from './LocationFinder.js';
 
 import { Slider } from 'rsuite';
 
@@ -27,6 +28,7 @@ class PreferenceForm extends React.Component {
     };
     this.changeState = this.changeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.getData = this.getData.bind(this);
   }
 
   // Updates the state of the input element so it holds the chosen value.
@@ -54,6 +56,10 @@ class PreferenceForm extends React.Component {
     const field = this.state[attrName];
     field['weight'] = value;
     this.setState({ [attrName]: field });
+  }
+
+  getData(data) {
+    this.setState({ currLocation: data.currLocation });
   }
 
   getSlider(attrName) {
@@ -97,6 +103,8 @@ class PreferenceForm extends React.Component {
     const prices = { Low: 1, Medium: 2, High: 3, 'Very High': 4 };
     return (
       <form onSubmit={this.handleSubmit}>
+        <label htmlFor='location-finder'>Search for your location here</label>
+        <LocationFinder sendData={this.getData} />
         <label htmlFor='cuisine'>
           What cuisine?
           <select
@@ -164,28 +172,6 @@ class PreferenceForm extends React.Component {
           <br />
           Importance
           {this.getSlider('priceLevel')}
-        </label>
-        <label htmlFor='lat'>
-          Latitude
-          <input
-            type='number'
-            id='lat'
-            name='currLocation'
-            value={this.state.lat}
-            onChange={this.changeState}
-            required
-          />
-        </label>
-        <label htmlFor='lng'>
-          Longitude
-          <input
-            type='number'
-            id='lng'
-            name='currLocation'
-            value={this.state.lng}
-            onChange={this.changeState}
-            required
-          />
         </label>
         <label htmlFor='open'>
           Open Now?
