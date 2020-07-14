@@ -53,8 +53,11 @@ export default function getRecommendation(preferences, callback) {
  *  If no cuisines are specified, only one promise is created.
  */
 function makePromisesArray(preferences) {
-  const { cuisine, radius, currLocation, open } = preferences;
-  const defaultRadius = 50000; // this is the max radius allowed for text search.
+  const { cuisine, radius, currLocation, diningExp, open } = preferences;
+  // If the user specified delivery the default to 15 mile radius.
+  // Else default to max radius allowed by the API.
+  const defaultRadius =
+    diningExp === 'meal_delivery' ? milesToMeters(15) : 50000;
   const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
   const nearbySearchBaseUrl =
     'https://maps.googleapis.com/maps/api/place/nearbysearch/json?';
