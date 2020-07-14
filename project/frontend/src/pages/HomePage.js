@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import Modal from '../components/Modal.js';
 import PreferenceForm from '../components/PreferenceForm.js';
 
-function HomePage() {
+function HomePage(props) {
   const [isPreferenceFormOpen, setIsPreferenceFormOpen] = useState(false);
 
   const togglePreferenceForm = () => {
@@ -82,7 +82,7 @@ function HomePage() {
       centerHorizontal={true}
       top='64px'
       bottom='64px'>
-      <PreferenceForm />
+      <PreferenceForm history={props.history} />
     </Modal>,
   ];
 }
