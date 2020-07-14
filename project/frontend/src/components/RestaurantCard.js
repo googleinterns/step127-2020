@@ -1,6 +1,8 @@
 import './RestaurantCard.css';
 
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useContext, useRef, useLayoutEffect } from 'react';
+
+import PlacesApiContext from '../contexts/PlacesApiContext.js';
 
 import ImageSlider from './ImageSlider.js';
 import RatingStars from './RatingStars.js';
@@ -15,28 +17,29 @@ import Clock from '../assets/clock.svg';
  *
  * @param {!Object<string, *>} props.restaurant An object containing basic restaurant
  *     information.
- * @param {!Object<string, *>} props.details An object containing detailed restaurant
- *     information.
  * @param {?Object<string, *>} props.style An optional style object to be applied
  *     to the parent container of this component.
  * @param {boolean=} props.collapsed An optional control over whether this card is in
  *     a collapsed or full view (default: false).
  */
 function RestaurantCard(props) {
-  const { restaurant, details, style, collapsed = false } = props;
+  const { restaurant, style, collapsed = false } = props;
 
-  const photoUrls = (details) ? details.result.photos.map(
-    (photo) =>
-      'https://maps.googleapis.com/maps/api/place/photo?photoreference=' +
-      photo.photo_reference +
-      '&key=' +
-      process.env.REACT_APP_GOOGLE_API_KEY +
-      '&maxwidth=344'
-  ) : ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
+  const [details, setDetails] = useState(null);
 
   const collapsible = useRef(null);
   const collapsibleMaxHeight = useRef(null);
   const restaurantName = useRef(null);
+
+  const placesService = useContext(PlacesApiContext);
+
+  useEffect(() => {
+    const fields = ['formatted_address', 'formatted_phone_number', 'photos',
+                    'website', 'opening_hours', 'name'];
+    placesService.getDetails({placeId: restaurant.key.id, fields}, (details) => {
+      setDetails({ result: details });
+    });
+  }, [placesService, restaurant.key.id]);
 
   useLayoutEffect(() => {
     collapsibleMaxHeight.current = collapsible.current.offsetHeight;
@@ -67,7 +70,10 @@ function RestaurantCard(props) {
   // This is all necessary to avoid hardcoding the maximum height of the collapsible
   // elements, as their height may vary due to word wrapping within the collapsible
   // elements (e.g. long addresses or website urls).
-  const open = details ? details.result.opening_hours.open_now ? 'Open' : 'Closed' : 'loading';
+  const photoUrls = (details) ? details.result.photos.map(
+    (photo) => photo.getUrl({ maxWidth: 344 })
+  ) : ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
+  const open = details ? details.result.opening_hours.isOpen() ? 'Open' : 'Closed' : 'loading';
   const website = details ? details.result.website : 'loading';
   const phone = details ? details.result.formatted_phone_number : 'loading';
   return (
@@ -96,7 +102,7 @@ function RestaurantCard(props) {
               : collapsibleMaxHeight.current + 'px',
           }}>
           <p className='restaurant-type'>
-            {'$'.repeat(restaurant.key.priceLevel)} •{' '}
+            {'$'.repeat(Math.max(restaurant.key.priceLevel, 1))} •{' '}
             {restaurant.key.placeTypes.join(', ')}
           </p>
           <div className='restaurant-detail-container'>
