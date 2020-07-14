@@ -1,0 +1,10 @@
+.rating-stars-container {
+  display: flex;
+  align-items: center;
+}
+
+.rating-stars-container span {
+  margin-left: 4px;
+  font-family: 'Crimson Text';
+  font-size: 1.5rem;
+}

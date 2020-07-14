@@ -26,8 +26,7 @@ function Authentication(props) {
   useEffect(() => {
     window.gapi.load('auth2', () => {
       const auth2 = window.gapi.auth2.init({
-        client_id:
-          '21423804760-e3goj1cdhg49ojdf780mcq92qgshbr4v.apps.googleusercontent.com',
+        client_id: process.env.REACT_APP_GOOGLE_AUTH_CLIENT_ID,
       });
 
       auth2.currentUser.listen((user) => {

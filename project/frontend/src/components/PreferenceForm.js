@@ -1,7 +1,6 @@
 import React from 'react';
-import getRecommendation from '../scripts/recommendation_script.js';
+
 import { Slider } from 'rsuite';
-import 'rsuite/dist/styles/rsuite-default.css';
 
 class PreferenceForm extends React.Component {
   constructor(props) {
@@ -57,17 +56,6 @@ class PreferenceForm extends React.Component {
     this.setState({ [attrName]: field });
   }
 
-  handleSubmit(event) {
-    const propHistory = this.props.history;
-    getRecommendation(/* preferences= */ this.state, function (response) {
-      propHistory.push({
-        pathname: '/match-results',
-        data: response,
-      });
-    });
-    event.preventDefault();
-  }
-
   getSlider(attrName) {
     return (
       <div style={{ width: 200, padding: 20 }}>
@@ -83,6 +71,14 @@ class PreferenceForm extends React.Component {
         />
       </div>
     );
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.history.push({
+      pathname: '/match-results',
+      state: this.state,
+    });
   }
 
   render() {

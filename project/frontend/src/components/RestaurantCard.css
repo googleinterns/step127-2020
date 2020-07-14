@@ -1,0 +1,34 @@
+.restaurant-card {
+  width: 344px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.restaurant-content {
+  padding: 16px;
+}
+
+.restaurant-name {
+  font-size: 2rem;
+}
+
+.restaurant-type {
+  margin: 16px 0px 8px 0px;
+  font-family: 'Crimson Text';
+  font-size: 1.7rem;
+  font-weight: bold;
+}
+
+.restaurant-detail-container {
+  display: flex;
+  align-items: center;
+  padding: 8px 8px 8px 0px;
+}
+
+.restaurant-detail-container span {
+  font-family: 'Crimson Text';
+  font-size: 1.7rem;
+  margin-left: 8px;
+}
