@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
 import { Slider } from 'rsuite';
 
 class PreferenceForm extends React.Component {
@@ -27,6 +26,7 @@ class PreferenceForm extends React.Component {
       open: true,
     };
     this.changeState = this.changeState.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   // Updates the state of the input element so it holds the chosen value.
@@ -48,7 +48,6 @@ class PreferenceForm extends React.Component {
           : parseInt(event.target.value);
       this.setState({ [event.target.name]: field });
     }
-    console.log(this.state);
   }
 
   changeWeightState(attrName, value) {
@@ -74,6 +73,14 @@ class PreferenceForm extends React.Component {
     );
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.history.push({
+      pathname: '/match-results',
+      state: this.state,
+    });
+  }
+
   render() {
     const cuisines = ['Italian ', 'Mexican ', 'Indian '];
     const distancesInMiles = {
@@ -89,7 +96,7 @@ class PreferenceForm extends React.Component {
     };
     const prices = { Low: 1, Medium: 2, High: 3, 'Very High': 4 };
     return (
-      <form>
+      <form onSubmit={this.handleSubmit}>
         <label htmlFor='cuisine'>
           What cuisine?
           <select
@@ -189,9 +196,7 @@ class PreferenceForm extends React.Component {
             onChange={this.changeState}
           />
         </label>
-        <Link to={{ pathname: '/match-results', state: this.state }}>
-          <button>Submit</button>
-        </Link>
+        <button type='submit'>Submit</button>
       </form>
     );
   }
