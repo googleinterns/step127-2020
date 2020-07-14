@@ -11,7 +11,7 @@ class LocationFinder extends React.Component {
   }
 
   changeState(event) {
-    this.setState({ locationString: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });
   }
 
   handleSubmit(event) {
@@ -46,7 +46,7 @@ class LocationFinder extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <input name='location' onChange={this.changeState} />
+        <input name='locationString' onChange={this.changeState} />
         <button onClick={this.handleSubmit}>Find Location</button>
       </form>
     );

@@ -28,7 +28,7 @@ class PreferenceForm extends React.Component {
     };
     this.changeState = this.changeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.getData = this.getData.bind(this);
+    this.getLocationData = this.getLocationData.bind(this);
   }
 
   // Updates the state of the input element so it holds the chosen value.
@@ -58,7 +58,7 @@ class PreferenceForm extends React.Component {
     this.setState({ [attrName]: field });
   }
 
-  getData(data) {
+  getLocationData(data) {
     this.setState({ currLocation: data.currLocation });
   }
 
@@ -104,7 +104,7 @@ class PreferenceForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <label htmlFor='location-finder'>Search for your location here</label>
-        <LocationFinder sendData={this.getData} />
+        <LocationFinder sendData={this.getLocationData} />
         <label htmlFor='cuisine'>
           What cuisine?
           <select
