@@ -15,6 +15,7 @@ function RestaurantCardStack(props) {
 
   const maxScaleFactor = 1.0;
   const minScaleFactor = 0.85;
+  const numberOfRenderedCards = 7;
   const numberOfCollapsedCards = 3;
   const uncollapsedCardHeight = 487;
   const offsetBetweenCollapsedCards = 24;
@@ -24,7 +25,8 @@ function RestaurantCardStack(props) {
     'opacity 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'transform 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
   const cards = props.cards.map((card, index) => {
-    if (index < currentCardIndex - 7 || index > currentCardIndex + 7) {
+    if (index < currentCardIndex - numberOfRenderedCards ||
+        index > currentCardIndex + numberOfRenderedCards) {
       return null;
     }
 

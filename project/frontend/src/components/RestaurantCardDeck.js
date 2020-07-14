@@ -56,6 +56,7 @@ function RestaurantCardDeck(props) {
 
   const maxScaleFactor = 1.0;
   const minScaleFactor = 0.9;
+  const numberOfRenderedCards = 7;
   const numberOfVisibleCards = 3;
   const offsetBetweenCards = 24;
   const transitionString =
@@ -64,7 +65,8 @@ function RestaurantCardDeck(props) {
     'transform 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'opacity 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
   const cards = props.cards.map((card, index) => {
-    if (index < state.index - 7 || index > state.index + 7) {
+    if (index < state.index - numberOfRenderedCards ||
+        index > state.index + numberOfRenderedCards) {
       return null;
     }
 
