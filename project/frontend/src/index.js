@@ -13,14 +13,24 @@ import HomePage from './pages/HomePage.js';
 import MapContainer from './components/ResultsMap.js';
 import MatchResultsPage from './pages/MatchResultsPage.js';
 
+import RestaurantCard from './components/RestaurantCard.js';
+
 import * as serviceWorker from './serviceWorker';
 
+// TODO: remove
+import { restaurant, details } from './components/SampleRestaurant.js';
+
+// TODO: Use Redirect component
 ReactDOM.render(
   <React.StrictMode>
     <Authentication>
       <Router>
         <Header />
         <Switch>
+          <Route path='/card'>
+            <RestaurantCard restaurant={restaurant} details={details} />
+          </Route>
+
           <Route path='/match-results' component={MatchResultsPage} />
           <Route path='/mapRoute' component={MapContainer} />
           <Route path='/' component={HomePage} />
