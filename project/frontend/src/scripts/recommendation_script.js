@@ -56,8 +56,8 @@ function makePromisesArray(preferences) {
   const { cuisine, radius, currLocation, open } = preferences;
   const defaultRadius = 50000; // this is the max radius allowed for text search.
   const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-  const textSearchBaseUrl =
-    'https://maps.googleapis.com/maps/api/place/textsearch/json?';
+  const nearbySearchBaseUrl =
+    'https://maps.googleapis.com/maps/api/place/nearbysearch/json?';
   const promises = [];
   const cuisineTypes = cuisine;
   // Make sure we still create a promise even if no cuisine type is specified.
@@ -67,8 +67,11 @@ function makePromisesArray(preferences) {
   }
   for (const cuisineType of cuisineTypes) {
     const searchParams = new URLSearchParams();
-    searchParams.append('query', cuisineType + 'restaurant');
+    searchParams.append('type', 'restaurant');
     searchParams.append('location', currLocation.lat + ',' + currLocation.lng);
+    if (cuisineType) {
+      searchParams.append('keyword', cuisineType);
+    }
     if (radius.pref) {
       searchParams.append('radius', milesToMeters(radius.pref));
     } else {
@@ -78,7 +81,7 @@ function makePromisesArray(preferences) {
       searchParams.append('opennow', open);
     }
     searchParams.append('key', process.env.REACT_APP_GOOGLE_API_KEY);
-    promises.push(fetch(proxyUrl + textSearchBaseUrl + searchParams));
+    promises.push(fetch(proxyUrl + nearbySearchBaseUrl + searchParams));
   }
   return promises;
 }
