@@ -46,7 +46,6 @@ function MapContainer(props) {
         />
       );
     }
-    console.log(markers);
     return markers;
   };
 
