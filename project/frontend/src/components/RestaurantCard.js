@@ -1,6 +1,12 @@
 import './RestaurantCard.css';
 
-import React, { useState, useEffect, useContext, useRef, useLayoutEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  useLayoutEffect,
+} from 'react';
 
 import PlacesApiContext from '../contexts/PlacesApiContext.js';
 
@@ -34,11 +40,20 @@ function RestaurantCard(props) {
   const placesService = useContext(PlacesApiContext);
 
   useEffect(() => {
-    const fields = ['formatted_address', 'formatted_phone_number', 'photos',
-                    'website', 'opening_hours', 'name'];
-    placesService.getDetails({placeId: restaurant.key.id, fields}, (details) => {
-      setDetails({ result: details });
-    });
+    const fields = [
+      'formatted_address',
+      'formatted_phone_number',
+      'photos',
+      'website',
+      'opening_hours',
+      'name',
+    ];
+    placesService.getDetails(
+      { placeId: restaurant.key.id, fields },
+      (details) => {
+        setDetails({ result: details });
+      }
+    );
   }, [placesService, restaurant.key.id]);
 
   useLayoutEffect(() => {
@@ -70,14 +85,14 @@ function RestaurantCard(props) {
   // This is all necessary to avoid hardcoding the maximum height of the collapsible
   // elements, as their height may vary due to word wrapping within the collapsible
   // elements (e.g. long addresses or website urls).
-  const photoUrls = (details) ? details.result.photos.map(
-    (photo) => photo.getUrl({ maxWidth: 344 })
-  ) : ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
+  const photoUrls = details
+    ? details.result.photos.map((photo) => photo.getUrl({ maxWidth: 344 }))
+    : ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
   const open = details
-        ? details.result.opening_hours.isOpen()
-        ? 'Open'
-        : 'Closed'
-        : 'loading';
+    ? details.result.opening_hours.isOpen()
+      ? 'Open'
+      : 'Closed'
+    : 'loading';
   const website = details ? details.result.website : 'loading';
   const phone = details ? details.result.formatted_phone_number : 'loading';
   return (
