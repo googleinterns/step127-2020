@@ -4,7 +4,9 @@ class LocationFinder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      locationString: '',
+      userInput: '',
+      locationName: '',
+      submitted: false,
     };
     this.changeState = this.changeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -16,7 +18,7 @@ class LocationFinder extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.getLocation(this.state.locationString);
+    this.getLocation(this.state.userInput);
   }
 
   getLocation(userInput) {
@@ -39,16 +41,21 @@ class LocationFinder extends React.Component {
         }
         const currLocation = location.results[0].geometry.location;
         const locationName = location.results[0].formatted_address;
+        this.setState({ locationName });
+        this.setState({ submitted: true });
         this.props.sendData({ currLocation, locationName });
       });
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <input name='locationString' onChange={this.changeState} />
-        <button onClick={this.handleSubmit}>Find Location</button>
-      </form>
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <input name='userInput' onChange={this.changeState} />
+          <button onClick={this.handleSubmit}>Find Location</button>
+        </form>
+        {this.state.submitted ? <p>Your current location: {this.state.locationName}</p> : null}
+      </div>
     );
   }
 }
