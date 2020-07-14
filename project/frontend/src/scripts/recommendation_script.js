@@ -1,5 +1,5 @@
 export default function getRecommendation(preferences, callback) {
-  const promises = makePromisesArray(preferences, callback);
+  const promises = makePromisesArray(preferences);
 
   Promise.all(promises)
     // This gives us the list of restaurants.
@@ -13,14 +13,19 @@ export default function getRecommendation(preferences, callback) {
       }
 
       if (restaurants.length === 0) {
-        let message = "We can't find any restaurants near you";
-        if (preferences.open) {
-          message += ' that are currently open';
+        if (preferences.radius.pref) {
+          preferences.radius.pref = '';
+          getRecommendation(preferences, callback);
+        } else {
+          let message = "We can't find any restaurants near you";
+          if (preferences.open) {
+            message += ' that are currently open';
+          }
+          message +=
+            ' that match your preferences. Please try changing your preferences.';
+          // TODO: create NoResults page that would be rendered here.
+          alert(message);
         }
-        message +=
-          ' that match your preferences. Please try changing your preferences.';
-        // TODO: create NoResults page that would be rendered here.
-        alert(message);
         return;
       }
 
