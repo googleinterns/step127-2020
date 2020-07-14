@@ -8,19 +8,20 @@ const mapStyle = {
 };
 
 function MapContainer(props) {
-  const [activeMarker, changeMarker] = useState({});
-  const [showInfoWindow, changeInfoVisibility] = useState(false);
+  const [activeMarker, setActiveMarker] = useState({});
+  const [showInfoWindow, setShowInfoWindow] = useState(false);
+  // TODO: add a conditional to check if the list is empty
   const restaurant = props.restaurant;
   const matchCoords = restaurant[0].key.latLngCoords;
 
   const onMarkerClick = (props, marker) => {
-    changeMarker(marker);
-    changeInfoVisibility(true);
+    setActiveMarker(marker);
+    setShowInfoWindow(true);
   };
 
   const onClose = (props) => {
     if (showInfoWindow) {
-      changeInfoVisibility(false);
+      setShowInfoWindow(false);
     }
   };
 
