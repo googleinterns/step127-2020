@@ -12,7 +12,7 @@ export default function getRecommendation(preferences, callback) {
         restaurants = restaurants.concat(restaurant.results);
       }
 
-      if (restaurants.length === 0) {
+      if (!restaurants) {
         if (preferences.radius.pref) {
           preferences.radius.pref = '';
           getRecommendation(preferences, callback);
@@ -70,7 +70,7 @@ function makePromisesArray(preferences) {
   const cuisineTypes = cuisine;
   // Make sure we still create a promise even if no cuisine type is specified.
   // This will make the text search query just "restaurant" without specifying a cuisine.
-  if (cuisineTypes.length === 0) {
+  if (!cuisineTypes) {
     cuisineTypes.push('');
   }
   for (const cuisineType of cuisineTypes) {
@@ -89,7 +89,12 @@ function makePromisesArray(preferences) {
       searchParams.append('opennow', open);
     }
     searchParams.append('key', process.env.REACT_APP_GOOGLE_API_KEY);
-    promises.push(fetch(proxyUrl + nearbySearchBaseUrl + searchParams));
+    promises.push(fetch(proxyUrl + nearbySearchBaseUrl + searchParams), {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    });
   }
   return promises;
 }
