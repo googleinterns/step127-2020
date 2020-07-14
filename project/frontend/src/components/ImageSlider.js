@@ -1,6 +1,6 @@
 import './ImageSlider.css';
 
-import React, { useState, useReducer, useRef, useLayoutEffect } from 'react';
+import React, { useState, useReducer, useRef, useEffect, useLayoutEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
 import Next from '../assets/next.svg';
@@ -16,7 +16,22 @@ const Action = {
   SWIPED_RIGHT: 2,
   PREV_SLIDE: 3,
   NEXT_SLIDE: 4,
+  RESET: 5,
 };
+
+/**
+ * Initializes the state for this ImageSlider.
+ *
+ * @param {number} count The number of images in this slider.
+ */
+function initState(count) {
+  return {
+    left: 0,
+    lastLeft: 0,
+    slide: 0,
+    slideCount: count,
+  };
+}
 
 // TODO: Scale RestaurantCard dimensions based on screen size.
 /**
@@ -89,6 +104,8 @@ function reducer(previous, action) {
     case Action.NEXT_SLIDE:
       if (slide < slideCount - 1) slide++;
       break;
+    case Action.RESET:
+      return initState(action.count);
     default:
       throw new Error();
   }
@@ -117,12 +134,11 @@ function ImageSlider(props) {
 
   const [areControlsVisible, setAreControlsVisible] = useState(false);
 
-  const [state, dispatch] = useReducer(reducer, {
-    left: 0,
-    lastLeft: 0,
-    slide: 0,
-    slideCount: images.length,
-  });
+  const [state, dispatch] = useReducer(reducer, images.length, initState);
+
+  useEffect(() => {
+    dispatch({ type: Action.RESET, count: images.length });
+  }, [images.length]);
 
   const handleSwipedUpOrDown = (event) => {
     if (event.deltaX > 0) {
