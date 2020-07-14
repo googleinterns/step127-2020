@@ -15,7 +15,7 @@ public final class JsonToRestaurantParser {
 
   /** Parses a JSON object to a Restaurant object. */
   public static Restaurant toRestaurant(JSONObject body) throws JSONException {
-    String id = body.getString("id");
+    String id = body.getString("place_id");
     String name = body.getString("name");
     String address = body.getString("formatted_address");
     String stringifiedLocation =
