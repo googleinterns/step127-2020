@@ -25,17 +25,17 @@ function MatchResultsPage(props) {
           <RestaurantCardStack restaurants={restaurants} />
         </div>
         <div className='one-half column'>
-          <div style={{width: '100%', height: '100%'}}>
+          <div style={{ width: '100%', height: '100%' }}>
             <p>MAP</p>
           </div>
         </div>
       </div>
     </div>,
     <Modal key='loading-modal' open={loading} center={true}>
-      <div style={{height: '300px', width: '300px'}}>
+      <div style={{ height: '300px', width: '300px' }}>
         <p>Hi there your results are loading...</p>
       </div>
-    </Modal>
+    </Modal>,
   ];
 }
 
