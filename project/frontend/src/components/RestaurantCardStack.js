@@ -32,16 +32,19 @@ function RestaurantCardStack(props) {
 
     const relativeIndex = index - currentCardIndex;
     const relativeIndexAbs = Math.abs(relativeIndex);
-    const offset =
-      relativeIndex === 0
-        ? offsetPxBeforeUncollapsedCard
-        : relativeIndex > 0
-        ? offsetPxBeforeUncollapsedCard +
-          uncollapsedCardHeightPx +
-          Math.min(relativeIndex, numberOfCollapsedCards) *
-            offsetPxBetweenCollapsedCards
-        : Math.max(numberOfCollapsedCards + relativeIndex, 0) *
-          offsetPxBetweenCollapsedCards;
+
+    let offset;
+    if (relativeIndex === 0) {
+      offset = offsetPxBeforeUncollapsedCard;
+    } else if (relativeIndex < 0) {
+      offset = Math.max(numberOfCollapsedCards + relativeIndex, 0) *
+        offsetPxBetweenCollapsedCards;
+    } else {
+      offset = offsetPxBeforeUncollapsedCard + uncollapsedCardHeightPx +
+        Math.min(relativeIndex, numberOfCollapsedCards) *
+        offsetPxBetweenCollapsedCards;
+    }
+    
     const top = offset + 'px';
     const opacity = relativeIndexAbs <= numberOfCollapsedCards ? 1 : 0;
     const zIndex = props.cards.length - relativeIndexAbs;
