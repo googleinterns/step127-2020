@@ -61,7 +61,7 @@ function makePromisesArray(preferences) {
   const { cuisine, radius, currLocation, diningExp, open } = preferences;
   // If the user specified delivery the default to 15 mile radius.
   // Else default to max radius allowed by the API.
-  const defaultRadius =
+  const defaultRadiusMeters =
     diningExp === 'meal_delivery' ? milesToMeters(15) : 50000;
   const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
   const nearbySearchBaseUrl =
@@ -83,7 +83,7 @@ function makePromisesArray(preferences) {
     if (radius.pref) {
       searchParams.append('radius', milesToMeters(radius.pref));
     } else {
-      searchParams.append('radius', defaultRadius);
+      searchParams.append('radius', defaultRadiusMeters);
     }
     if (open) {
       searchParams.append('opennow', open);
