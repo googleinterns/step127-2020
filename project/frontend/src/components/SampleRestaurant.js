@@ -1,9 +1,9 @@
 /**
  * Generates a sample restaurant using the specified name and id.
  *
- * @param {string=} name An optional name for the generated 
+ * @param {string=} name An optional name for the generated
  *     restaurant (default: 'Olive Garden Italian Restaurant').
- * @param {string=} id An optional id for the generated 
+ * @param {string=} id An optional id for the generated
  *     restaurant (default: 'ChIJrRKLs5c5tokR2F3Oal2td04').
  */
 function generateRestaurant(
@@ -18,7 +18,7 @@ function generateRestaurant(
       id: id,
       latLngCoords: {
         lat: 39.033242,
-        lng: -77.410246
+        lng: -77.410246,
       },
       name: name,
       numRatings: 1458,
