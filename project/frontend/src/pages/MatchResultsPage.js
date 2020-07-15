@@ -27,7 +27,7 @@ function MatchResultsPage(props) {
         <div className='one-half column u-pad32'>
           <h2
             className='your-match-header'
-            style={{opacity: currentRestaurantIndex !== 0 ? 0 : 1}}>
+            style={{ opacity: currentRestaurantIndex !== 0 ? 0 : 1 }}>
             Your restaurant match is...
           </h2>
           <RestaurantCardStack
