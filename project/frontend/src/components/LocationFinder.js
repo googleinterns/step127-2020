@@ -1,4 +1,5 @@
 import React from 'react';
+import { GoogleApiWrapper } from 'google-maps-react';
 
 class LocationFinder extends React.Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class LocationFinder extends React.Component {
     };
     this.changeState = this.changeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.geolocate = this.geolocate.bind(this);
   }
 
   changeState(event) {
@@ -21,6 +23,33 @@ class LocationFinder extends React.Component {
     const locationData = this.getLocation(this.state.userInput);
     if (locationData) {
       this.props.sendData(locationData);
+    }
+  }
+
+  geolocate() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const currLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        const geolocationBaseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?';
+        const searchParams = new URLSearchParams();
+        searchParams.append('latlng', currLocation.lat + ',' + currLocation.lng);
+        searchParams.append('key', process.env.REACT_APP_GOOGLE_API_KEY);
+        fetch(proxyUrl + geolocationBaseUrl + searchParams)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.results) {
+              const locationName = data.results[0].formatted_address;
+              this.setState({ locationName });
+              this.setState({ submitted: true });
+              this.props.sendData({ currLocation, locationName });
+            } else {
+              alert('Cannot find your location');
+            }
+          });
+      });
+    } else {
+      alert('Cannot find your location');
     }
   }
 
@@ -54,6 +83,7 @@ class LocationFinder extends React.Component {
   render() {
     return (
       <div>
+        <button onClick={this.geolocate}>Use My Current Location</button>
         <form onSubmit={this.handleSubmit}>
           <input name='userInput' onChange={this.changeState} />
           <button onClick={this.handleSubmit}>Find Location</button>
