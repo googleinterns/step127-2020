@@ -32,7 +32,6 @@ ReactDOM.render(
           </Route>
 
           <Route path='/match-results' component={MatchResultsPage} />
-          <Route path='/mapRoute' component={MapContainer} />
           <Route path='/' component={HomePage} />
         </Switch>
         <Footer />
