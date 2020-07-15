@@ -25,9 +25,7 @@ import generateRestaurant from './components/SampleRestaurant.js';
 const numberOfCardsToGenerate = 20;
 const restaurants = [];
 for (let i = 0; i < numberOfCardsToGenerate; i++) {
-  const restaurant = generateRestaurant(
-    'Olive Garden Italian Restaurant ' + i,
-  );
+  const restaurant = generateRestaurant('Olive Garden Italian Restaurant ' + i);
   restaurants.push(restaurant);
 }
 
