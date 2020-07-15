@@ -18,6 +18,27 @@ import Globe from '../assets/globe.svg';
 import Phone from '../assets/phone.svg';
 import Clock from '../assets/clock.svg';
 
+function nthIndexOf(haystack, needle, n) {
+  let i = -1;
+  while (n--) {
+    i = haystack.indexOf(needle, ++i);
+    if (i < 0) break;
+  }
+  return i;
+}
+
+const bannedTags = ['food', 'point_of_interest', 'establishment'];
+function prettifyTags(tags) {
+  const out = [];
+  for (let tag of tags) {
+    if (!bannedTags.includes(tag)) {
+      tag = tag.replace('meal_', '');
+      out.push(tag);
+    }
+  }
+  return out;
+}
+
 /**
  * A card displaying a restaurant's basic information.
  *
@@ -33,18 +54,14 @@ function RestaurantCard(props) {
 
   const [details, setDetails] = useState(null);
 
-  const collapsible = useRef(null);
-  const collapsibleMaxHeight = useRef(null);
-  const imageSlider = useRef(null);
-  const imageSliderMaxHeight = useRef(null);
-  const restaurantName = useRef(null);
-
   const placesService = useContext(PlacesApiContext);
-
+  
   useEffect(() => {
     const fields = [
+      'url',
       'formatted_address',
       'formatted_phone_number',
+      'international_phone_number',
       'photos',
       'website',
       'opening_hours',
@@ -59,6 +76,12 @@ function RestaurantCard(props) {
       }
     );
   }, [placesService, restaurant.key.id]);
+  
+  const collapsible = useRef(null);
+  const collapsibleMaxHeight = useRef(null);
+  const imageSlider = useRef(null);
+  const imageSliderMaxHeight = useRef(null);
+  const restaurantName = useRef(null);
 
   useLayoutEffect(() => {
     // Temporarily update the collapsible divs to an uncollapsed state.
@@ -114,22 +137,46 @@ function RestaurantCard(props) {
   const photoUrls = details
     ? details.result.photos.map((photo) => photo.getUrl({ maxWidth: 344 }))
     : ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
+
   const open = details
     ? details.result.opening_hours.isOpen()
-      ? 'Open'
-      : 'Closed'
-    : 'loading';
-  const website = details ? details.result.website : 'loading';
+      ? <span className='restaurant-open-text'>Open.</span>
+      : <span className='restaurant-closed-text'>Closed.</span>
+    : <span>loading</span>;
+
+  const websiteFull = details ? details.result.website : 'loading';
+  let website;
+  if (websiteFull) {
+    const end = nthIndexOf(websiteFull, '/', 3);
+    if (end !== -1) {
+      website = websiteFull.slice(0, end + 1);
+    } else {
+      website = websiteFull;
+    }
+  } else {
+    website = 'unavailable :(';
+  }
+
   const phone = details ? details.result.formatted_phone_number : 'loading';
+  const internationalPhone = details ? details.result.international_phone_number : 'loading';
+
+  const address = details ? details.result.formatted_address : 'loading';
+  const googleUrl = details ? details.result.url : null;
+  
   return (
     <div className='restaurant-card' style={style}>
       <ImageSlider parentRef={imageSlider} images={photoUrls} style={sliderStyle} />
       <div className='restaurant-content'>
-        <h5
-          className={`restaurant-name ${collapsed ? 'collapsed' : ''}`}
-          ref={restaurantName}>
-          {restaurant.key.name}
-        </h5>
+        <div className='restaurant-header'>
+          <h5
+            className={`restaurant-name ${collapsed ? 'collapsed' : ''}`}
+            ref={restaurantName}>
+            {restaurant.key.name}
+          </h5>
+          <h5 className='restaurant-score'>
+            {Math.round(restaurant.value * 100) + '%'}
+          </h5>
+        </div>
         <RatingStars
           avgRating={restaurant.key.avgRating}
           numRatings={restaurant.key.numRatings}
@@ -140,23 +187,29 @@ function RestaurantCard(props) {
           style={{ height: collapsed ? '0px' : collapsibleMaxHeight.current + 'px' }}>
           <p className='restaurant-type'>
             {'$'.repeat(Math.max(restaurant.key.priceLevel, 1))} •{' '}
-            {restaurant.key.placeTypes.join(', ')}
+            {prettifyTags(restaurant.key.placeTypes).join(', ')}
           </p>
           <div className='restaurant-detail-container'>
             <img src={Clock} alt='Clock icon' />
-            <span>{open}</span>
+            {open}
           </div>
           <div className='restaurant-detail-container'>
             <img src={Place} alt='Place marker icon' />
-            <span>{restaurant.key.address}</span>
+            <span>
+              <a href={googleUrl} target='_blank' rel='noopener noreferrer'>{address}</a>
+            </span>
           </div>
           <div className='restaurant-detail-container'>
             <img src={Globe} alt='Globe icon' />
-            <span>{website}</span>
+            <span className='restaurant-website'>
+              <a href={websiteFull} target='_blank' rel='noopener noreferrer'>{website}</a>
+            </span>
           </div>
           <div className='restaurant-detail-container'>
             <img src={Phone} alt='Phone icon' />
-            <span>{phone}</span>
+            <span>
+              <a href={'tel:' + internationalPhone}>{phone}</a>
+            </span>
           </div>
         </div>
       </div>
