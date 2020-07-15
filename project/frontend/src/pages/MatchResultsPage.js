@@ -1,3 +1,5 @@
+import './MatchResultsPage.css';
+
 import React, { useState, useEffect } from 'react';
 
 import getRecommendation from '../scripts/recommendation_script.js';
@@ -10,6 +12,7 @@ function MatchResultsPage(props) {
 
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentRestaurantIndex, setCurrentRestaurantIndex] = useState(0);
 
   useEffect(() => {
     getRecommendation(formState, (result) => {
@@ -21,8 +24,17 @@ function MatchResultsPage(props) {
   return [
     <div key='match-results' className='container u-full-width'>
       <div className='row'>
-        <div className='one-half column'>
-          <RestaurantCardStack restaurants={restaurants} />
+        <div className='one-half column u-pad32'>
+          <h2
+            className='your-match-header'
+            style={{opacity: currentRestaurantIndex !== 0 ? 0 : 1}}>
+            Your restaurant match is...
+          </h2>
+          <RestaurantCardStack
+            restaurants={restaurants}
+            currentCardIndex={currentRestaurantIndex}
+            setCurrentCardIndex={setCurrentRestaurantIndex}
+          />
         </div>
         <div className='one-half column'>
           <div style={{ width: '100%', height: '100%' }}>
