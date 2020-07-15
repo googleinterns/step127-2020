@@ -35,6 +35,8 @@ function RestaurantCard(props) {
 
   const collapsible = useRef(null);
   const collapsibleMaxHeight = useRef(null);
+  const imageSlider = useRef(null);
+  const imageSliderMaxHeight = useRef(null);
   const restaurantName = useRef(null);
 
   const placesService = useContext(PlacesApiContext);
@@ -51,40 +53,64 @@ function RestaurantCard(props) {
     placesService.getDetails(
       { placeId: restaurant.key.id, fields },
       (details) => {
-        setDetails({ result: details });
+        if (details) {
+          setDetails({ result: details });
+        }
       }
     );
   }, [placesService, restaurant.key.id]);
 
   useLayoutEffect(() => {
+    // Temporarily update the collapsible divs to an uncollapsed state.
+    imageSlider.current.style.transition = 'none';
+    restaurantName.current.classList.remove('collapsed');
+    collapsible.current.style.height = '';
+    imageSlider.current.style.height = '200px';
+
+    // Capture uncollapsed heights.
     collapsibleMaxHeight.current = collapsible.current.offsetHeight;
+    imageSliderMaxHeight.current = imageSlider.current.offsetHeight;
+
+    // Reset collapsible divs to their proper heights.
     if (collapsed) {
       collapsible.current.style.height = '0px';
+      imageSlider.current.style.height = '0px';
       restaurantName.current.classList.add('collapsed');
     } else {
       collapsible.current.style.height = collapsibleMaxHeight.current + 'px';
+      imageSlider.current.style.height = imageSliderMaxHeight.current + 'px';
     }
-    // We only want this effect to run once (the very first time this component
-    // is laid out) so that we may capture the uncollapsed height of the collapsible
-    // div within this card and save it to a persistent ref (collapsibleMaxHeight).
+
+    // We need to calculate the offsetHeight of the imageSlider here so that
+    // the following line adding the transition animation back to the imageSlider
+    // does not get batched with the previous update to the imageSlider height
+    // and cause an unwanted animation to play.
+    // 
+    // eslint-disable-next-line no-unused-vars
+    const ignore = imageSlider.current.offsetHeight;
+    imageSlider.current.style.transition = 'height 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
+    
+    // We only want this effect to run twice (the very first time this component
+    // is laid out and when the details of this restaurant are updated) so that
+    // we may capture the uncollapsed heights of the collapsible divs within this
+    // card and save it to a persistent ref (collapsibleMaxHeight and imageSliderMaxHeight).
+    // 
     // Adding `collapsed` to the dependency array below, as eslint would have us do,
     // would cause the value of `collapsibleMaxHeight` to be updated to 0px when the
-    // card goes from a collapsed -> uncollapsed state.
+    // card goes from a collapsed -> uncollapsed state and would cause this effect to
+    // be run more than is necessary.
+    //
+    // This is all necessary to avoid hardcoding the maximum height of the collapsible
+    // elements, as their height may vary due to word wrapping within the collapsible
+    // elements (e.g. long addresses or website urls).
     //
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [details]);
 
-  // On the first render event of this component, the collapsible elements will be
-  // rendered with their default full heights (style.height = '') regardless of whether
-  // `collapsed` is true or false. This allows the full height to be captured in the
-  // above layoutEffect before this component is painted to the screen. The layoutEffect
-  // also updates the collapsible elements height according to the value of `collapsed`
-  // before painting so there is no flicker even though an initially collapsed card will
-  // be first rendered at full height.
-  //
-  // This is all necessary to avoid hardcoding the maximum height of the collapsible
-  // elements, as their height may vary due to word wrapping within the collapsible
-  // elements (e.g. long addresses or website urls).
+  const sliderStyle = {
+    height: collapsed ? '0px' : imageSliderMaxHeight.current + 'px',
+    transition: 'height 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)',
+  };
   const photoUrls = details
     ? details.result.photos.map((photo) => photo.getUrl({ maxWidth: 344 }))
     : ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
@@ -97,12 +123,10 @@ function RestaurantCard(props) {
   const phone = details ? details.result.formatted_phone_number : 'loading';
   return (
     <div className='restaurant-card' style={style}>
-      <ImageSlider images={photoUrls} collapsed={collapsed} />
+      <ImageSlider parentRef={imageSlider} images={photoUrls} style={sliderStyle} />
       <div className='restaurant-content'>
         <h5
-          className={`restaurant-name ${
-            collapsed && collapsibleMaxHeight.current ? 'collapsed' : ''
-          }`}
+          className={`restaurant-name ${collapsed ? 'collapsed' : ''}`}
           ref={restaurantName}>
           {restaurant.key.name}
         </h5>
@@ -113,13 +137,7 @@ function RestaurantCard(props) {
         <div
           ref={collapsible}
           className='restaurant-collapsible'
-          style={{
-            height: !collapsibleMaxHeight.current
-              ? ''
-              : collapsed
-              ? '0px'
-              : collapsibleMaxHeight.current + 'px',
-          }}>
+          style={{ height: collapsed ? '0px' : collapsibleMaxHeight.current + 'px' }}>
           <p className='restaurant-type'>
             {'$'.repeat(Math.max(restaurant.key.priceLevel, 1))} •{' '}
             {restaurant.key.placeTypes.join(', ')}
