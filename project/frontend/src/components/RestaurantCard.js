@@ -55,7 +55,7 @@ function RestaurantCard(props) {
   const [details, setDetails] = useState(null);
 
   const placesService = useContext(PlacesApiContext);
-  
+
   useEffect(() => {
     const fields = [
       'url',
@@ -76,7 +76,7 @@ function RestaurantCard(props) {
       }
     );
   }, [placesService, restaurant.key.id]);
-  
+
   const collapsible = useRef(null);
   const collapsibleMaxHeight = useRef(null);
   const imageSlider = useRef(null);
@@ -108,16 +108,17 @@ function RestaurantCard(props) {
     // the following line adding the transition animation back to the imageSlider
     // does not get batched with the previous update to the imageSlider height
     // and cause an unwanted animation to play.
-    // 
+    //
     // eslint-disable-next-line no-unused-vars
     const ignore = imageSlider.current.offsetHeight;
-    imageSlider.current.style.transition = 'height 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
-    
+    imageSlider.current.style.transition =
+      'height 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
+
     // We only want this effect to run twice (the very first time this component
     // is laid out and when the details of this restaurant are updated) so that
     // we may capture the uncollapsed heights of the collapsible divs within this
     // card and save it to a persistent ref (collapsibleMaxHeight and imageSliderMaxHeight).
-    // 
+    //
     // Adding `collapsed` to the dependency array below, as eslint would have us do,
     // would cause the value of `collapsibleMaxHeight` to be updated to 0px when the
     // card goes from a collapsed -> uncollapsed state and would cause this effect to
@@ -138,11 +139,15 @@ function RestaurantCard(props) {
     ? details.result.photos.map((photo) => photo.getUrl({ maxWidth: 344 }))
     : ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
 
-  const open = details
-    ? details.result.opening_hours.isOpen()
-      ? <span className='restaurant-open-text'>Open.</span>
-      : <span className='restaurant-closed-text'>Closed.</span>
-    : <span>loading</span>;
+  const open = details ? (
+    details.result.opening_hours.isOpen() ? (
+      <span className='restaurant-open-text'>Open.</span>
+    ) : (
+      <span className='restaurant-closed-text'>Closed.</span>
+    )
+  ) : (
+    <span>loading</span>
+  );
 
   const websiteFull = details ? details.result.website : 'loading';
   let website;
@@ -158,14 +163,20 @@ function RestaurantCard(props) {
   }
 
   const phone = details ? details.result.formatted_phone_number : 'loading';
-  const internationalPhone = details ? details.result.international_phone_number : 'loading';
+  const internationalPhone = details
+    ? details.result.international_phone_number
+    : 'loading';
 
   const address = details ? details.result.formatted_address : 'loading';
   const googleUrl = details ? details.result.url : null;
-  
+
   return (
     <div className='restaurant-card' style={style}>
-      <ImageSlider parentRef={imageSlider} images={photoUrls} style={sliderStyle} />
+      <ImageSlider
+        parentRef={imageSlider}
+        images={photoUrls}
+        style={sliderStyle}
+      />
       <div className='restaurant-content'>
         <div className='restaurant-header'>
           <h5
@@ -184,7 +195,9 @@ function RestaurantCard(props) {
         <div
           ref={collapsible}
           className='restaurant-collapsible'
-          style={{ height: collapsed ? '0px' : collapsibleMaxHeight.current + 'px' }}>
+          style={{
+            height: collapsed ? '0px' : collapsibleMaxHeight.current + 'px',
+          }}>
           <p className='restaurant-type'>
             {'$'.repeat(Math.max(restaurant.key.priceLevel, 1))} •{' '}
             {prettifyTags(restaurant.key.placeTypes).join(', ')}
@@ -196,13 +209,17 @@ function RestaurantCard(props) {
           <div className='restaurant-detail-container'>
             <img src={Place} alt='Place marker icon' />
             <span>
-              <a href={googleUrl} target='_blank' rel='noopener noreferrer'>{address}</a>
+              <a href={googleUrl} target='_blank' rel='noopener noreferrer'>
+                {address}
+              </a>
             </span>
           </div>
           <div className='restaurant-detail-container'>
             <img src={Globe} alt='Globe icon' />
             <span className='restaurant-website'>
-              <a href={websiteFull} target='_blank' rel='noopener noreferrer'>{website}</a>
+              <a href={websiteFull} target='_blank' rel='noopener noreferrer'>
+                {website}
+              </a>
             </span>
           </div>
           <div className='restaurant-detail-container'>
