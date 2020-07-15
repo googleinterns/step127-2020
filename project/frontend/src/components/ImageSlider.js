@@ -126,7 +126,7 @@ function reducer(previous, action) {
  *
  * @param {!Array<string>} props.images An array of image URLs pointing to the
  *     images that should be displayed in this slider.
- * @param {?Object<string, *>} props.parentRef An optional ref to the parent 
+ * @param {?Object<string, *>} props.parentRef An optional ref to the parent
  *     container of this component.
  * @param {?Object<string, *>} props.style An optional style object to be applied
  *     to the parent container of this component.
