@@ -2,7 +2,7 @@ export default function getRecommendation(preferences, callback) {
   const promises = makePromisesArray(preferences);
 
   Promise.all(promises)
-    // This gives us the list of restaurants.
+    // Gives us the list of restaurants.
     .then((responses) =>
       Promise.all(responses.map((response) => response.json()))
     )

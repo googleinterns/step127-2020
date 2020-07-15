@@ -115,7 +115,7 @@ public final class RestaurantScorer {
 
   /** 
    * Skews ratings so that ratings with a lower number of ratings are weighed less. 
-   * Averages the ratings with numInitialRatings dummy ratings worth 3 points.
+   * Averages the restaurant's ratings with numInitialRatings dummy ratings worth 3 points.
    * numInitialRatings is a fraction of the mean so that it doesn't heavily affect restaurants near the average number of ratings.
    */
   private static double calculateRatingScore(
