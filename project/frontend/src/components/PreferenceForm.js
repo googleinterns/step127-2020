@@ -1,5 +1,4 @@
 import React from 'react';
-import LocationFinder from './LocationFinder.js';
 
 import { Slider } from 'rsuite';
 
@@ -28,7 +27,6 @@ class PreferenceForm extends React.Component {
     };
     this.changeState = this.changeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.getLocationData = this.getLocationData.bind(this);
   }
 
   // Updates the state of the input element so it holds the chosen value.
@@ -40,9 +38,6 @@ class PreferenceForm extends React.Component {
       this.setState({ [event.target.name]: cuisineList });
     } else if (event.target.name === 'open') {
       this.setState({ [event.target.name]: event.target.checked });
-    } else if (event.target.name === 'currLocation' && event.target.value) {
-      field[event.target.id] = parseFloat(event.target.value);
-      this.setState({ [event.target.name]: field });
     } else {
       field['pref'] =
         event.target.name === 'diningExp'
@@ -56,10 +51,6 @@ class PreferenceForm extends React.Component {
     const field = this.state[attrName];
     field['weight'] = value;
     this.setState({ [attrName]: field });
-  }
-
-  getLocationData(data) {
-    this.setState({ currLocation: data.currLocation });
   }
 
   getSlider(attrName) {
@@ -81,6 +72,11 @@ class PreferenceForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    const { currLocation } = this.state;
+    currLocation['lat'] = this.props.history.location.currLocation.lat;
+    currLocation['lng'] = this.props.history.location.currLocation.lng;
+    this.setState({ currLocation });
+    console.log(this.state);
     this.props.history.push({
       pathname: '/match-results',
       state: this.state,
@@ -103,8 +99,7 @@ class PreferenceForm extends React.Component {
     const prices = { Low: 1, Medium: 2, High: 3, 'Very High': 4 };
     return (
       <form onSubmit={this.handleSubmit}>
-        <label htmlFor='location-finder'>Search for your location here
-        <LocationFinder sendData={this.getLocationData} /></label>
+        <p>Your current location: {this.props.history.location.locationName}</p>
         <label htmlFor='cuisine'>
           What cuisine?
           <select

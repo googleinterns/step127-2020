@@ -54,7 +54,9 @@ class LocationFinder extends React.Component {
           <input name='userInput' onChange={this.changeState} />
           <button onClick={this.handleSubmit}>Find Location</button>
         </form>
-        {this.state.submitted ? <p>Your current location: {this.state.locationName}</p> : null}
+        {this.state.submitted ? (
+          <p>Your current location: {this.state.locationName}</p>
+        ) : null}
       </div>
     );
   }
