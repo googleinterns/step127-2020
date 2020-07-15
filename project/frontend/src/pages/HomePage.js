@@ -23,6 +23,12 @@ function HomePage(props) {
     toggleLocationForm();
   };
 
+  const handleData = (data) => {
+    if (data) {
+      props.history.push(data);
+    }
+  };
+
   return [
     <div key='home-page' className='container u-full-width'>
       <div className='row'>
@@ -106,7 +112,7 @@ function HomePage(props) {
       centerHorizontal={true}
       top='64px'
       bottom='64px'>
-      <LocationFinder sendData={(data) => props.history.push(data)} />
+      <LocationFinder sendData={handleData} />
       <button
         disabled={!Boolean(props.history.location.currLocation)}
         onClick={handleClick}>

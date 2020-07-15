@@ -18,7 +18,10 @@ class LocationFinder extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.getLocation(this.state.userInput);
+    const locationData = this.getLocation(this.state.userInput);
+    if (locationData) {
+      this.props.sendData(locationData);
+    }
   }
 
   getLocation(userInput) {
@@ -35,15 +38,16 @@ class LocationFinder extends React.Component {
     })
       .then((response) => response.json())
       .then((location) => {
-        if (!location) {
+        if (location.error_message) {
           alert('Could not find any results for that location.');
-          return;
+          return false;
         }
         const currLocation = location.results[0].geometry.location;
         const locationName = location.results[0].formatted_address;
         this.setState({ locationName });
         this.setState({ submitted: true });
-        this.props.sendData({ currLocation, locationName });
+        
+        return { currLocation, locationName };
       });
   }
 
