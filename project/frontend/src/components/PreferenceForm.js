@@ -76,7 +76,6 @@ class PreferenceForm extends React.Component {
     currLocation['lat'] = this.props.history.location.currLocation.lat;
     currLocation['lng'] = this.props.history.location.currLocation.lng;
     this.setState({ currLocation });
-    console.log(this.state);
     this.props.history.push({
       pathname: '/match-results',
       state: this.state,

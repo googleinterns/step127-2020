@@ -1,5 +1,4 @@
 import React from 'react';
-import { GoogleApiWrapper } from 'google-maps-react';
 
 class LocationFinder extends React.Component {
   constructor(props) {
@@ -12,6 +11,7 @@ class LocationFinder extends React.Component {
     this.changeState = this.changeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.geolocate = this.geolocate.bind(this);
+    this.getLocation = this.getLocation.bind(this);
   }
 
   changeState(event) {
@@ -20,10 +20,12 @@ class LocationFinder extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const locationData = this.getLocation(this.state.userInput);
-    if (locationData) {
-      this.props.sendData(locationData);
-    }
+    this.getLocation(this.state.userInput, (locationData) => {
+      if (locationData) {
+        this.props.sendData(locationData);
+      }
+    });
+    
   }
 
   geolocate() {
@@ -53,31 +55,23 @@ class LocationFinder extends React.Component {
     }
   }
 
-  getLocation(userInput) {
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const geocodeBaseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?';
-    const searchParams = new URLSearchParams();
-    searchParams.append('address', userInput);
-    searchParams.append('key', process.env.REACT_APP_GOOGLE_API_KEY);
-    fetch(proxyUrl + geocodeBaseUrl + searchParams, {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((location) => {
-        if (location.error_message) {
-          alert('Could not find any results for that location.');
-          return false;
-        }
-        const currLocation = location.results[0].geometry.location;
-        const locationName = location.results[0].formatted_address;
+  getLocation(userInput, callback) {
+    const google = window.google;
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: userInput }, (results, status) => {
+      if (status === 'OK') {
+        const currLocation = { 
+          lat: results[0].geometry.location.lat(), 
+          lng: results[0].geometry.location.lng(),
+         };
+        const locationName = results[0].formatted_address;
         this.setState({ locationName });
         this.setState({ submitted: true });
-        
-        return { currLocation, locationName };
-      });
+        callback({ currLocation, locationName });
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
   }
 
   render() {
