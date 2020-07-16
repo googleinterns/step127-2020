@@ -145,8 +145,7 @@ function RestaurantCard(props) {
     if (details.result.opening_hours) {
       if (details.result.opening_hours.isOpen()) {
         open = <span className='restaurant-open-text'>Open.</span>;
-      }
-      else {
+      } else {
         open = <span className='restaurant-closed-text'>Closed.</span>;
       }
     } else {
