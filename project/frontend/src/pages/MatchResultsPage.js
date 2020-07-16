@@ -4,10 +4,6 @@ import Modal from '../components/Modal.js';
 import React, { useState, useEffect } from 'react';
 
 function MatchResultsPage(props) {
-  // Form state is in `props.location.state`.
-  // this is going to have the users location here
-  // send current location in the map container and initialize that in here
-  // copy over the current restaurant index state
   const formState = props.location.state;
   const userLocation = formState.currLocation;
 
