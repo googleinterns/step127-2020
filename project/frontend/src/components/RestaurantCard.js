@@ -65,6 +65,7 @@ function RestaurantCard(props) {
       'photos',
       'website',
       'opening_hours',
+      'utc_offset_minutes',
       'name',
     ];
     placesService.getDetails(
