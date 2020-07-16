@@ -3,27 +3,10 @@ import GoogleMapReact from 'google-map-react';
 import Lunch from '../assets/lunch.svg';
 
 function MapContainer(props) {
-  const [activeMarker, setActiveMarker] = useState({});
-  const [showInfoWindow, setShowInfoWindow] = useState(false);
-  const [infoWindowNumber, setInfoWindowNumber] = useState('');
-  const [displayName, setDisplayName] = useState('');
-
   const restaurants = props.restaurants;
   const userCenter = props.userLocation;
-  let nameList = [];
 
   const MarkerIcon = () => <img src={Lunch} alt='Lunch icon' />;
-
-  const onMouseOverMarker = (props, marker) => {
-    setActiveMarker(marker);
-    setShowInfoWindow(true);
-    setInfoWindowNumber(marker.id);
-    setDisplayName(nameList[marker.id - 1]);
-  };
-
-  const onMouseOutMarker = () => {
-    setShowInfoWindow(false);
-  };
 
   const createMarkers = () => {
     if (!restaurants) {
@@ -36,8 +19,6 @@ function MapContainer(props) {
       const numInList = (i + 1).toString();
       markers.push(
         <MarkerIcon
-          onMouseover={onMouseOverMarker}
-          onMouseout={onMouseOutMarker}
           lat={coords.lat}
           lng={coords.lng}
           id={numInList}
