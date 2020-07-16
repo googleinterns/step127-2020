@@ -33,24 +33,25 @@ function MapContainer(props) {
   };
 
   const createMarkers = () => {
-    if (restaurants.length >= 1) {
-      let markers = [];
-      const numOfMarkers = Math.min(restaurants.length, 4);
-      for (let i = 0; i < numOfMarkers; i++) {
-        const coords = restaurants[i].key.latLngCoords;
-        const numInList = (i + 1).toString();
-        markers.push(
-          <MarkerIcon
-            onMouseover={onMouseOverMarker}
-            onMouseout={onMouseOutMarker}
-            lat={coords.lat}
-            lng={coords.lng}
-            id={numInList}
-            name={'Your #' + numInList + ' Match'}
-            aria-label={'Your #' + numInList + ' Match'}
-          />
-        );
-      }
+    if (!restaurants) {
+      return;
+    }
+    let markers = [];
+    const numOfMarkers = Math.min(restaurants.length, 4);
+    for (let i = 0; i < numOfMarkers; i++) {
+      const coords = restaurants[i].key.latLngCoords;
+      const numInList = (i + 1).toString();
+      markers.push(
+        <MarkerIcon
+          onMouseover={onMouseOverMarker}
+          onMouseout={onMouseOutMarker}
+          lat={coords.lat}
+          lng={coords.lng}
+          id={numInList}
+          name={'Your #' + numInList + ' Match'}
+          aria-label={'Your #' + numInList + ' Match'}
+        />
+      );
       return markers;
     }
   };
