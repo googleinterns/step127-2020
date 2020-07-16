@@ -89,12 +89,14 @@ function makePromisesArray(preferences) {
       searchParams.append('opennow', open);
     }
     searchParams.append('key', process.env.REACT_APP_GOOGLE_API_KEY);
-    promises.push(fetch(proxyUrl + nearbySearchBaseUrl + searchParams, {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-      },
-    }));
+    promises.push(
+      fetch(proxyUrl + nearbySearchBaseUrl + searchParams, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+      })
+    );
   }
   return promises;
 }
