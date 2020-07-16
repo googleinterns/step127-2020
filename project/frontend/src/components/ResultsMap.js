@@ -11,34 +11,37 @@ function MapContainer(props) {
   const [activeMarker, setActiveMarker] = useState({});
   const [showInfoWindow, setShowInfoWindow] = useState(false);
   // TODO: add a conditional to check if the list is empty
-  const restaurant = props.restaurant;
-  const matchCoords = restaurant[0].key.latLngCoords;
+  const restaurants = props.restaurants;
+  const userCenter = props.userLocation;
 
   const onMarkerClick = (props, marker) => {
     setActiveMarker(marker);
     setShowInfoWindow(true);
   };
 
-  const onClose = (props) => {
+  const onClose = () => {
     if (showInfoWindow) {
       setShowInfoWindow(false);
     }
   };
 
   const createMarkers = () => {
-    let markers = [];
-    const numOfMarkers = 4;
-    for (let i = 0; i < numOfMarkers; i++) {
-      const coords = restaurant[i].key.latLngCoords;
-      markers.push(
-        <Marker
-          onClick={onMarkerClick}
-          position={coords}
-          name={'Your #' + toString(i + 1) + ' Match'}
-        />
-      );
+    if (restaurants.length >= 1) {
+      let markers = [];
+      const numOfMarkers = Math.min(restaurants.length, 4);
+      for (let i = 0; i < numOfMarkers; i++) {
+        const coords = restaurants[i].key.latLngCoords;
+        markers.push(
+          <Marker
+            onClick={onMarkerClick}
+            position={coords}
+            name={'Your #' + toString(i + 1) + ' Match'}
+            aria-label={'Your #' + toString(i + 1) + ' Match'}
+          />
+        );
+      }
+      return markers;
     }
-    return markers;
   };
 
   return (
@@ -47,7 +50,7 @@ function MapContainer(props) {
       google={props.google}
       zoom={10}
       style={mapStyle}
-      initialCenter={matchCoords}>
+      initialCenter={userCenter}>
       {createMarkers()}
       <InfoWindow
         marker={activeMarker}
