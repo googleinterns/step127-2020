@@ -9,8 +9,6 @@ function MatchResultsPage(props) {
   // send current location in the map container and initialize that in here
   // copy over the current restaurant index state
   const formState = props.location.state;
-  console.log('yada yada');
-  console.log(formState);
   const userLocation = formState.currLocation;
 
   const [restaurants, setRestaurants] = useState([]);
