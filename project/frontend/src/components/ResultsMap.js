@@ -10,12 +10,18 @@ const mapStyle = {
 function MapContainer(props) {
   const [activeMarker, setActiveMarker] = useState({});
   const [showInfoWindow, setShowInfoWindow] = useState(false);
+  const [infoWindowNumber, setInfoWindowNumber] = useState('');
   const restaurants = props.restaurants;
   const userCenter = props.userLocation;
 
-  const onMarkerClick = (props, marker) => {
+  const onMouseOverMarker = (props, marker) => {
     setActiveMarker(marker);
     setShowInfoWindow(true);
+    setInfoWindowNumber(marker.id);
+  };
+
+  const onMouseOutMarker = () => {
+    setShowInfoWindow(false);
   };
 
   const onClose = () => {
@@ -30,12 +36,15 @@ function MapContainer(props) {
       const numOfMarkers = Math.min(restaurants.length, 4);
       for (let i = 0; i < numOfMarkers; i++) {
         const coords = restaurants[i].key.latLngCoords;
+        const numInList = (i + 1).toString();
         markers.push(
           <Marker
-            onClick={onMarkerClick}
+            onMouseover={onMouseOverMarker}
+            onMouseout={onMouseOutMarker}
             position={coords}
-            name={'Your #' + toString(i + 1) + ' Match'}
-            aria-label={'Your #' + toString(i + 1) + ' Match'}
+            id={numInList}
+            name={'Your #' + numInList + ' Match'}
+            aria-label={'Your #' + numInList + ' Match'}
           />
         );
       }
@@ -57,7 +66,7 @@ function MapContainer(props) {
         onClose={onClose}
         aria-label={'Your #1 Match Info Window'}>
         <div>
-          <h5>{'Your #1 Match'}</h5>
+          <h5>{'#' + infoWindowNumber}</h5>
         </div>
       </InfoWindow>
     </Map>
