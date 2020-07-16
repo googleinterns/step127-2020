@@ -1,21 +1,29 @@
-import { GoogleApiWrapper, InfoWindow, Map, Marker } from 'google-maps-react';
+// import { GoogleApiWrapper, InfoWindow, Map, Marker } from 'google-maps-react';
 import React, { useState } from 'react';
-
-const mapStyle = {
-  border: 'thin solid black',
-  height: '100%',
-  width: '100%',
-};
+import GoogleMapReact from 'google-map-react';
+import Lunch from '../assets/lunch.svg';
 
 function MapContainer(props) {
   const [activeMarker, setActiveMarker] = useState({});
   const [showInfoWindow, setShowInfoWindow] = useState(false);
+  const [infoWindowNumber, setInfoWindowNumber] = useState('');
+  const [displayName, setDisplayName] = useState('');
+
   const restaurants = props.restaurants;
   const userCenter = props.userLocation;
+  let nameList = [];
 
-  const onMarkerClick = (props, marker) => {
+  const MarkerIcon = () => <img src={Lunch} alt='Lunch icon' />;
+
+  const onMouseOverMarker = (props, marker) => {
     setActiveMarker(marker);
     setShowInfoWindow(true);
+    setInfoWindowNumber(marker.id);
+    setDisplayName(nameList[marker.id - 1]);
+  };
+
+  const onMouseOutMarker = () => {
+    setShowInfoWindow(false);
   };
 
   const onClose = () => {
@@ -30,40 +38,32 @@ function MapContainer(props) {
       const numOfMarkers = Math.min(restaurants.length, 4);
       for (let i = 0; i < numOfMarkers; i++) {
         const coords = restaurants[i].key.latLngCoords;
+        const numInList = (i + 1).toString();
         markers.push(
-          <Marker
-            onClick={onMarkerClick}
-            position={coords}
-            name={'Your #' + toString(i + 1) + ' Match'}
-            aria-label={'Your #' + toString(i + 1) + ' Match'}
+          <MarkerIcon
+            onMouseover={onMouseOverMarker}
+            onMouseout={onMouseOutMarker}
+            lat={coords.lat}
+            lng={coords.lng}
+            id={numInList}
+            name={'Your #' + numInList + ' Match'}
+            aria-label={'Your #' + numInList + ' Match'}
           />
         );
       }
       return markers;
     }
   };
-
+  const mapStyle = { height: '100%', width: '50%' };
   return (
-    <Map
-      aria-label={'A Google Map with your Matches!'}
-      google={props.google}
-      zoom={10}
-      style={mapStyle}
-      initialCenter={userCenter}>
+    <GoogleMapReact
+      bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
+      defaultCenter={userCenter}
+      defaultZoom={10}
+      style={mapStyle}>
       {createMarkers()}
-      <InfoWindow
-        marker={activeMarker}
-        visible={showInfoWindow}
-        onClose={onClose}
-        aria-label={'Your #1 Match Info Window'}>
-        <div>
-          <h5>{'Your #1 Match'}</h5>
-        </div>
-      </InfoWindow>
-    </Map>
+    </GoogleMapReact>
   );
 }
 
-export default GoogleApiWrapper({
-  apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-})(MapContainer);
+export default MapContainer;
