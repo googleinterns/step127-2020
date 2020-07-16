@@ -20,14 +20,8 @@ function MatchResultsPage(props) {
     getRecommendation(formState, (result) => {
       setRestaurants(result);
       setLoading(false);
-      console.log('ha');
-      console.log(result);
     });
   }, [formState]);
-  console.log('boom');
-  console.log(restaurants);
-
-  // make a conditional so that map container is made only when
 
   return [
     <Modal key='loading-modal' open={loading} center={true}>
