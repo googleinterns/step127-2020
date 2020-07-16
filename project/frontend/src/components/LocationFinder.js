@@ -30,25 +30,20 @@ class LocationFinder extends React.Component {
 
   geolocate() {
     if (navigator.geolocation) {
+      const google = window.google;
+      const geocoder = new google.maps.Geocoder();
       navigator.geolocation.getCurrentPosition((position) => {
         const currLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
-        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-        const geolocationBaseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?';
-        const searchParams = new URLSearchParams();
-        searchParams.append('latlng', currLocation.lat + ',' + currLocation.lng);
-        searchParams.append('key', process.env.REACT_APP_GOOGLE_API_KEY);
-        fetch(proxyUrl + geolocationBaseUrl + searchParams)
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.results) {
-              const locationName = data.results[0].formatted_address;
-              this.setState({ locationName });
-              this.setState({ submitted: true });
-              this.props.sendData({ currLocation, locationName });
-            } else {
-              alert('Cannot find your location');
-            }
-          });
+        geocoder.geocode({ location: currLocation }, (results, status) => {
+          if (status == 'OK') {
+            const locationName = results[0].formatted_address;
+            this.setState({ locationName });
+            this.setState({ submitted: true });
+            this.props.sendData({ currLocation, locationName });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
       });
     } else {
       alert('Cannot find your location');
