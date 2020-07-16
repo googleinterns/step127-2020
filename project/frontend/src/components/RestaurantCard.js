@@ -140,15 +140,21 @@ function RestaurantCard(props) {
     ? details.result.photos.map((photo) => photo.getUrl({ maxWidth: 344 }))
     : ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
 
-  const open = details ? (
-    details.result.opening_hours.isOpen() ? (
-      <span className='restaurant-open-text'>Open.</span>
-    ) : (
-      <span className='restaurant-closed-text'>Closed.</span>
-    )
-  ) : (
-    <span>loading</span>
-  );
+  let open;
+  if (details) {
+    if (details.result.opening_hours) {
+      if (details.result.opening_hours.isOpen()) {
+        open = <span className='restaurant-open-text'>Open.</span>;
+      }
+      else {
+        open = <span className='restaurant-closed-text'>Closed.</span>;
+      }
+    } else {
+      open = <span>unavailable. :(</span>;
+    }
+  } else {
+    open = <span>loading</span>;
+  }
 
   const websiteFull = details ? details.result.website : 'loading';
   let website;
