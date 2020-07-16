@@ -21,8 +21,7 @@ class LocationFinder extends React.Component {
    * Uses Geolocation to get the user's current coordinates.
    * Gets formatted address to display from Geocoder.
    */
-  getLocationFromGeolocate(event) {
-    event.preventDefault();
+  getLocationFromGeolocate() {
     if (navigator.geolocation) {
       const google = window.google;
       const geocoder = new google.maps.Geocoder();
@@ -70,9 +69,7 @@ class LocationFinder extends React.Component {
   render() {
     return (
       <div>
-        <form  id='get-curr-location-form' onSubmit={this.getLocationFromGeolocate}>
-          <button type='submit'>Use My Current Location</button>
-        </form>
+        <button onClick={this.getLocationFromGeolocate}>Use My Current Location</button>
         <form id='get-input-location-form' onSubmit={this.getLocationFromText}>
           <input name='userInput' onChange={this.changeState} />
           <button type='submit'>Find Location</button>
