@@ -17,7 +17,7 @@ public final class JsonToRestaurantParser {
   public static Restaurant toRestaurant(JSONObject body) throws JSONException {
     String id = body.getString("place_id");
     String name = body.getString("name");
-    String address = body.getString("formatted_address");
+    String address = body.getString("vicinity");
     String stringifiedLocation =
         body.getJSONObject("geometry").getJSONObject("location").toString();
     Map<String, Double> latLngCoords = new Gson().fromJson(stringifiedLocation, HashMap.class);

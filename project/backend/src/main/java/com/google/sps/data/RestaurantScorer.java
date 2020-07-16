@@ -19,7 +19,14 @@ public final class RestaurantScorer {
   /** Class should not be instantiated. */
   private RestaurantScorer() {}
 
-  /** Returns the percent match for a restaurant to a set of user preferences. */
+  /**
+   * Returns the percent match for a restaurant to a set of user preferences.
+   * Awards points based on the weighting of each field:
+   * For price level and dining experience, awards the weight if it matches, else none.
+   * For radius, awards weight if it matches, else subtracts from the score proportionally to how
+   * far out of range the place is. Adds or subtracts a max of 1 point from the score for ratings
+   * based on how good they are (see decription for calculateRatingScore).
+   */
   public static double score(Restaurant restaurant, JSONObject preferences,
       DescriptiveStatistics statistics) throws JSONException {
     double score = 0;
@@ -107,14 +114,19 @@ public final class RestaurantScorer {
     return numMeters / 1609.34;
   }
 
-  /** Skews ratings so that ratings with a lower number of ratings are weighed less. */
+  /**
+   * Skews ratings so that ratings with a lower number of ratings are weighed less.
+   * Averages the restaurant's ratings with numInitialRatings dummy ratings worth 3 points.
+   * numInitialRatings is a fraction of the mean so that it doesn't heavily affect restaurants near
+   * the average number of ratings.
+   */
   private static double calculateRatingScore(
       double avgRating, int numRatings, DescriptiveStatistics statistics) {
-    int numInitialRatings = (int) Math.round(statistics.getPercentile(10));
+    int numInitialRatings = (int) Math.round(statistics.getMean() / 5);
     int totalRatings = numInitialRatings + numRatings;
     double totalPoints = numInitialRatings * MID_RATING + avgRating * numRatings;
     double weightedRating = totalPoints / totalRatings;
-    return (weightedRating - MID_RATING) / MAX_RATING;
+    return (weightedRating - MID_RATING) / (MAX_RATING - MID_RATING);
   }
 
   private static boolean isValidIntField(JSONObject obj, String key) {
