@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 
 const mapStyle = {
   border: 'thin solid black',
-  height: '500px',
-  width: '500px',
+  height: '100%',
+  width: '100%',
 };
 
 function MapContainer(props) {
