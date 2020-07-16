@@ -55,7 +55,8 @@ function MapContainer(props) {
       bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
       defaultCenter={userCenter}
       defaultZoom={10}
-      style={mapStyle}>
+      style={mapStyle}
+      aria-label={'Google Map with top 4 restaurant markers.'}>
       {createMarkers()}
     </GoogleMapReact>
   );
