@@ -1,4 +1,3 @@
-// import { GoogleApiWrapper, InfoWindow, Map, Marker } from 'google-maps-react';
 import React, { useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import Lunch from '../assets/lunch.svg';
@@ -26,12 +25,6 @@ function MapContainer(props) {
     setShowInfoWindow(false);
   };
 
-  const onClose = () => {
-    if (showInfoWindow) {
-      setShowInfoWindow(false);
-    }
-  };
-
   const createMarkers = () => {
     if (!restaurants) {
       return;
@@ -56,6 +49,7 @@ function MapContainer(props) {
     }
   };
   const mapStyle = { height: '100%', width: '50%' };
+  // TODO: add aria-labels!!
   return (
     <GoogleMapReact
       bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
