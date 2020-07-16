@@ -10,7 +10,6 @@ const mapStyle = {
 function MapContainer(props) {
   const [activeMarker, setActiveMarker] = useState({});
   const [showInfoWindow, setShowInfoWindow] = useState(false);
-  // TODO: add a conditional to check if the list is empty
   const restaurants = props.restaurants;
   const userCenter = props.userLocation;
 
