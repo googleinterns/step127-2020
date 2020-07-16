@@ -11,13 +11,16 @@ function MapContainer(props) {
   const [activeMarker, setActiveMarker] = useState({});
   const [showInfoWindow, setShowInfoWindow] = useState(false);
   const [infoWindowNumber, setInfoWindowNumber] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const restaurants = props.restaurants;
   const userCenter = props.userLocation;
+  let nameList = [];
 
   const onMouseOverMarker = (props, marker) => {
     setActiveMarker(marker);
     setShowInfoWindow(true);
     setInfoWindowNumber(marker.id);
+    setDisplayName(nameList[marker.id - 1]);
   };
 
   const onMouseOutMarker = () => {
@@ -37,6 +40,7 @@ function MapContainer(props) {
       for (let i = 0; i < numOfMarkers; i++) {
         const coords = restaurants[i].key.latLngCoords;
         const numInList = (i + 1).toString();
+        nameList.push(restaurants[i].key.name);
         markers.push(
           <Marker
             onMouseover={onMouseOverMarker}
@@ -66,7 +70,7 @@ function MapContainer(props) {
         onClose={onClose}
         aria-label={'Your #1 Match Info Window'}>
         <div>
-          <h5>{'#' + infoWindowNumber}</h5>
+          <h5>{'#' + infoWindowNumber + ': ' + displayName}</h5>
         </div>
       </InfoWindow>
     </Map>
