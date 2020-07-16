@@ -9,33 +9,27 @@ class LocationFinder extends React.Component {
       submitted: false,
     };
     this.changeState = this.changeState.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.geolocate = this.geolocate.bind(this);
-    this.getLocation = this.getLocation.bind(this);
+    this.getLocationFromGeolocate = this.getLocationFromGeolocate.bind(this);
+    this.getLocationFromText = this.getLocationFromText.bind(this);
   }
 
   changeState(event) {
     this.setState({ [event.target.name]: event.target.value });
   }
 
-  handleSubmit(event) {
+  /** 
+   * Uses Geolocation to get the user's current coordinates.
+   * Gets formatted address to display from Geocoder.
+   */
+  getLocationFromGeolocate(event) {
     event.preventDefault();
-    this.getLocation(this.state.userInput, (locationData) => {
-      if (locationData) {
-        this.props.sendData(locationData);
-      }
-    });
-    
-  }
-
-  geolocate() {
     if (navigator.geolocation) {
       const google = window.google;
       const geocoder = new google.maps.Geocoder();
       navigator.geolocation.getCurrentPosition((position) => {
         const currLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
         geocoder.geocode({ location: currLocation }, (results, status) => {
-          if (status == 'OK') {
+          if (status === 'OK') {
             const locationName = results[0].formatted_address;
             this.setState({ locationName });
             this.setState({ submitted: true });
@@ -50,10 +44,14 @@ class LocationFinder extends React.Component {
     }
   }
 
-  getLocation(userInput, callback) {
+  /**
+   * Uses Geocoder to get location information based on user input.
+   */
+  getLocationFromText(event) {
+    event.preventDefault();
     const google = window.google;
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address: userInput }, (results, status) => {
+    geocoder.geocode({ address: this.state.userInput }, (results, status) => {
       if (status === 'OK') {
         const currLocation = { 
           lat: results[0].geometry.location.lat(), 
@@ -62,7 +60,7 @@ class LocationFinder extends React.Component {
         const locationName = results[0].formatted_address;
         this.setState({ locationName });
         this.setState({ submitted: true });
-        callback({ currLocation, locationName });
+        this.props.sendData({ currLocation, locationName });
       } else {
         alert('Geocode was not successful for the following reason: ' + status);
       }
@@ -72,10 +70,12 @@ class LocationFinder extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.geolocate}>Use My Current Location</button>
-        <form onSubmit={this.handleSubmit}>
+        <form  id='get-curr-location-form' onSubmit={this.getLocationFromGeolocate}>
+          <button type='submit'>Use My Current Location</button>
+        </form>
+        <form id='get-input-location-form' onSubmit={this.getLocationFromText}>
           <input name='userInput' onChange={this.changeState} />
-          <button onClick={this.handleSubmit}>Find Location</button>
+          <button type='submit'>Find Location</button>
         </form>
         {this.state.submitted ? (
           <p>Your current location: {this.state.locationName}</p>
