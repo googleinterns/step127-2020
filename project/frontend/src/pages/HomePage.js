@@ -38,9 +38,7 @@ function HomePage(props) {
           <h4>Discover your restaurant match</h4>
           <button onClick={toggleLocationForm}>Location</button>
           <div>
-            <button
-              disabled={!locationName}
-              onClick={togglePreferenceForm}>
+            <button disabled={!locationName} onClick={togglePreferenceForm}>
               Find My Match
             </button>
             <button>Swipe Match</button>
@@ -104,10 +102,10 @@ function HomePage(props) {
       centerHorizontal={true}
       top='64px'
       bottom='64px'>
-      <PreferenceForm 
-        history={props.history} 
-        currLocation={currLocation} 
-        locationName={locationName} 
+      <PreferenceForm
+        history={props.history}
+        currLocation={currLocation}
+        locationName={locationName}
       />
     </Modal>,
     <Modal
@@ -118,9 +116,7 @@ function HomePage(props) {
       top='64px'
       bottom='64px'>
       <LocationFinder sendData={handleLocationData} />
-      <button
-        disabled={!locationName}
-        onClick={handleClick}>
+      <button disabled={!locationName} onClick={handleClick}>
         Find my match
       </button>
     </Modal>,
