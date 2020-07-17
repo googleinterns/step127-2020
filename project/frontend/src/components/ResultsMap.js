@@ -30,7 +30,6 @@ function MapContainer(props) {
     }
   };
   const mapStyle = { height: '100%', width: '50%' };
-  // TODO: add aria-labels!!
   return (
     <GoogleMapReact
       bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
