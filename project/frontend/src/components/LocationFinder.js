@@ -87,7 +87,9 @@ class LocationFinder extends React.Component {
           <MyLocation />
         </button>
         {this.state.submitted ? (
-          <p id='location-label'>Your current location: {this.state.locationName}</p>
+          <p id='location-label'>
+            Your current location: {this.state.locationName}
+          </p>
         ) : null}
       </div>
     );

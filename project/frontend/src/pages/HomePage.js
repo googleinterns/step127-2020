@@ -8,13 +8,16 @@ import LocationFinder from '../components/LocationFinder';
 
 function HomePage(props) {
   const [isPreferenceFormOpen, setIsPreferenceFormOpen] = useState(false);
+  const [currLocation, setCurrLocation] = useState({});
+  const [locationName, setLocationName] = useState('');
 
   const togglePreferenceForm = () => {
     setIsPreferenceFormOpen((prev) => !prev);
   };
 
   const handleLocationData = (locationData) => {
-    props.history.push(locationData);
+    setCurrLocation(locationData.currLocation);
+    setLocationName(locationData.locationName);
   };
 
   return [
@@ -27,9 +30,7 @@ function HomePage(props) {
             <LocationFinder sendData={handleLocationData} />
           </div>
           <div>
-            <button
-              disabled={!Boolean(props.history.location.currLocation)}
-              onClick={togglePreferenceForm}>
+            <button disabled={!locationName} onClick={togglePreferenceForm}>
               Find My Match
             </button>
             <button>Swipe Match</button>
@@ -93,7 +94,11 @@ function HomePage(props) {
       centerHorizontal={true}
       top='64px'
       bottom='64px'>
-      <PreferenceForm history={props.history} />
+      <PreferenceForm
+        history={props.history}
+        currLocation={currLocation}
+        locationName={locationName}
+      />
     </Modal>,
   ];
 }

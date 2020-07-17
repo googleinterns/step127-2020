@@ -73,9 +73,10 @@ class PreferenceForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     const { currLocation } = this.state;
-    currLocation['lat'] = this.props.history.location.currLocation.lat;
-    currLocation['lng'] = this.props.history.location.currLocation.lng;
+    currLocation['lat'] = this.props.currLocation.lat;
+    currLocation['lng'] = this.props.currLocation.lng;
     this.setState({ currLocation });
+    console.log(this.state);
     this.props.history.push({
       pathname: '/match-results',
       state: this.state,
@@ -98,7 +99,7 @@ class PreferenceForm extends React.Component {
     const prices = { Low: 1, Medium: 2, High: 3, 'Very High': 4 };
     return (
       <form onSubmit={this.handleSubmit}>
-        <p>Your current location: {this.props.history.location.locationName}</p>
+        <p>Your current location: {this.props.locationName}</p>
         <label htmlFor='cuisine'>
           What cuisine?
           <select
