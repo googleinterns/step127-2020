@@ -49,7 +49,10 @@ class LocationFinder extends React.Component {
    */
   getLocationFromGeolocate() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this.handleGeolocateSuccess, this.handleGeolocateError);
+      navigator.geolocation.getCurrentPosition(
+        this.handleGeolocateSuccess,
+        this.handleGeolocateError
+      );
     } else {
       alert(
         'Cannot find your location. Try entering a location in the text box below.'
@@ -76,9 +79,8 @@ class LocationFinder extends React.Component {
         const result = document.getElementById('error-label');
         result.innerHTML =
           'Geocode was not successful for the following reason: ' +
-            status +
-            '. Try entering a location in the text box below.'
-        ;
+          status +
+          '. Try entering a location in the text box below.';
       }
     });
   }
@@ -86,14 +88,17 @@ class LocationFinder extends React.Component {
   handleGeolocateError(error) {
     this.setState({ error: true });
     const result = document.getElementById('error-label');
-    if(error.code === 1) {
-      result.innerHTML = "You've decided not to share your position, but it's OK. We won't ask you again.";
-    } else if(error.code === 2) {
-      result.innerHTML = "The network is down or the positioning service can't be reached.";
-    } else if(error.code === 3) {
-      result.innerHTML = "The attempt timed out before it could get the location data.";
+    if (error.code === 1) {
+      result.innerHTML =
+        "You've decided not to share your position, but it's OK. We won't ask you again.";
+    } else if (error.code === 2) {
+      result.innerHTML =
+        "The network is down or the positioning service can't be reached.";
+    } else if (error.code === 3) {
+      result.innerHTML =
+        'The attempt timed out before it could get the location data.';
     } else {
-      result.innerHTML = "Geolocation failed due to unknown error.";
+      result.innerHTML = 'Geolocation failed due to unknown error.';
     }
   }
 
@@ -113,7 +118,7 @@ class LocationFinder extends React.Component {
           <p id='error-label' className='highlighted-label' />
         ) : null}
         {this.state.submitted ? (
-          <p id='location-label'className='highlighted-label' >
+          <p id='location-label' className='highlighted-label'>
             Your current location: {this.state.locationName}
           </p>
         ) : null}
