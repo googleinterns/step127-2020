@@ -27,7 +27,7 @@
   color: black;
 }
 
-#location-finder #location-label {
+#location-finder .highlighted-label {
   background-color: white;
 }
 
