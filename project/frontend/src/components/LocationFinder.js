@@ -7,10 +7,32 @@ class LocationFinder extends React.Component {
       userInput: '',
       locationName: '',
       submitted: false,
+      autocomplete: null,
     };
     this.changeState = this.changeState.bind(this);
     this.getLocationFromGeolocate = this.getLocationFromGeolocate.bind(this);
     this.getLocationFromText = this.getLocationFromText.bind(this);
+    this.handlePlaceSelect = this.handlePlaceSelect.bind(this);
+  }
+
+  componentDidMount() {
+    const google = window.google;
+    this.autocomplete = new google.maps.places.Autocomplete(
+      document.getElementById('autocomplete-input')
+    );
+    this.autocomplete.addListener('place_changed', this.handlePlaceSelect);
+  }
+
+  handlePlaceSelect() {
+    const addressObj = this.autocomplete.getPlace();
+    const locationName = addressObj.formatted_address;
+    const currLocation = {
+      lat: addressObj.geometry.location.lat(),
+      lng: addressObj.geometry.location.lng(),
+    };
+    this.setState({ locationName });
+    this.setState({ submitted: true });
+    this.props.sendData({ currLocation, locationName });
   }
 
   changeState(event) {
@@ -82,7 +104,11 @@ class LocationFinder extends React.Component {
           Use My Current Location
         </button>
         <form id='get-input-location-form' onSubmit={this.getLocationFromText}>
-          <input name='userInput' onChange={this.changeState} />
+          <input
+            id='autocomplete-input'
+            name='userInput'
+            onChange={this.changeState}
+          />
           <button type='submit'>Find Location</button>
         </form>
         {this.state.submitted ? (
