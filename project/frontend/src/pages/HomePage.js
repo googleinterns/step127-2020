@@ -108,8 +108,8 @@ function HomePage(props) {
       open={isLocationFormOpen}
       onDismiss={toggleLocationForm}
       centerHorizontal={true}
-      top='64px'
-      bottom='64px'>
+      top='264px'
+      bottom='750px'>
       <LocationFinder sendData={handleLocationData} />
       <button
         disabled={!Boolean(props.history.location.currLocation)}

@@ -1,4 +1,5 @@
 import React from 'react';
+import MyLocation from '@material-ui/icons/MyLocation';
 
 class LocationFinder extends React.Component {
   constructor(props) {
@@ -11,7 +12,6 @@ class LocationFinder extends React.Component {
     };
     this.changeState = this.changeState.bind(this);
     this.getLocationFromGeolocate = this.getLocationFromGeolocate.bind(this);
-    this.getLocationFromText = this.getLocationFromText.bind(this);
     this.handlePlaceSelect = this.handlePlaceSelect.bind(this);
   }
 
@@ -74,43 +74,18 @@ class LocationFinder extends React.Component {
     }
   }
 
-  /**
-   * Uses Geocoder to get location information based on user input.
-   */
-  getLocationFromText(event) {
-    event.preventDefault();
-    const google = window.google;
-    const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address: this.state.userInput }, (results, status) => {
-      if (status === 'OK') {
-        const currLocation = {
-          lat: results[0].geometry.location.lat(),
-          lng: results[0].geometry.location.lng(),
-        };
-        const locationName = results[0].formatted_address;
-        this.setState({ locationName });
-        this.setState({ submitted: true });
-        this.props.sendData({ currLocation, locationName });
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status);
-      }
-    });
-  }
-
   render() {
     return (
       <div>
+        <label htmlFor='autocomplete-input' />
+        <input
+          id='autocomplete-input'
+          name='userInput'
+          onChange={this.changeState}
+        />
         <button onClick={this.getLocationFromGeolocate}>
-          Use My Current Location
+          <MyLocation />
         </button>
-        <form id='get-input-location-form' onSubmit={this.getLocationFromText}>
-          <input
-            id='autocomplete-input'
-            name='userInput'
-            onChange={this.changeState}
-          />
-          <button type='submit'>Find Location</button>
-        </form>
         {this.state.submitted ? (
           <p>Your current location: {this.state.locationName}</p>
         ) : null}
