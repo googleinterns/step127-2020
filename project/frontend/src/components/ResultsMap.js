@@ -6,9 +6,11 @@ function MapContainer(props) {
   const restaurants = props.restaurants;
   const userCenter = props.userLocation;
 
+  // TODO: Add a marker for "you are here location".
   const MarkerIcon = () => <img src={Lunch} alt='Lunch icon' />;
 
   const InfoWindow = (props) => {
+    // TODO: Remove hard coded data and add name and percent match from the backend.
     const restaurantName = 'Applebees';
     const restaurantRating = 2.5;
     const cuisineType = 'American';
