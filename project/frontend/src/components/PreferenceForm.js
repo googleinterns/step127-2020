@@ -1,5 +1,8 @@
 import React from 'react';
 
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import { Slider } from 'rsuite';
 
 class PreferenceForm extends React.Component {
@@ -34,7 +37,7 @@ class PreferenceForm extends React.Component {
     const field = this.state[event.target.name];
     if (event.target.name === 'cuisine') {
       const cuisineList = this.state.cuisine;
-      cuisineList.push(event.target.value);
+      cuisineList.push(event.target.innerHTML);
       this.setState({ [event.target.name]: cuisineList });
     } else if (event.target.name === 'open') {
       this.setState({ [event.target.name]: event.target.checked });
@@ -82,7 +85,15 @@ class PreferenceForm extends React.Component {
   }
 
   render() {
-    const cuisines = ['Italian ', 'Mexican ', 'Indian '];
+    const classes = makeStyles((theme) => ({
+      root: {
+        width: 500,
+        '& > * + *': {
+          marginTop: theme.spacing(3),
+        },
+      },
+    }));
+    const cuisines = ['Italian', 'Mexican', 'Indian'];
     const distancesInMiles = {
       '1 mile': 1,
       '5 miles': 5,
@@ -99,20 +110,24 @@ class PreferenceForm extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <label htmlFor='cuisine'>
           What cuisine?
-          <select
-            className='cuisine-type'
-            name='cuisine'
-            id='cuisine'
-            onChange={this.changeState}
-            value={this.state.cuisine}
-            multiple>
-            {cuisines.map((cuisine) => (
-              <option key={cuisine} value={cuisine}>
-                {cuisine}
-              </option>
-            ))}
-            ;
-          </select>
+          <div className={classes.root}>
+            <Autocomplete
+              multiple
+              name='cuisine'
+              id='cuisine'
+              options={cuisines}
+              onChange={(_event, newCuisineList) => {
+                this.setState({ cuisine: newCuisineList });
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant='standard'
+                  placeholder='Select Cuisine Types'
+                />
+              )}
+            />
+          </div>
         </label>
         <label htmlFor='radius'>
           Distance?
