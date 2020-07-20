@@ -86,10 +86,10 @@ class LocationFinder extends React.Component {
     const result = document.getElementById('error-label');
     if (error.code === 1) {
       result.innerHTML =
-        "You've decided not to share your position, but it's OK. We won't ask you again.";
+        "You've decided not to share your location, but it's OK. We won't ask you again.";
     } else if (error.code === 2) {
       result.innerHTML =
-        "The network is down or the positioning service can't be reached.";
+        "The network is down or the location service can't be reached.";
     } else if (error.code === 3) {
       result.innerHTML =
         'The attempt timed out before it could get the location data.';
