@@ -33,8 +33,7 @@ class LocationFinder extends React.Component {
         geocoder.geocode({ location: currLocation }, (results, status) => {
           if (status === 'OK') {
             const locationName = results[0].formatted_address;
-            this.setState({ locationName });
-            this.setState({ submitted: true });
+            this.setState({ locationName, submitted: true });
             this.props.sendData({ currLocation, locationName });
           } else {
             alert(
@@ -66,8 +65,7 @@ class LocationFinder extends React.Component {
           lng: results[0].geometry.location.lng(),
         };
         const locationName = results[0].formatted_address;
-        this.setState({ locationName });
-        this.setState({ submitted: true });
+        this.setState({ locationName, submitted: true });
         this.props.sendData({ currLocation, locationName });
       } else {
         alert('Geocode was not successful for the following reason: ' + status);
