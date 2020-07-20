@@ -18,6 +18,15 @@ import Globe from '../assets/globe.svg';
 import Phone from '../assets/phone.svg';
 import Clock from '../assets/clock.svg';
 
+/**
+ * Returns the starting index of the nth instance of a given string
+ * within a specified larger string.
+ * 
+ * @param {string} haystack The string in which to search.
+ * @param {string} needle The string for which to search.
+ * @param {number} n Specifies which instance of 'needle' to find.
+ * @return {number} The starting index of the nth 'needle'.
+ */
 function nthIndexOf(haystack, needle, n) {
   let i = -1;
   while (n--) {
@@ -27,7 +36,21 @@ function nthIndexOf(haystack, needle, n) {
   return i;
 }
 
+/**
+ * A list of nondescript tags that do not need to be displayed
+ * in the RestaurantCard component.
+ *
+ * @type {!Array<string>}
+ */
 const bannedTags = ['food', 'point_of_interest', 'establishment'];
+
+/**
+ * Modifies the list of tags returned from the Places API into
+ * a more readable format.
+ * 
+ * @param {!Array<string>} tags The list of tags for a restaurant.
+ * @return {!Array<string>} An array of more readable tags.
+ */
 function prettifyTags(tags) {
   const out = [];
   for (let tag of tags) {
