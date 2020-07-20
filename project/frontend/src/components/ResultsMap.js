@@ -30,22 +30,9 @@ function MapContainer(props) {
 
     return (
       <div style={infoWindowStyle}>
-        <div style={{ fontSize: 16 }}>{restaurantName}</div>
-        <div style={{ fontSize: 14 }}>
-          <span style={{ color: 'grey' }}>{restaurantRating} </span>
-          <span style={{ color: 'orange' }}>
-            {String.fromCharCode(9733).repeat(Math.floor(restaurantRating))}
-          </span>
-          <span style={{ color: 'lightgrey' }}>
-            {String.fromCharCode(9733).repeat(5 - Math.floor(restaurantRating))}
-          </span>
-        </div>
-        <div style={{ fontSize: 14, color: 'grey' }}>{cuisineType}</div>
-        <div style={{ fontSize: 14, color: 'grey' }}>
-          {'$'.repeat(priceLevel)}
-        </div>
-        <div style={{ fontSize: 14, color: 'green' }}>
-          {isOpen ? 'Open' : 'Closed'}
+        <div style={{ fontSize: 16 }}>
+          <span style={{ float: 'right' }}>{'96%'}</span>
+          {restaurantName}
         </div>
       </div>
     );
