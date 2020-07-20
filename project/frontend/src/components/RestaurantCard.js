@@ -21,7 +21,7 @@ import Clock from '../assets/clock.svg';
 /**
  * Returns the starting index of the nth instance of a given string
  * within a specified larger string.
- * 
+ *
  * @param {string} haystack The string in which to search.
  * @param {string} needle The string for which to search.
  * @param {number} n Specifies which instance of 'needle' to find.
@@ -47,7 +47,7 @@ const bannedTags = ['food', 'point_of_interest', 'establishment'];
 /**
  * Modifies the list of tags returned from the Places API into
  * a more readable format.
- * 
+ *
  * @param {!Array<string>} tags The list of tags for a restaurant.
  * @return {!Array<string>} An array of more readable tags.
  */
