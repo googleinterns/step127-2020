@@ -41,9 +41,6 @@ class PreferenceForm extends React.Component {
       this.setState({ [event.target.name]: cuisineList });
     } else if (event.target.name === 'open') {
       this.setState({ [event.target.name]: event.target.checked });
-    } else if (event.target.name === 'currLocation' && event.target.value) {
-      field[event.target.id] = parseFloat(event.target.value);
-      this.setState({ [event.target.name]: field });
     } else {
       field['pref'] =
         event.target.name === 'diningExp'
@@ -78,6 +75,11 @@ class PreferenceForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    const { currLocation } = this.state;
+    currLocation['lat'] = this.props.currLocation.lat;
+    currLocation['lng'] = this.props.currLocation.lng;
+    this.setState({ currLocation });
+    console.log(this.state);
     this.props.history.push({
       pathname: '/match-results',
       state: this.state,
@@ -108,6 +110,7 @@ class PreferenceForm extends React.Component {
     const prices = { Low: 1, Medium: 2, High: 3, 'Very High': 4 };
     return (
       <form onSubmit={this.handleSubmit}>
+        <p>Your current location: {this.props.locationName}</p>
         <label htmlFor='cuisine'>
           What cuisine?
           <div className={classes.root}>
@@ -179,28 +182,6 @@ class PreferenceForm extends React.Component {
           <br />
           Importance
           {this.getSlider('priceLevel')}
-        </label>
-        <label htmlFor='lat'>
-          Latitude
-          <input
-            type='number'
-            id='lat'
-            name='currLocation'
-            value={this.state.lat}
-            onChange={this.changeState}
-            required
-          />
-        </label>
-        <label htmlFor='lng'>
-          Longitude
-          <input
-            type='number'
-            id='lng'
-            name='currLocation'
-            value={this.state.lng}
-            onChange={this.changeState}
-            required
-          />
         </label>
         <label htmlFor='open'>
           Open Now?
