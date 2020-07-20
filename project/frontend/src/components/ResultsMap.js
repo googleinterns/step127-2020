@@ -12,10 +12,7 @@ function MapContainer(props) {
   const InfoWindow = (props) => {
     // TODO: Remove hard coded data and add name and percent match from the backend.
     const restaurantName = 'Applebees';
-    const restaurantRating = 2.5;
-    const cuisineType = 'American';
-    const priceLevel = 3;
-    const isOpen = true;
+    const percentMatch = '96%';
     const infoWindowStyle = {
       position: 'relative',
       bottom: 150,
@@ -31,7 +28,7 @@ function MapContainer(props) {
     return (
       <div style={infoWindowStyle}>
         <div style={{ fontSize: 16 }}>
-          <span style={{ float: 'right' }}>{'96%'}</span>
+          <span style={{ float: 'right' }}>{percentMatch}</span>
           {restaurantName}
         </div>
       </div>
