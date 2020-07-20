@@ -9,12 +9,6 @@ function MapContainer(props) {
   const MarkerIcon = () => <img src={Lunch} alt='Lunch icon' />;
 
   const InfoWindow = (props) => {
-    // const { place } = {
-    //   name: 'yah',
-    //   rating: 2.5,
-    //   opening_hours: { open_now: true },
-    //   types: ['Italian'],
-    // };
     const restaurantName = 'Applebees';
     const restaurantRating = 2.5;
     const cuisineType = 'American';
