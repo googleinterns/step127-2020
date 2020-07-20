@@ -1,4 +1,5 @@
 import React from 'react';
+import MyLocation from '@material-ui/icons/MyLocation';
 
 class LocationFinder extends React.Component {
   constructor(props) {
@@ -7,10 +8,33 @@ class LocationFinder extends React.Component {
       userInput: '',
       locationName: '',
       submitted: false,
+      error: false,
+      autocomplete: null,
     };
     this.changeState = this.changeState.bind(this);
     this.getLocationFromGeolocate = this.getLocationFromGeolocate.bind(this);
-    this.getLocationFromText = this.getLocationFromText.bind(this);
+    this.handlePlaceSelect = this.handlePlaceSelect.bind(this);
+    this.handleGeolocateSuccess = this.handleGeolocateSuccess.bind(this);
+    this.handleGeolocateError = this.handleGeolocateError.bind(this);
+  }
+
+  componentDidMount() {
+    const google = window.google;
+    this.autocomplete = new google.maps.places.Autocomplete(
+      document.getElementById('autocomplete-input')
+    );
+    this.autocomplete.addListener('place_changed', this.handlePlaceSelect);
+  }
+
+  handlePlaceSelect() {
+    const addressObj = this.autocomplete.getPlace();
+    const locationName = addressObj.formatted_address;
+    const currLocation = {
+      lat: addressObj.geometry.location.lat(),
+      lng: addressObj.geometry.location.lng(),
+    };
+    this.setState({ locationName, submitted: true, error: false });
+    this.props.sendData({ currLocation, locationName });
   }
 
   changeState(event) {
@@ -23,27 +47,10 @@ class LocationFinder extends React.Component {
    */
   getLocationFromGeolocate() {
     if (navigator.geolocation) {
-      const google = window.google;
-      const geocoder = new google.maps.Geocoder();
-      navigator.geolocation.getCurrentPosition((position) => {
-        const currLocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-        geocoder.geocode({ location: currLocation }, (results, status) => {
-          if (status === 'OK') {
-            const locationName = results[0].formatted_address;
-            this.setState({ locationName, submitted: true });
-            this.props.sendData({ currLocation, locationName });
-          } else {
-            alert(
-              'Geocode was not successful for the following reason: ' +
-                status +
-                '. Try entering a location in the text box below.'
-            );
-          }
-        });
-      });
+      navigator.geolocation.getCurrentPosition(
+        this.handleGeolocateSuccess,
+        this.handleGeolocateError
+      );
     } else {
       alert(
         'Cannot find your location. Try entering a location in the text box below.'
@@ -51,40 +58,65 @@ class LocationFinder extends React.Component {
     }
   }
 
-  /**
-   * Uses Geocoder to get location information based on user input.
-   */
-  getLocationFromText(event) {
-    event.preventDefault();
+  handleGeolocateSuccess(position) {
     const google = window.google;
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address: this.state.userInput }, (results, status) => {
+    const currLocation = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+    };
+    geocoder.geocode({ location: currLocation }, (results, status) => {
       if (status === 'OK') {
-        const currLocation = {
-          lat: results[0].geometry.location.lat(),
-          lng: results[0].geometry.location.lng(),
-        };
         const locationName = results[0].formatted_address;
-        this.setState({ locationName, submitted: true });
+        this.setState({ locationName, submitted: true, error: false });
         this.props.sendData({ currLocation, locationName });
       } else {
-        alert('Geocode was not successful for the following reason: ' + status);
+        this.setState({ error: true });
+        const result = document.getElementById('error-label');
+        result.innerHTML =
+          'Geocode was not successful for the following reason: ' +
+          status +
+          '. Try entering a location in the text box below.';
       }
     });
+  }
+
+  handleGeolocateError(error) {
+    this.setState({ error: true });
+    const result = document.getElementById('error-label');
+    if (error.code === 1) {
+      result.innerHTML =
+        "You've decided not to share your location, but it's OK. We won't ask you again.";
+    } else if (error.code === 2) {
+      result.innerHTML =
+        "The network is down or the location service can't be reached.";
+    } else if (error.code === 3) {
+      result.innerHTML =
+        'The attempt timed out before it could get the location data.';
+    } else {
+      result.innerHTML = 'Geolocation failed due to unknown error.';
+    }
   }
 
   render() {
     return (
       <div>
+        <label htmlFor='autocomplete-input' />
+        <input
+          id='autocomplete-input'
+          name='userInput'
+          onChange={this.changeState}
+        />
         <button onClick={this.getLocationFromGeolocate}>
-          Use My Current Location
+          <MyLocation />
         </button>
-        <form id='get-input-location-form' onSubmit={this.getLocationFromText}>
-          <input name='userInput' onChange={this.changeState} />
-          <button type='submit'>Find Location</button>
-        </form>
+        {this.state.error ? (
+          <p id='error-label' className='highlighted-label' />
+        ) : null}
         {this.state.submitted ? (
-          <p>Your current location: {this.state.locationName}</p>
+          <p id='location-label' className='highlighted-label'>
+            Your current location: {this.state.locationName}
+          </p>
         ) : null}
       </div>
     );

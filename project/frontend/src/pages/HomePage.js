@@ -8,21 +8,11 @@ import LocationFinder from '../components/LocationFinder';
 
 function HomePage(props) {
   const [isPreferenceFormOpen, setIsPreferenceFormOpen] = useState(false);
-  const [isLocationFormOpen, setIsLocationFormOpen] = useState(false);
   const [currLocation, setCurrLocation] = useState({});
   const [locationName, setLocationName] = useState('');
 
   const togglePreferenceForm = () => {
     setIsPreferenceFormOpen((prev) => !prev);
-  };
-
-  const toggleLocationForm = () => {
-    setIsLocationFormOpen((prev) => !prev);
-  };
-
-  const handleClick = () => {
-    togglePreferenceForm();
-    toggleLocationForm();
   };
 
   const handleLocationData = (locationData) => {
@@ -36,7 +26,9 @@ function HomePage(props) {
         <div id='welcome' className='column'>
           <h1 id='logo'>[LOGO]</h1>
           <h4>Discover your restaurant match</h4>
-          <button onClick={toggleLocationForm}>Location</button>
+          <div id='location-finder'>
+            <LocationFinder sendData={handleLocationData} />
+          </div>
           <div>
             <button disabled={!locationName} onClick={togglePreferenceForm}>
               Find My Match
@@ -107,18 +99,6 @@ function HomePage(props) {
         currLocation={currLocation}
         locationName={locationName}
       />
-    </Modal>,
-    <Modal
-      key='location-form'
-      open={isLocationFormOpen}
-      onDismiss={toggleLocationForm}
-      centerHorizontal={true}
-      top='64px'
-      bottom='64px'>
-      <LocationFinder sendData={handleLocationData} />
-      <button disabled={!locationName} onClick={handleClick}>
-        Find my match
-      </button>
     </Modal>,
   ];
 }
