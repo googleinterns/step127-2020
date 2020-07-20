@@ -15,6 +15,11 @@ function MapContainer(props) {
     //   opening_hours: { open_now: true },
     //   types: ['Italian'],
     // };
+    const restaurantName = 'Applebees';
+    const restaurantRating = 2.5;
+    const cuisineType = 'American';
+    const priceLevel = 3;
+    const isOpen = true;
     const infoWindowStyle = {
       position: 'relative',
       bottom: 150,
@@ -29,20 +34,22 @@ function MapContainer(props) {
 
     return (
       <div style={infoWindowStyle}>
-        <div style={{ fontSize: 16 }}>{'Applebees'}</div>
+        <div style={{ fontSize: 16 }}>{restaurantName}</div>
         <div style={{ fontSize: 14 }}>
-          <span style={{ color: 'grey' }}>{2.5} </span>
+          <span style={{ color: 'grey' }}>{restaurantRating} </span>
           <span style={{ color: 'orange' }}>
-            {String.fromCharCode(9733).repeat(Math.floor(2.5))}
+            {String.fromCharCode(9733).repeat(Math.floor(restaurantRating))}
           </span>
           <span style={{ color: 'lightgrey' }}>
-            {String.fromCharCode(9733).repeat(5 - Math.floor(2.6))}
+            {String.fromCharCode(9733).repeat(5 - Math.floor(restaurantRating))}
           </span>
         </div>
-        <div style={{ fontSize: 14, color: 'grey' }}>{'American'}</div>
-        <div style={{ fontSize: 14, color: 'grey' }}>{'$'.repeat(3)}</div>
+        <div style={{ fontSize: 14, color: 'grey' }}>{cuisineType}</div>
+        <div style={{ fontSize: 14, color: 'grey' }}>
+          {'$'.repeat(priceLevel)}
+        </div>
         <div style={{ fontSize: 14, color: 'green' }}>
-          {true ? 'Open' : 'Closed'}
+          {isOpen ? 'Open' : 'Closed'}
         </div>
       </div>
     );
