@@ -17,10 +17,11 @@ function MapContainer(props) {
   // TODO: Add a marker for "you are here location".
   const MarkerIcon = (props) => {
     const infoNum = props.id;
+    console.log(showInfoWindows[infoNum]);
     return (
       <Fragment>
         <img src={Lunch} alt={'lunch icon'} />
-        {<InfoWindow marker={activeMarker} /> && props.show}
+        {showInfoWindows[infoNum] && <InfoWindow marker={activeMarker} />}
       </Fragment>
     );
   };
@@ -75,17 +76,15 @@ function MapContainer(props) {
 
   const onMouseEnterMarker = (props, marker) => {
     setActiveMarker(marker);
-    console.log('show infoWindows before is: ');
-    console.log(showInfoWindows);
-    let showInfoWindowsTemp = showInfoWindows;
-    showInfoWindowsTemp[marker.id] = true;
-    setShowInfoWindows(showInfoWindowsTemp);
-    console.log('show infowindows after:');
-    console.log(showInfoWindows);
+    let showInfoWindowsChange = showInfoWindows;
+    showInfoWindowsChange[marker.id] = true;
+    setShowInfoWindows(showInfoWindowsChange);
   };
 
-  const onMouseLeaveMarker = () => {
-    // setShowInfoWindow(false);
+  const onMouseLeaveMarker = (marker) => {
+    let showInfoWindowsChange = showInfoWindows;
+    showInfoWindowsChange[marker.id] = false;
+    setShowInfoWindows(showInfoWindowsChange);
   };
 
   const mapStyle = { height: '100%', width: '50%' };
@@ -95,7 +94,7 @@ function MapContainer(props) {
       defaultCenter={userCenter}
       defaultZoom={10}
       style={mapStyle}
-      onChildClick={onMouseEnterMarker}
+      onChildMouseEnter={onMouseEnterMarker}
       onChildMouseLeave={onMouseLeaveMarker}
       aria-label={'Google Map with top 4 restaurant markers.'}>
       {createMarkers()}
