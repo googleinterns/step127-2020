@@ -3,15 +3,16 @@ import './MatchResultsPage.css';
 import React, { useState, useEffect } from 'react';
 
 import getRecommendation from '../scripts/recommendation_script.js';
-// import MapContainer from '../components/ResultsMap.js';
+import MapContainer from '../components/ResultsMap.js';
 import Modal from '../components/Modal.js';
 import RestaurantCardStack from '../components/RestaurantCardStack.js';
 
 function MatchResultsPage(props) {
   const formState = props.location.state;
+  const userLocation = formState.currLocation;
 
-  const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [restaurants, setRestaurants] = useState([]);
   const [currentRestaurantIndex, setCurrentRestaurantIndex] = useState(0);
 
   useEffect(() => {
@@ -37,15 +38,13 @@ function MatchResultsPage(props) {
           />
         </div>
         <div className='one-half column'>
-          <div style={{ width: '100%', height: '100%' }}>
-            <p>MAP</p>
-          </div>
+          <MapContainer restaurants={restaurants} userLocation={userLocation} />,
         </div>
       </div>
     </div>,
     <Modal key='loading-modal' open={loading} center={true}>
       <div style={{ height: '300px', width: '300px' }}>
-        <p>Hi there your results are loading...</p>
+        <h4>Hi there your results are loading...</h4>
       </div>
     </Modal>,
   ];
