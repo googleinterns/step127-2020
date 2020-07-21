@@ -5,9 +5,34 @@ import Lunch from '../assets/lunch.svg';
 function MapContainer(props) {
   const restaurants = props.restaurants;
   const userCenter = props.userLocation;
-  const apple = 5;
 
   const MarkerIcon = () => <img src={Lunch} alt='Lunch icon' />;
+
+  const InfoWindow = (props) => {
+    // TODO: Remove hard coded data and add name and percent match from the backend.
+    const restaurantName = 'Applebees';
+    const percentMatch = '96%';
+    const infoWindowStyle = {
+      position: 'relative',
+      bottom: 80,
+      left: '-45px',
+      width: 220,
+      backgroundColor: 'white',
+      boxShadow: '0 2px 7px 1px rgba(0, 0, 0, 0.3)',
+      padding: 10,
+      fontSize: 14,
+      zIndex: 100,
+    };
+
+    return (
+      <div style={infoWindowStyle}>
+        <div style={{ fontSize: 16 }}>
+          <span style={{ float: 'right' }}>{percentMatch}</span>
+          {restaurantName}
+        </div>
+      </div>
+    );
+  };
 
   const createMarkers = () => {
     if (!restaurants) {
@@ -39,6 +64,7 @@ function MapContainer(props) {
       style={mapStyle}
       aria-label={'Google Map with top 4 restaurant markers.'}>
       {createMarkers()}
+      <InfoWindow />
     </GoogleMapReact>
   );
 }
