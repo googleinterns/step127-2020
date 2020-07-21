@@ -38,7 +38,7 @@ function MatchResultsPage(props) {
           />
         </div>
         <div className='one-half column'>
-          <MapContainer restaurants={restaurants} userLocation={userLocation} />,
+          <MapContainer restaurants={restaurants} userLocation={userLocation} />
         </div>
       </div>
     </div>,
