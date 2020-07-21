@@ -23,6 +23,14 @@
   font-weight: bold;
 }
 
+#location-finder {
+  color: black;
+}
+
+#location-finder .highlighted-label {
+  background-color: white;
+}
+
 .title {
   font-weight: bold;
   text-transform: uppercase;
