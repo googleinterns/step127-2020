@@ -28,7 +28,7 @@ function HomePage(props) {
   const goToSwipeMatch = () => {
     props.history.push({
       pathname: '/swipe-match',
-      state: { username: 'user ' + Math.floor(Math.random() * 100)},
+      state: { username: 'user ' + Math.floor(Math.random() * 100) },
     });
   };
 
@@ -45,9 +45,7 @@ function HomePage(props) {
             <button disabled={!locationName} onClick={togglePreferenceForm}>
               Find My Match
             </button>
-            <button onClick={toggleSwipeMatchForm}>
-              Swipe Match
-            </button>
+            <button onClick={toggleSwipeMatchForm}>Swipe Match</button>
           </div>
         </div>
       </div>
