@@ -12,7 +12,6 @@ function MapContainer(props) {
     false,
     false,
   ]);
-  // let showInfoWindows = [false, false, false, false];
 
   // TODO: Add a marker for "you are here location".
   const MarkerIcon = (props) => {
@@ -98,7 +97,6 @@ function MapContainer(props) {
       onChildMouseLeave={onMouseLeaveMarker}
       aria-label={'Google Map with top 4 restaurant markers.'}>
       {createMarkers()}
-      {/* {showInfoWindow && <InfoWindow marker={activeMarker} />} */}
     </GoogleMapReact>
   );
 }
