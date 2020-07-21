@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/api/swipematch")
+@WebServlet(urlPatterns = "/api/swipematch", asyncSupported = true)
 public class SwipeMatchServlet extends HttpServlet {
   private boolean running;
 
