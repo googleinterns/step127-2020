@@ -68,9 +68,6 @@ public class SwipeMatchServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     if (request.getHeader("Accept").equals("text/event-stream")) {
-      String username = request.getParameter("username");
-      queue.put(username);
-
       response.setContentType("text/event-stream");
       response.setHeader("Cache-Control", "no-cache");
       response.setHeader("Connection", "keep-alive");
@@ -106,6 +103,12 @@ public class SwipeMatchServlet extends HttpServlet {
 
       asyncContexts.put(id, asyncContext);
     }
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String username = request.getParameter("username");
+    queue.put(username);
   }
 
   private void sendUser(PrintWriter writer, String user) {
