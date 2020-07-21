@@ -80,7 +80,7 @@ function MapContainer(props) {
     setShowInfoWindows(showInfoWindowsChange);
   };
 
-  const onMouseLeaveMarker = (marker) => {
+  const onMouseLeaveMarker = (props, marker) => {
     let showInfoWindowsChange = showInfoWindows;
     showInfoWindowsChange[marker.id] = false;
     setShowInfoWindows(showInfoWindowsChange);
