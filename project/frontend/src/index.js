@@ -11,10 +11,10 @@ import Footer from './pages/Footer.js';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
 import MatchResultsPage from './pages/MatchResultsPage.js';
-
 import RestaurantCard from './components/RestaurantCard.js';
 import RestaurantCardDeck from './components/RestaurantCardDeck.js';
 import RestaurantCardStack from './components/RestaurantCardStack.js';
+import SwipeMatchPage from './pages/SwipeMatchPage.js';
 
 import * as serviceWorker from './serviceWorker';
 
@@ -52,6 +52,7 @@ ReactDOM.render(
           </Route>
 
           <Route path='/match-results' component={MatchResultsPage} />
+          <Route path='/swipe-match' component={SwipeMatchPage} />
           <Route path='/' component={HomePage} />
         </Switch>
         <Footer />
