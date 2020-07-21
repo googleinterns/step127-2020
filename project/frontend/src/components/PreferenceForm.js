@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Slider } from 'rsuite';
 
@@ -54,6 +53,24 @@ class PreferenceForm extends React.Component {
     const field = this.state[attrName];
     field['weight'] = value;
     this.setState({ [attrName]: field });
+  }
+
+  getCuisines(callback) {
+    const baseUrl = 'https://developers.zomato.com/api/v2.1/cuisines?';
+    const searchParams = new URLSearchParams();
+    searchParams.append('lat', this.props.currLocation.lat);
+    searchParams.append('lon', this.props.currLocation.lng);
+    const headers = {
+      'content-type': 'application/json',
+      'user-key': '13a9d1657b1b371f722feb1b04e3a7b1',
+    };
+    fetch(baseUrl + searchParams, { headers })
+      .then((response) => response.json())
+      .then((data) => {
+        const cuisines = [];
+        data['cuisines'].forEach((entry) => cuisines.push(entry.cuisine.cuisine_name));
+        callback(cuisines);
+      });
   }
 
   getSlider(attrName) {
