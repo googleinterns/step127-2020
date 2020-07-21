@@ -30,3 +30,5 @@ function SwipeMatchPage(props) {
     </div>
   );
 }
+
+export default SwipeMatchPage;
