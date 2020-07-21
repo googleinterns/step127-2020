@@ -5,6 +5,7 @@ import Lunch from '../assets/lunch.svg';
 function MapContainer(props) {
   const restaurants = props.restaurants;
   const userCenter = props.userLocation;
+  const apple = 5;
 
   const MarkerIcon = () => <img src={Lunch} alt='Lunch icon' />;
 
