@@ -108,7 +108,11 @@ public class SwipeMatchServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String username = request.getParameter("username");
-    queue.put(username);
+    try {
+      queue.put(username);
+    } catch (InterruptedException e) {
+      // failed, idk yet
+    }
   }
 
   private void sendUser(PrintWriter writer, String user) {
