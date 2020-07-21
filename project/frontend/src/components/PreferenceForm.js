@@ -87,14 +87,6 @@ class PreferenceForm extends React.Component {
   }
 
   render() {
-    const classes = makeStyles((theme) => ({
-      root: {
-        width: 500,
-        '& > * + *': {
-          marginTop: theme.spacing(3),
-        },
-      },
-    }));
     const cuisines = ['Italian', 'Mexican', 'Indian'];
     const distancesInMiles = {
       '1 mile': 1,
@@ -113,24 +105,22 @@ class PreferenceForm extends React.Component {
         <p>Your current location: {this.props.locationName}</p>
         <label htmlFor='cuisine'>
           What cuisine?
-          <div className={classes.root}>
-            <Autocomplete
-              multiple
-              name='cuisine'
-              id='cuisine'
-              options={cuisines}
-              onChange={(_event, newCuisineList) => {
-                this.setState({ cuisine: newCuisineList });
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant='standard'
-                  placeholder='Select Cuisine Types'
-                />
-              )}
-            />
-          </div>
+          <Autocomplete
+            multiple
+            name='cuisine'
+            id='cuisine'
+            options={cuisines}
+            onChange={(_event, newCuisineList) => {
+              this.setState({ cuisine: newCuisineList });
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant='standard'
+                placeholder='Select Cuisine Types'
+              />
+            )}
+          />
         </label>
         <label htmlFor='radius'>
           Distance?
