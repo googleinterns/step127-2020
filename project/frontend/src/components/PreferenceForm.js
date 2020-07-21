@@ -26,9 +26,19 @@ class PreferenceForm extends React.Component {
         lng: '',
       },
       open: true,
+      cuisineOptions: [],
     };
     this.changeState = this.changeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    const { currLocation } = this.state;
+    currLocation['lat'] = this.props.currLocation.lat;
+    currLocation['lng'] = this.props.currLocation.lng;
+    this.setState({ currLocation });
+    const cuisineOptions = this.getCuisines();
+    this.setState({ cuisineOptions });
   }
 
   // Updates the state of the input element so it holds the chosen value.
@@ -55,7 +65,7 @@ class PreferenceForm extends React.Component {
     this.setState({ [attrName]: field });
   }
 
-  getCuisines(callback) {
+  getCuisines() {
     const baseUrl = 'https://developers.zomato.com/api/v2.1/cuisines?';
     const searchParams = new URLSearchParams();
     searchParams.append('lat', this.props.currLocation.lat);
@@ -68,8 +78,10 @@ class PreferenceForm extends React.Component {
       .then((response) => response.json())
       .then((data) => {
         const cuisines = [];
-        data['cuisines'].forEach((entry) => cuisines.push(entry.cuisine.cuisine_name));
-        callback(cuisines);
+        data['cuisines'].forEach((entry) =>
+          cuisines.push(entry.cuisine.cuisine_name)
+        );
+        this.setState({ cuisineOptions: cuisines });
       });
   }
 
@@ -92,19 +104,38 @@ class PreferenceForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const { currLocation } = this.state;
-    currLocation['lat'] = this.props.currLocation.lat;
-    currLocation['lng'] = this.props.currLocation.lng;
-    this.setState({ currLocation });
-    console.log(this.state);
     this.props.history.push({
       pathname: '/match-results',
       state: this.state,
     });
   }
 
+  showCuisineOptions() {
+    if (this.state.cuisineOptions) {
+      return (
+        <Autocomplete
+          multiple
+          name='cuisine'
+          id='cuisine'
+          options={this.state.cuisineOptions}
+          onChange={(_event, newCuisineList) => {
+            this.setState({ cuisine: newCuisineList });
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant='standard'
+              placeholder='Select Cuisine Types'
+            />
+          )}
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
-    const cuisines = ['Italian', 'Mexican', 'Indian'];
+    // const cuisines = ['Italian', 'Mexican', 'Indian'];
     const distancesInMiles = {
       '1 mile': 1,
       '5 miles': 5,
@@ -122,22 +153,7 @@ class PreferenceForm extends React.Component {
         <p>Your current location: {this.props.locationName}</p>
         <label htmlFor='cuisine'>
           What cuisine?
-          <Autocomplete
-            multiple
-            name='cuisine'
-            id='cuisine'
-            options={cuisines}
-            onChange={(_event, newCuisineList) => {
-              this.setState({ cuisine: newCuisineList });
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant='standard'
-                placeholder='Select Cuisine Types'
-              />
-            )}
-          />
+          {this.showCuisineOptions()}
         </label>
         <label htmlFor='radius'>
           Distance?
