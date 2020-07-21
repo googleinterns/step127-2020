@@ -8,6 +8,7 @@ import LocationFinder from '../components/LocationFinder';
 
 function HomePage(props) {
   const [isPreferenceFormOpen, setIsPreferenceFormOpen] = useState(false);
+  const [isSwipeMatchFormOpen, setIsSwipeMatchFormOpen] = useState(false);
   const [currLocation, setCurrLocation] = useState({});
   const [locationName, setLocationName] = useState('');
 
@@ -15,9 +16,20 @@ function HomePage(props) {
     setIsPreferenceFormOpen((prev) => !prev);
   };
 
+  const toggleSwipeMatchForm = () => {
+    setIsSwipeMatchFormOpen((prev) => !prev);
+  };
+
   const handleLocationData = (locationData) => {
     setCurrLocation(locationData.currLocation);
     setLocationName(locationData.locationName);
+  };
+
+  const goToSwipeMatch = () => {
+    props.history.push({
+      pathname: '/swipe-match',
+      state: { username: 'user ' + Math.floor(Math.random() * 100)},
+    });
   };
 
   return [
@@ -33,7 +45,9 @@ function HomePage(props) {
             <button disabled={!locationName} onClick={togglePreferenceForm}>
               Find My Match
             </button>
-            <button>Swipe Match</button>
+            <button onClick={toggleSwipeMatchForm}>
+              Swipe Match
+            </button>
           </div>
         </div>
       </div>
@@ -99,6 +113,16 @@ function HomePage(props) {
         currLocation={currLocation}
         locationName={locationName}
       />
+    </Modal>,
+    <Modal
+      key='swipe-match-form'
+      open={isSwipeMatchFormOpen}
+      onDismiss={toggleSwipeMatchForm}
+      centerHorizontal={true}
+      top='64px'
+      bottom='64px'>
+      <h4>Swipe Match Form</h4>
+      <button onClick={goToSwipeMatch}>Go</button>
     </Modal>,
   ];
 }
