@@ -10,7 +10,7 @@ target/
 .idea
 
 # Eclipse bin
-project/backend/bin/
+project/backend/bin/*
 
 # IDE settings
 project/backend/.classpath
