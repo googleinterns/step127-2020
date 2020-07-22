@@ -34,13 +34,18 @@ class PreferenceForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
+  componentWillUpdate() {
     const { currLocation } = this.state;
-    currLocation['lat'] = this.props.currLocation.lat;
-    currLocation['lng'] = this.props.currLocation.lng;
-    this.setState({ currLocation });
-    const cuisineOptions = this.getCuisines();
-    this.setState({ cuisineOptions });
+    if (
+      currLocation['lat'] !== this.props.currLocation.lat ||
+      currLocation['lng'] !== this.props.currLocation.lng
+    ) {
+      currLocation['lat'] = this.props.currLocation.lat;
+      currLocation['lng'] = this.props.currLocation.lng;
+      this.setState({ currLocation });
+      const cuisineOptions = this.getCuisines();
+      this.setState({ cuisineOptions });
+    }
   }
 
   // Updates the state of the input element so it holds the chosen value.
@@ -74,7 +79,7 @@ class PreferenceForm extends React.Component {
     searchParams.append('lon', this.props.currLocation.lng);
     const headers = {
       'content-type': 'application/json',
-      'user-key': '13a9d1657b1b371f722feb1b04e3a7b1',
+      'user-key': process.env.REACT_APP_ZOMATO_API_KEY,
     };
     fetch(baseUrl + searchParams, { headers })
       .then((response) => response.json())
@@ -98,7 +103,7 @@ class PreferenceForm extends React.Component {
           graduated
           progress
           onChange={(val) => this.changeWeightState(attrName, val)}
-          disabled={!Boolean(this.state[attrName]['pref'])}
+          disabled={!this.state[attrName]['pref']}
         />
       </div>
     );
@@ -121,13 +126,15 @@ class PreferenceForm extends React.Component {
           name='cuisine'
           id='cuisine'
           options={this.state.cuisineOptions}
-          onChange={(event, newCuisineList) => {
+          onChange={(_event, newCuisineList) => {
             this.setState({ cuisine: newCuisineList });
           }}
           filterOptions={(options, params) => {
             const filtered = filter(options, params);
             if (
               params.inputValue !== '' &&
+              params.inputValue.length < 25 &&
+              /^[a-z\s]+$/i.test(params.inputValue) && // RegEx to make sure input is only chars and spaces
               !options.includes(params.inputValue)
             ) {
               filtered.push(params.inputValue);
@@ -148,7 +155,6 @@ class PreferenceForm extends React.Component {
   }
 
   render() {
-    // const cuisines = ['Italian', 'Mexican', 'Indian'];
     const distancesInMiles = {
       '1 mile': 1,
       '5 miles': 5,
