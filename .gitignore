@@ -8,3 +8,8 @@ target/
 
 # Ignore editor config
 .idea
+
+#ide
+project/backend/.classpath
+project/backend/.factorypath
+project/backend/.project
