@@ -4,12 +4,20 @@ import React, { useState } from 'react';
 
 import Modal from '../components/Modal.js';
 import PreferenceForm from '../components/PreferenceForm.js';
+import LocationFinder from '../components/LocationFinder';
 
 function HomePage(props) {
   const [isPreferenceFormOpen, setIsPreferenceFormOpen] = useState(false);
+  const [currLocation, setCurrLocation] = useState({});
+  const [locationName, setLocationName] = useState('');
 
   const togglePreferenceForm = () => {
     setIsPreferenceFormOpen((prev) => !prev);
+  };
+
+  const handleLocationData = (locationData) => {
+    setCurrLocation(locationData.currLocation);
+    setLocationName(locationData.locationName);
   };
 
   return [
@@ -18,9 +26,13 @@ function HomePage(props) {
         <div id='welcome' className='column'>
           <h1 id='logo'>[LOGO]</h1>
           <h4>Discover your restaurant match</h4>
-          <button>Location</button>
+          <div id='location-finder'>
+            <LocationFinder sendData={handleLocationData} />
+          </div>
           <div>
-            <button onClick={togglePreferenceForm}>Find My Match</button>
+            <button disabled={!locationName} onClick={togglePreferenceForm}>
+              Find My Match
+            </button>
             <button>Swipe Match</button>
           </div>
         </div>
@@ -82,7 +94,11 @@ function HomePage(props) {
       centerHorizontal={true}
       top='64px'
       bottom='64px'>
-      <PreferenceForm history={props.history} />
+      <PreferenceForm
+        history={props.history}
+        currLocation={currLocation}
+        locationName={locationName}
+      />
     </Modal>,
   ];
 }
