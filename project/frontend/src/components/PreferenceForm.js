@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import { Slider } from 'rsuite';
 
@@ -111,6 +111,7 @@ class PreferenceForm extends React.Component {
   }
 
   showCuisineOptions() {
+    const filter = createFilterOptions();
     if (this.state.cuisineOptions) {
       return (
         <Autocomplete
@@ -118,8 +119,15 @@ class PreferenceForm extends React.Component {
           name='cuisine'
           id='cuisine'
           options={this.state.cuisineOptions}
-          onChange={(_event, newCuisineList) => {
+          onChange={(event, newCuisineList) => {
             this.setState({ cuisine: newCuisineList });
+          }}
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
+            if (params.inputValue !== '' && !options.includes(params.inputValue)) {
+              filtered.push(params.inputValue);
+            }
+            return filtered;
           }}
           renderInput={(params) => (
             <TextField
