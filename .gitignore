@@ -9,7 +9,10 @@ target/
 # Ignore editor config
 .idea
 
-#ide
+# Eclipse bin
+project/backend/bin/*
+
+# IDE settings
 project/backend/.classpath
 project/backend/.factorypath
 project/backend/.project
