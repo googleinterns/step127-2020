@@ -13,10 +13,9 @@ function MapContainer(props) {
     false,
   ]);
 
-  // TODO: Add a marker for "you are here location".
+  // TODO: Add marker for "you are here location".
   const MarkerIcon = (props) => {
     const infoNum = props.id;
-    console.log(showInfoWindows[infoNum]);
     return (
       <Fragment>
         <img src={Lunch} alt={'lunch icon'} />
@@ -65,7 +64,6 @@ function MapContainer(props) {
           lat={coords.lat}
           lng={coords.lng}
           id={i}
-          name={'Your #' + numInList + ' Match'}
           aria-label={'Your #' + numInList + ' Match'}
         />
       );
