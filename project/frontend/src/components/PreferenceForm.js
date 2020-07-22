@@ -84,6 +84,11 @@ class PreferenceForm extends React.Component {
     fetch(baseUrl + searchParams, { headers })
       .then((response) => response.json())
       .then((data) => {
+        // If there are no cuisines found we will have no autocomplete options.
+        // No need for error message as user can still enter their own cuisines.
+        if (!data || !data['cuisines']) {
+          return;
+        }
         const cuisines = [];
         data['cuisines'].forEach((entry) =>
           cuisines.push(entry.cuisine.cuisine_name)
