@@ -23,7 +23,9 @@ function MatchResultsPage(props) {
         <p>Hi there your results are loading...</p>
       </div>
     </Modal>,
-    <MapContainer restaurants={restaurants} userLocation={userLocation} />,
+    <div style={{ height: '100%', width: '50%', position: 'relative' }}>
+      <MapContainer restaurants={restaurants} userLocation={userLocation} />{' '}
+    </div>,
   ];
 }
 
