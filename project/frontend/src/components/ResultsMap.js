@@ -17,7 +17,7 @@ function MapContainer(props) {
   const MarkerIcon = (props) => {
     const markerIndex = props.id;
     const currentRestaurant = restaurants[markerIndex];
-    console.log(currentRestaurant);
+    const percentValue = Math.round(currentRestaurant.value * 100);
     return (
       <Fragment>
         <img src={Lunch} alt={'lunch icon'} />
@@ -25,6 +25,8 @@ function MapContainer(props) {
           <InfoWindow
             marker={activeMarker}
             restaurantName={currentRestaurant.key.name}
+            percentMatch={percentValue + '%'}
+            aria-label={'Info Window for ' + currentRestaurant.key.Name}
           />
         )}
       </Fragment>
@@ -32,9 +34,8 @@ function MapContainer(props) {
   };
 
   const InfoWindow = (props) => {
-    // TODO: Remove hard coded data and add name and percent match from the backend.
     const restaurantName = props.restaurantName;
-    const percentMatch = '96%';
+    const percentMatch = props.percentMatch;
     const infoWindowStyle = {
       position: 'relative',
       bottom: 80,
