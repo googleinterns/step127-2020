@@ -8,3 +8,6 @@ target/
 
 # Ignore editor config
 .idea
+
+#eclipse bin
+project/backend/bin/*
