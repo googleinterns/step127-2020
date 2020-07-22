@@ -16,3 +16,8 @@ project/backend/bin/*
 project/backend/.classpath
 project/backend/.factorypath
 project/backend/.project
+
+# Settings
+project/backend/.settings/org.eclipse.core.resources.prefs
+project/backend/.settings/org.eclipse.jdt.apt.core.prefs
+project/backend/.settings/org.eclipse.jdt.core.prefs
