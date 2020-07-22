@@ -16,3 +16,6 @@ project/backend/bin/*
 project/backend/.classpath
 project/backend/.factorypath
 project/backend/.project
+
+# Settings
+project/backend/.settings/*
