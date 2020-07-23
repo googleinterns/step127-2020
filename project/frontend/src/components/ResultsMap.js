@@ -33,7 +33,7 @@ function MapContainer(props) {
     return (
       <Fragment>
         <img src={Lunch} alt={'lunch icon'} />
-        {showInfoWindows[markerName] && (
+        {(markerID === currentCardIndex || showInfoWindows[markerName]) && (
           <InfoWindow
             restaurantName={restaurantName}
             percentMatch={percentValue + '%'}
