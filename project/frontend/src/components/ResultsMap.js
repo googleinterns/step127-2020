@@ -12,9 +12,9 @@ function MapContainer(props) {
     marker1: false,
     marker2: false,
     marker3: false,
-    // marker4: false,
-    // marker5: false,
-    // marker6: false,
+    marker4: false,
+    marker5: false,
+    marker6: false,
   });
 
   // TODO: Add marker for "you are here location".
