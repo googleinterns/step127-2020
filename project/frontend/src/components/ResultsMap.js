@@ -6,20 +6,20 @@ function MapContainer(props) {
   const restaurants = props.restaurants;
   const userCenter = props.userLocation;
   const [activeMarker, setActiveMarker] = useState({});
-  const [showInfoWindows, setShowInfoWindows] = useState([
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const [showInfoWindows, setShowInfoWindows] = useState({
+    marker1: false,
+    marker2: false,
+    marker3: false,
+    marker4: false,
+  });
 
   // TODO: Add marker for "you are here location".
   const MarkerIcon = (props) => {
-    const infoNum = props.id;
+    const markerName = 'marker' + props.id;
     return (
       <Fragment>
         <img src={Lunch} alt={'lunch icon'} />
-        {showInfoWindows[infoNum] && <InfoWindow marker={activeMarker} />}
+        {showInfoWindows[markerName] && <InfoWindow marker={activeMarker} />}
       </Fragment>
     );
   };
@@ -72,15 +72,17 @@ function MapContainer(props) {
   };
 
   const onMouseEnterMarker = (props, marker) => {
-    setActiveMarker(marker);
+    const markerName = 'marker' + marker.id;
     let showInfoWindowsChange = showInfoWindows;
-    showInfoWindowsChange[marker.id] = true;
+    setActiveMarker(marker);
+    showInfoWindowsChange[markerName] = true;
     setShowInfoWindows(showInfoWindowsChange);
   };
 
   const onMouseLeaveMarker = (props, marker) => {
+    const markerName = 'marker' + marker.id;
     let showInfoWindowsChange = showInfoWindows;
-    showInfoWindowsChange[marker.id] = false;
+    showInfoWindowsChange[markerName] = false;
     setShowInfoWindows(showInfoWindowsChange);
   };
 
