@@ -1,12 +1,28 @@
-import React from 'react';
+import React, { Fragment, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import Lunch from '../assets/lunch.svg';
 
 function MapContainer(props) {
   const restaurants = props.restaurants;
   const userCenter = props.userLocation;
+  const [activeMarker, setActiveMarker] = useState({});
+  const [showInfoWindows, setShowInfoWindows] = useState([
+    false,
+    false,
+    false,
+    false,
+  ]);
 
-  const MarkerIcon = () => <img src={Lunch} alt='Lunch icon' />;
+  // TODO: Add marker for "you are here location".
+  const MarkerIcon = (props) => {
+    const infoNum = props.id;
+    return (
+      <Fragment>
+        <img src={Lunch} alt={'lunch icon'} />
+        {showInfoWindows[infoNum] && <InfoWindow marker={activeMarker} />}
+      </Fragment>
+    );
+  };
 
   const InfoWindow = (props) => {
     // TODO: Remove hard coded data and add name and percent match from the backend.
@@ -47,24 +63,38 @@ function MapContainer(props) {
         <MarkerIcon
           lat={coords.lat}
           lng={coords.lng}
-          id={numInList}
-          name={'Your #' + numInList + ' Match'}
+          id={i}
           aria-label={'Your #' + numInList + ' Match'}
         />
       );
-      return markers;
     }
+    return markers;
   };
-  const mapStyle = { height: '100vh', width: '50%' };
+
+  const onMouseEnterMarker = (props, marker) => {
+    setActiveMarker(marker);
+    let showInfoWindowsChange = showInfoWindows;
+    showInfoWindowsChange[marker.id] = true;
+    setShowInfoWindows(showInfoWindowsChange);
+  };
+
+  const onMouseLeaveMarker = (props, marker) => {
+    let showInfoWindowsChange = showInfoWindows;
+    showInfoWindowsChange[marker.id] = false;
+    setShowInfoWindows(showInfoWindowsChange);
+  };
+
+  const mapStyle = { height: '100%', width: '50%' };
   return (
     <GoogleMapReact
       bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
       defaultCenter={userCenter}
       defaultZoom={10}
       style={mapStyle}
+      onChildMouseEnter={onMouseEnterMarker}
+      onChildMouseLeave={onMouseLeaveMarker}
       aria-label={'Google Map with top 4 restaurant markers.'}>
       {createMarkers()}
-      <InfoWindow />
     </GoogleMapReact>
   );
 }
