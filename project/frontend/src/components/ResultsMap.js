@@ -23,22 +23,25 @@ function MapContainer(props) {
     marker6: false,
   });
 
-  const youAreHereIcon = () => {
+  const YouAreHereIcon = (props) => {
     return (
       <div
         style={{
-          height: '20px',
-          width: '20px',
-          color: 'blue',
+          height: '25px',
+          width: '25px',
+          backgroundColor: '#F8F8F8',
           borderRadius: '50%',
+          position: 'relative',
         }}>
         <div
           style={{
-            height: '40px',
-            width: '40px',
-            color: 'blue',
+            height: '15px',
+            width: '15px',
+            top: '5px',
+            left: '5px',
+            backgroundColor: '#007AFF',
             borderRadius: '50%',
-            opacity: '.5',
+            position: 'absolute',
           }}
         />
       </div>
@@ -93,7 +96,7 @@ function MapContainer(props) {
   // TODO: add a spec here to explain what's happening.
   const createMarkers = () => {
     if (restaurants.length === 0) {
-      return;
+      return null;
     }
     const markers = [];
     let coords = restaurants[currentCardIndex].key.latLngCoords;
@@ -154,13 +157,14 @@ function MapContainer(props) {
     <GoogleMapReact
       bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
       center={center}
-      defaultZoom={14}
+      defaultZoom={9}
       style={mapStyle}
       onChildMouseEnter={onMouseEnterMarker}
       onChildMouseLeave={onMouseLeaveMarker}
       onChildClick={onMouseClickMarker}
       aria-label={'Google Map with top 4 restaurant markers.'}>
       {createMarkers()}
+      <YouAreHereIcon lat={userLocation.lat} lng={userLocation.lng} />
     </GoogleMapReact>
   );
 }
