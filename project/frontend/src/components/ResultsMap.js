@@ -13,7 +13,6 @@ function MapContainer(props) {
     restaurants.length === 0
       ? userLocation
       : restaurants[currentCardIndex].key.latLngCoords;
-  const [mapCenter, setMapCenter] = useState(center);
   const [showInfoWindows, setShowInfoWindows] = useState({
     marker0: false,
     marker1: false,
@@ -126,14 +125,13 @@ function MapContainer(props) {
 
   const onMouseClickMarker = (props, marker) => {
     setCurrentCardIndex(marker.id);
-    setMapCenter(restaurants[currentCardIndex].key.latLngCoords);
   };
 
   const mapStyle = { height: '100vh', width: '50%' };
   return (
     <GoogleMapReact
       bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
-      center={mapCenter}
+      center={center}
       defaultZoom={10}
       style={mapStyle}
       onChildMouseEnter={onMouseEnterMarker}
