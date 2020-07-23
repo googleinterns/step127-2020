@@ -63,6 +63,7 @@ function MapContainer(props) {
     );
   };
 
+  // TODO: add a spec here to explain what's happening.
   const createMarkers = () => {
     if (restaurants.length === 0) {
       return;
