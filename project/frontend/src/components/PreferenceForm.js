@@ -141,9 +141,12 @@ class PreferenceForm extends React.Component {
               trimmedInput !== '' &&
               trimmedInput.length < 25 &&
               // RegEx to make sure input is only chars and spaces.
-              /^[a-z\s]+$/i.test(trimmedInput) && 
+              /^[a-z\s]+$/i.test(trimmedInput) &&
               // Make sure we don't display duplicates.
-              (!(options.includes(trimmedInput) && options.includes(params.inputValue)))  
+              !(
+                options.includes(trimmedInput) &&
+                options.includes(params.inputValue)
+              )
             ) {
               filtered.push(trimmedInput);
             }
