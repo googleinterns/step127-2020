@@ -55,7 +55,7 @@ function MapContainer(props) {
       return markers;
     }
   };
-  const mapStyle = { height: '100vh', width: '50%' };
+  const mapStyle = { height: '100vh', width: '50%', position: 'relative' };
   return (
     <GoogleMapReact
       bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}

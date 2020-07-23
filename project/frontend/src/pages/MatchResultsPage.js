@@ -6,12 +6,12 @@ function MapContainer(props) {
   const restaurants = props.restaurants;
   const userCenter = props.userLocation;
   const [activeMarker, setActiveMarker] = useState({});
-  const [showInfoWindows, setShowInfoWindows] = useState([
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const [showInfoWindows, setShowInfoWindows] = useState({
+    marker0: false,
+    marker1: false,
+    marker2: false,
+    marker3: false,
+  });
 
   // TODO: Add marker for "you are here location".
   const MarkerIcon = (props) => {
@@ -81,8 +81,10 @@ function MapContainer(props) {
 
   const onMouseEnterMarker = (props, marker) => {
     setActiveMarker(marker);
+    const markerName = 'marker' + marker.id;
     let showInfoWindowsChange = showInfoWindows;
-    showInfoWindowsChange[marker.id] = true;
+    showInfoWindowsChange[markerName] = true;
+    // showInfoWindowsChange[marker.id] = true;
     setShowInfoWindows(showInfoWindowsChange);
   };
 
@@ -92,7 +94,7 @@ function MapContainer(props) {
     setShowInfoWindows(showInfoWindowsChange);
   };
 
-  const mapStyle = { height: '100%', width: '50%' };
+  const mapStyle = { height: '100%', width: '50%', position: 'relative' };
   return (
     <GoogleMapReact
       bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
