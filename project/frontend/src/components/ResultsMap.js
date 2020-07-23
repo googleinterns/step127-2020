@@ -157,7 +157,7 @@ function MapContainer(props) {
     <GoogleMapReact
       bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
       center={center}
-      defaultZoom={9}
+      defaultZoom={14}
       style={mapStyle}
       onChildMouseEnter={onMouseEnterMarker}
       onChildMouseLeave={onMouseLeaveMarker}
