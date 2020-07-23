@@ -19,7 +19,7 @@ function MapContainer(props) {
     const markerName = 'marker' + markerID;
     // TODO: Check the casing of the restaurant name (some come back all caps).
     const restaurantName = restaurants[markerID].key.name;
-    const percentValue = Math.floor(restaurants[markerID].value * 100);
+    const percentValue = Math.round(restaurants[markerID].value * 100);
     return (
       <Fragment>
         <img src={Lunch} alt={'lunch icon'} />
