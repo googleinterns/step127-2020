@@ -7,10 +7,10 @@ function MapContainer(props) {
   const userCenter = props.userLocation;
   const [activeMarker, setActiveMarker] = useState({});
   const [showInfoWindows, setShowInfoWindows] = useState({
+    marker0: false,
     marker1: false,
     marker2: false,
     marker3: false,
-    marker4: false,
   });
 
   // TODO: Add marker for "you are here location".
