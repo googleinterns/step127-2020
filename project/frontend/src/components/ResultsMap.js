@@ -23,6 +23,28 @@ function MapContainer(props) {
     marker6: false,
   });
 
+  const youAreHereIcon = () => {
+    return (
+      <div
+        style={{
+          height: '20px',
+          width: '20px',
+          color: 'blue',
+          borderRadius: '50%',
+        }}>
+        <div
+          style={{
+            height: '40px',
+            width: '40px',
+            color: 'blue',
+            borderRadius: '50%',
+            opacity: '.5',
+          }}
+        />
+      </div>
+    );
+  };
+
   // TODO: Add marker for "you are here location".
   const MarkerIcon = (props) => {
     const markerID = props.id;
