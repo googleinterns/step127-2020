@@ -14,7 +14,6 @@ function MapContainer(props) {
       ? userLocation
       : restaurants[currentCardIndex].key.latLngCoords;
   const [mapCenter, setMapCenter] = useState(center);
-  const [activeMarker, setActiveMarker] = useState({});
   const [showInfoWindows, setShowInfoWindows] = useState({
     marker0: false,
     marker1: false,
@@ -37,7 +36,6 @@ function MapContainer(props) {
         <img src={Lunch} alt={'lunch icon'} />
         {showInfoWindows[markerName] && (
           <InfoWindow
-            marker={activeMarker}
             restaurantName={restaurantName}
             percentMatch={percentValue + '%'}
           />
@@ -76,7 +74,7 @@ function MapContainer(props) {
     if (restaurants.length === 0) {
       return;
     }
-    let markers = [];
+    const markers = [];
     let coords = restaurants[currentCardIndex].key.latLngCoords;
     markers.push(
       <MarkerIcon
@@ -99,7 +97,7 @@ function MapContainer(props) {
       if (!(beforeIndex < 0)) {
         coords = restaurants[beforeIndex].key.latLngCoords;
         markers.push(
-          <MarkerIcon lat={coords.lat} lng={coords.lng} id={afterIndex} />
+          <MarkerIcon lat={coords.lat} lng={coords.lng} id={beforeIndex} />
         );
       }
     }
@@ -112,7 +110,6 @@ function MapContainer(props) {
   const onMouseEnterMarker = (props, marker) => {
     const markerName = 'marker' + marker.id;
     let showInfoWindowsChange = showInfoWindows;
-    setActiveMarker(marker);
     showInfoWindowsChange[markerName] = true;
     setShowInfoWindows(showInfoWindowsChange);
   };
