@@ -71,6 +71,9 @@ function MapContainer(props) {
     return markers;
   };
 
+  /** Info Window with name and match appears when the mouse hovers
+   * over the marker.
+   */
   const onMouseEnterMarker = (props, marker) => {
     const markerName = 'marker' + marker.id;
     let showInfoWindowsChange = showInfoWindows;
@@ -79,6 +82,9 @@ function MapContainer(props) {
     setShowInfoWindows(showInfoWindowsChange);
   };
 
+  /** Info window with name and match disappears when the mouse
+   * leaves the marker.
+   */
   const onMouseLeaveMarker = (props, marker) => {
     const markerName = 'marker' + marker.id;
     let showInfoWindowsChange = showInfoWindows;
