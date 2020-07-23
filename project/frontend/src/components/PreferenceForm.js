@@ -40,7 +40,6 @@ class PreferenceForm extends React.Component {
       currLocation['lat'] !== this.props.currLocation.lat ||
       currLocation['lng'] !== this.props.currLocation.lng
     ) {
-      console.log('update');
       currLocation['lat'] = this.props.currLocation.lat;
       currLocation['lng'] = this.props.currLocation.lng;
       this.setState({ currLocation });
@@ -82,11 +81,9 @@ class PreferenceForm extends React.Component {
       'content-type': 'application/json',
       'user-key': process.env.REACT_APP_ZOMATO_API_KEY,
     };
-    console.log(baseUrl + searchParams);
     fetch(baseUrl + searchParams, { headers })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         // If there are no cuisines found we will have no autocomplete options.
         // No need for error message as user can still enter their own cuisines.
         if (!data || !data['cuisines']) {
@@ -144,12 +141,9 @@ class PreferenceForm extends React.Component {
               trimmedInput !== '' &&
               trimmedInput.length < 25 &&
               // RegEx to make sure input is only chars and spaces.
-              /^[a-z\s]+$/i.test(trimmedInput) &&
+              /^[a-z\s]+$/i.test(trimmedInput) && 
               // Make sure we don't display duplicates.
-              !(
-                options.includes(trimmedInput) &&
-                options.includes(params.inputValue)
-              )
+              (!(options.includes(trimmedInput) && options.includes(params.inputValue)))  
             ) {
               filtered.push(trimmedInput);
             }
