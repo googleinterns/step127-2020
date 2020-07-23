@@ -15,18 +15,19 @@ function MapContainer(props) {
 
   // TODO: Add marker for "you are here location".
   const MarkerIcon = (props) => {
-    const markerIndex = props.id;
-    const currentRestaurant = restaurants[markerIndex];
-    const percentValue = Math.round(currentRestaurant.value * 100);
+    const markerID = props.id;
+    const markerName = 'marker' + markerID;
+    // TODO: Check the casing of the restaurant name (some come back all caps).
+    const restaurantName = restaurants[markerID].key.name;
+    const percentValue = Math.floor(restaurants[markerID].value * 100);
     return (
       <Fragment>
         <img src={Lunch} alt={'lunch icon'} />
-        {showInfoWindows[markerIndex] && (
+        {showInfoWindows[markerName] && (
           <InfoWindow
             marker={activeMarker}
-            restaurantName={currentRestaurant.key.name}
+            restaurantName={restaurantName}
             percentMatch={percentValue + '%'}
-            aria-label={'Info Window for ' + currentRestaurant.key.Name}
           />
         )}
       </Fragment>
@@ -79,22 +80,28 @@ function MapContainer(props) {
     return markers;
   };
 
+  /** Info Window with name and match appears when the mouse hovers
+   * over the marker.
+   */
   const onMouseEnterMarker = (props, marker) => {
-    setActiveMarker(marker);
     const markerName = 'marker' + marker.id;
     let showInfoWindowsChange = showInfoWindows;
+    setActiveMarker(marker);
     showInfoWindowsChange[markerName] = true;
-    // showInfoWindowsChange[marker.id] = true;
     setShowInfoWindows(showInfoWindowsChange);
   };
 
+  /** Info window with name and match disappears when the mouse
+   * leaves the marker.
+   */
   const onMouseLeaveMarker = (props, marker) => {
+    const markerName = 'marker' + marker.id;
     let showInfoWindowsChange = showInfoWindows;
-    showInfoWindowsChange[marker.id] = false;
+    showInfoWindowsChange[markerName] = false;
     setShowInfoWindows(showInfoWindowsChange);
   };
 
-  const mapStyle = { height: '100%', width: '50%', position: 'relative' };
+  const mapStyle = { height: '100vh', width: '50%' };
   return (
     <GoogleMapReact
       bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
