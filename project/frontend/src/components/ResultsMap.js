@@ -4,6 +4,7 @@ import Lunch from '../assets/lunch.svg';
 
 function MapContainer(props) {
   const restaurants = props.restaurants;
+  const { currentCardIndex, setCurrentCardIndex } = props;
   const userCenter = props.userLocation;
   const [activeMarker, setActiveMarker] = useState({});
   const [showInfoWindows, setShowInfoWindows] = useState({
@@ -11,6 +12,9 @@ function MapContainer(props) {
     marker1: false,
     marker2: false,
     marker3: false,
+    // marker4: false,
+    // marker5: false,
+    // marker6: false,
   });
 
   // TODO: Add marker for "you are here location".
@@ -60,22 +64,35 @@ function MapContainer(props) {
   };
 
   const createMarkers = () => {
-    if (!restaurants) {
+    if (restaurants.length === 0) {
       return;
     }
     let markers = [];
-    const numOfMarkers = Math.min(restaurants.length, 4);
-    for (let i = 0; i < numOfMarkers; i++) {
-      const coords = restaurants[i].key.latLngCoords;
-      const numInList = (i + 1).toString();
-      markers.push(
-        <MarkerIcon
-          lat={coords.lat}
-          lng={coords.lng}
-          id={i}
-          aria-label={'Your #' + numInList + ' Match'}
-        />
-      );
+    let coords = restaurants[currentCardIndex].key.latLngCoords;
+    markers.push(
+      <MarkerIcon
+        lat={coords.lat}
+        lng={coords.lng}
+        id={currentCardIndex}
+        aria-label={'Your #' + currentCardIndex + ' Match'}
+      />
+    );
+    const numOfMarkers = Math.min(restaurants.length, 3);
+    for (let i = 1; i <= numOfMarkers; i++) {
+      const afterIndex = currentCardIndex + i;
+      if (afterIndex < restaurants.length) {
+        coords = restaurants[afterIndex].key.latLngCoords;
+        markers.push(
+          <MarkerIcon lat={coords.lat} lng={coords.lng} id={afterIndex} />
+        );
+      }
+      const beforeIndex = currentCardIndex - i;
+      if (!(beforeIndex < 0)) {
+        coords = restaurants[beforeIndex].key.latLngCoords;
+        markers.push(
+          <MarkerIcon lat={coords.lat} lng={coords.lng} id={afterIndex} />
+        );
+      }
     }
     return markers;
   };
@@ -101,6 +118,10 @@ function MapContainer(props) {
     setShowInfoWindows(showInfoWindowsChange);
   };
 
+  const onMouseClickMarker = (props, marker) => {
+    setCurrentCardIndex(marker.id);
+  };
+
   const mapStyle = { height: '100vh', width: '50%' };
   return (
     <GoogleMapReact
@@ -110,6 +131,7 @@ function MapContainer(props) {
       style={mapStyle}
       onChildMouseEnter={onMouseEnterMarker}
       onChildMouseLeave={onMouseLeaveMarker}
+      onChildClick={onMouseClickMarker}
       aria-label={'Google Map with top 4 restaurant markers.'}>
       {createMarkers()}
     </GoogleMapReact>
