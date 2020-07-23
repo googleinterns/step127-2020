@@ -1,17 +1,41 @@
-import React from 'react';
+import React, { Fragment, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import Lunch from '../assets/lunch.svg';
 
 function MapContainer(props) {
   const restaurants = props.restaurants;
   const userCenter = props.userLocation;
+  const [activeMarker, setActiveMarker] = useState({});
+  const [showInfoWindows, setShowInfoWindows] = useState({
+    marker0: false,
+    marker1: false,
+    marker2: false,
+    marker3: false,
+  });
 
-  const MarkerIcon = () => <img src={Lunch} alt='Lunch icon' />;
+  // TODO: Add marker for "you are here location".
+  const MarkerIcon = (props) => {
+    const markerIndex = props.id;
+    const currentRestaurant = restaurants[markerIndex];
+    const percentValue = Math.round(currentRestaurant.value * 100);
+    return (
+      <Fragment>
+        <img src={Lunch} alt={'lunch icon'} />
+        {showInfoWindows[markerIndex] && (
+          <InfoWindow
+            marker={activeMarker}
+            restaurantName={currentRestaurant.key.name}
+            percentMatch={percentValue + '%'}
+            aria-label={'Info Window for ' + currentRestaurant.key.Name}
+          />
+        )}
+      </Fragment>
+    );
+  };
 
   const InfoWindow = (props) => {
-    // TODO: Remove hard coded data and add name and percent match from the backend.
-    const restaurantName = 'Applebees';
-    const percentMatch = '96%';
+    const restaurantName = props.restaurantName;
+    const percentMatch = props.percentMatch;
     const infoWindowStyle = {
       position: 'relative',
       bottom: 80,
@@ -47,24 +71,40 @@ function MapContainer(props) {
         <MarkerIcon
           lat={coords.lat}
           lng={coords.lng}
-          id={numInList}
-          name={'Your #' + numInList + ' Match'}
+          id={i}
           aria-label={'Your #' + numInList + ' Match'}
         />
       );
-      return markers;
     }
+    return markers;
   };
-  const mapStyle = { height: '100vh', width: '50%', position: 'relative' };
+
+  const onMouseEnterMarker = (props, marker) => {
+    setActiveMarker(marker);
+    const markerName = 'marker' + marker.id;
+    let showInfoWindowsChange = showInfoWindows;
+    showInfoWindowsChange[markerName] = true;
+    // showInfoWindowsChange[marker.id] = true;
+    setShowInfoWindows(showInfoWindowsChange);
+  };
+
+  const onMouseLeaveMarker = (props, marker) => {
+    let showInfoWindowsChange = showInfoWindows;
+    showInfoWindowsChange[marker.id] = false;
+    setShowInfoWindows(showInfoWindowsChange);
+  };
+
+  const mapStyle = { height: '100%', width: '50%', position: 'relative' };
   return (
     <GoogleMapReact
       bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
       defaultCenter={userCenter}
       defaultZoom={10}
       style={mapStyle}
+      onChildMouseEnter={onMouseEnterMarker}
+      onChildMouseLeave={onMouseLeaveMarker}
       aria-label={'Google Map with top 4 restaurant markers.'}>
       {createMarkers()}
-      <InfoWindow />
     </GoogleMapReact>
   );
 }
