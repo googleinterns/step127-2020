@@ -37,8 +37,10 @@ class PreferenceForm extends React.Component {
   componentWillUpdate() {
     const { currLocation } = this.state;
     if (
-      currLocation['lat'] !== this.props.currLocation.lat ||
-      currLocation['lng'] !== this.props.currLocation.lng
+      this.props.currLocation.lat &&
+      this.props.currLocation.lng &&
+      (currLocation['lat'] !== this.props.currLocation.lat ||
+        currLocation['lng'] !== this.props.currLocation.lng)
     ) {
       currLocation['lat'] = this.props.currLocation.lat;
       currLocation['lng'] = this.props.currLocation.lng;
