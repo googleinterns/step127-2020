@@ -124,6 +124,18 @@ class PreferenceForm extends React.Component {
     });
   }
 
+  inputIsNewAndValid(input, options) {
+    const trimmedInput = input.trim();
+    return (
+      trimmedInput !== '' &&
+      trimmedInput.length < 25 &&
+      // RegEx to make sure input is only chars and spaces.
+      /^[a-z\s]+$/i.test(trimmedInput) &&
+      // Make sure we don't display duplicates.
+      !(options.includes(trimmedInput) && options.includes(input))
+    );
+  }
+
   showCuisineOptions() {
     const filter = createFilterOptions();
     if (this.state.cuisineOptions) {
@@ -138,19 +150,8 @@ class PreferenceForm extends React.Component {
           }}
           filterOptions={(options, params) => {
             const filtered = filter(options, params);
-            const trimmedInput = params.inputValue.trim();
-            if (
-              trimmedInput !== '' &&
-              trimmedInput.length < 25 &&
-              // RegEx to make sure input is only chars and spaces.
-              /^[a-z\s]+$/i.test(trimmedInput) &&
-              // Make sure we don't display duplicates.
-              !(
-                options.includes(trimmedInput) &&
-                options.includes(params.inputValue)
-              )
-            ) {
-              filtered.push(trimmedInput);
+            if (this.inputIsNewAndValid(params.inputValue, options)) {
+              filtered.push(params.inputValue.trim());
             }
             return filtered;
           }}
