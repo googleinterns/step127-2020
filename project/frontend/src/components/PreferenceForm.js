@@ -1,5 +1,9 @@
 import React from 'react';
 
+import Autocomplete, {
+  createFilterOptions,
+} from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 import { Slider } from 'rsuite';
 
 class PreferenceForm extends React.Component {
@@ -24,9 +28,26 @@ class PreferenceForm extends React.Component {
         lng: '',
       },
       open: true,
+      cuisineOptions: [],
     };
     this.changeState = this.changeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentWillUpdate() {
+    const { currLocation } = this.state;
+    if (
+      this.props.currLocation.lat &&
+      this.props.currLocation.lng &&
+      (currLocation['lat'] !== this.props.currLocation.lat ||
+        currLocation['lng'] !== this.props.currLocation.lng)
+    ) {
+      currLocation['lat'] = this.props.currLocation.lat;
+      currLocation['lng'] = this.props.currLocation.lng;
+      this.setState({ currLocation });
+      const cuisineOptions = this.getCuisines();
+      this.setState({ cuisineOptions });
+    }
   }
 
   // Updates the state of the input element so it holds the chosen value.
@@ -34,7 +55,7 @@ class PreferenceForm extends React.Component {
     const field = this.state[event.target.name];
     if (event.target.name === 'cuisine') {
       const cuisineList = this.state.cuisine;
-      cuisineList.push(event.target.value);
+      cuisineList.push(event.target.innerHTML);
       this.setState({ [event.target.name]: cuisineList });
     } else if (event.target.name === 'open') {
       this.setState({ [event.target.name]: event.target.checked });
@@ -53,6 +74,31 @@ class PreferenceForm extends React.Component {
     this.setState({ [attrName]: field });
   }
 
+  getCuisines() {
+    const baseUrl = 'https://developers.zomato.com/api/v2.1/cuisines?';
+    const searchParams = new URLSearchParams();
+    searchParams.append('lat', this.props.currLocation.lat);
+    searchParams.append('lon', this.props.currLocation.lng);
+    const headers = {
+      'content-type': 'application/json',
+      'user-key': process.env.REACT_APP_ZOMATO_API_KEY,
+    };
+    fetch(baseUrl + searchParams, { headers })
+      .then((response) => response.json())
+      .then((data) => {
+        // If there are no cuisines found we will have no autocomplete options.
+        // No need for error message as user can still enter their own cuisines.
+        if (!data || !data['cuisines']) {
+          return;
+        }
+        const cuisines = [];
+        data['cuisines'].forEach((entry) =>
+          cuisines.push(entry.cuisine.cuisine_name)
+        );
+        this.setState({ cuisineOptions: cuisines });
+      });
+  }
+
   getSlider(attrName) {
     return (
       <div style={{ width: 200, padding: 20 }}>
@@ -64,7 +110,7 @@ class PreferenceForm extends React.Component {
           graduated
           progress
           onChange={(val) => this.changeWeightState(attrName, val)}
-          disabled={!Boolean(this.state[attrName]['pref'])}
+          disabled={!this.state[attrName]['pref']}
         />
       </div>
     );
@@ -72,19 +118,57 @@ class PreferenceForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const { currLocation } = this.state;
-    currLocation['lat'] = this.props.currLocation.lat;
-    currLocation['lng'] = this.props.currLocation.lng;
-    this.setState({ currLocation });
-    console.log(this.state);
     this.props.history.push({
       pathname: '/match-results',
       state: this.state,
     });
   }
 
+  inputIsNewAndValid(input, options) {
+    const trimmedInput = input.trim();
+    return (
+      trimmedInput !== '' &&
+      trimmedInput.length < 25 &&
+      // RegEx to make sure input is only chars and spaces.
+      /^[a-z\s]+$/i.test(trimmedInput) &&
+      // Make sure we don't display duplicates.
+      !(options.includes(trimmedInput) && options.includes(input))
+    );
+  }
+
+  showCuisineOptions() {
+    const filter = createFilterOptions();
+    if (this.state.cuisineOptions) {
+      return (
+        <Autocomplete
+          multiple
+          name='cuisine'
+          id='cuisine'
+          options={this.state.cuisineOptions}
+          onChange={(_event, newCuisineList) => {
+            this.setState({ cuisine: newCuisineList });
+          }}
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
+            if (this.inputIsNewAndValid(params.inputValue, options)) {
+              filtered.push(params.inputValue.trim());
+            }
+            return filtered;
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant='standard'
+              placeholder='Select Cuisine Types'
+            />
+          )}
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
-    const cuisines = ['Italian ', 'Mexican ', 'Indian '];
     const distancesInMiles = {
       '1 mile': 1,
       '5 miles': 5,
@@ -102,20 +186,7 @@ class PreferenceForm extends React.Component {
         <p>Your current location: {this.props.locationName}</p>
         <label htmlFor='cuisine'>
           What cuisine?
-          <select
-            className='cuisine-type'
-            name='cuisine'
-            id='cuisine'
-            onChange={this.changeState}
-            value={this.state.cuisine}
-            multiple>
-            {cuisines.map((cuisine) => (
-              <option key={cuisine} value={cuisine}>
-                {cuisine}
-              </option>
-            ))}
-            ;
-          </select>
+          {this.showCuisineOptions()}
         </label>
         <label htmlFor='radius'>
           Distance?
