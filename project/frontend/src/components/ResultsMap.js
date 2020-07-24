@@ -1,12 +1,28 @@
-import React from 'react';
+import React, { Fragment, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import Lunch from '../assets/lunch.svg';
 
 function MapContainer(props) {
   const restaurants = props.restaurants;
   const userCenter = props.userLocation;
+  const [activeMarker, setActiveMarker] = useState({});
+  const [showInfoWindows, setShowInfoWindows] = useState({
+    marker0: false,
+    marker1: false,
+    marker2: false,
+    marker3: false,
+  });
 
-  const MarkerIcon = () => <img src={Lunch} alt='Lunch icon' />;
+  // TODO: Add marker for "you are here location".
+  const MarkerIcon = (props) => {
+    const markerName = 'marker' + props.id;
+    return (
+      <Fragment>
+        <img src={Lunch} alt={'lunch icon'} />
+        {showInfoWindows[markerName] && <InfoWindow marker={activeMarker} />}
+      </Fragment>
+    );
+  };
 
   const InfoWindow = (props) => {
     // TODO: Remove hard coded data and add name and percent match from the backend.
@@ -47,14 +63,35 @@ function MapContainer(props) {
         <MarkerIcon
           lat={coords.lat}
           lng={coords.lng}
-          id={numInList}
-          name={'Your #' + numInList + ' Match'}
+          id={i}
           aria-label={'Your #' + numInList + ' Match'}
         />
       );
-      return markers;
     }
+    return markers;
   };
+
+  /** Info Window with name and match appears when the mouse hovers
+   * over the marker.
+   */
+  const onMouseEnterMarker = (props, marker) => {
+    const markerName = 'marker' + marker.id;
+    let showInfoWindowsChange = showInfoWindows;
+    setActiveMarker(marker);
+    showInfoWindowsChange[markerName] = true;
+    setShowInfoWindows(showInfoWindowsChange);
+  };
+
+  /** Info window with name and match disappears when the mouse
+   * leaves the marker.
+   */
+  const onMouseLeaveMarker = (props, marker) => {
+    const markerName = 'marker' + marker.id;
+    let showInfoWindowsChange = showInfoWindows;
+    showInfoWindowsChange[markerName] = false;
+    setShowInfoWindows(showInfoWindowsChange);
+  };
+
   const mapStyle = { height: '100vh', width: '50%' };
   return (
     <GoogleMapReact
@@ -62,9 +99,10 @@ function MapContainer(props) {
       defaultCenter={userCenter}
       defaultZoom={10}
       style={mapStyle}
+      onChildMouseEnter={onMouseEnterMarker}
+      onChildMouseLeave={onMouseLeaveMarker}
       aria-label={'Google Map with top 4 restaurant markers.'}>
       {createMarkers()}
-      <InfoWindow />
     </GoogleMapReact>
   );
 }
