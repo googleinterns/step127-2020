@@ -4,6 +4,7 @@ import com.google.sps.data.JsonToRestaurantParser;
 import com.google.sps.data.Restaurant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.json.JSONException;
@@ -26,10 +27,10 @@ public final class JsonToRestaurantParserTest {
   private static final String RESTAURANT_NAME = "RESTAURANT_A";
   private static final String PLACE_ID = "A12345";
   private static final String VICINITY = "10 Main Street";
-  private static final Map<String, Double> COORDS = Map.ofEntries(
-    Map.entry("lat", 10.0),
-    Map.entry("lng", 20.0)
-  );
+  private static final Map<String, Double> COORDS = new HashMap<String, Double>() {{
+    put("lat", 10.0);
+    put("lng", 20.0);
+  }};
 
   @Test
   public void allRequiredAndOptionalFields() throws JSONException {
