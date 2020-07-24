@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public final class TestRestaurantParser {
+public final class JsonToRestaurantParserTest {
 
   private static final int MISSING_FIELD = -1;
   private static final List<String> EMPTY_TYPES = new ArrayList<>();
@@ -28,18 +28,24 @@ public final class TestRestaurantParser {
 
   @Test
   public void noOptionalFields() throws JSONException {
-    JSONObject body = new JSONObject();
-    JSONObject geometry = new JSONObject();
-    geometry.put("location", COORDS_A);
-    body.put("place_id", PLACE_ID_A);
-    body.put("name", RESTAURANT_A);
-    body.put("vicinity", VICINITY_A);
-    body.put("types", EMPTY_TYPES);
-    body.put("geometry", geometry);
-    
+    JSONObject geometry = new JSONObject().put("location", COORDS_A);
+    JSONObject body = new JSONObject()
+      .put("place_id", PLACE_ID_A)
+      .put("name", RESTAURANT_A)
+      .put("vicinity", VICINITY_A)
+      .put("types", EMPTY_TYPES)
+      .put("geometry", geometry);
+
     Restaurant expected = Restaurant.create(
-      PLACE_ID_A, RESTAURANT_A, VICINITY_A, COORDS_A, -1, -1, -1, EMPTY_TYPES);
+      PLACE_ID_A, RESTAURANT_A, VICINITY_A, COORDS_A, /* avgRating= */ -1, 
+      /* numRatings= */ -1, /* priceNum= */ -1, EMPTY_TYPES);
     Restaurant result = JsonToRestaurantParser.toRestaurant(body);
     Assert.assertEquals(result, expected);
+  }
+
+  @Test(expected = JSONException.class)
+  public void noFields() throws JSONException {
+    JSONObject body = new JSONObject();
+    Restaurant result = JsonToRestaurantParser.toRestaurant(body);
   }
 }
