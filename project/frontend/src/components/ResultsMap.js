@@ -71,7 +71,7 @@ function MapContainer(props) {
   // TODO: add a spec here to explain what's happening.
   const createMarkers = () => {
     if (restaurants.length === 0) {
-      return;
+      return null;
     }
     const markers = [];
     let coords = restaurants[currentCardIndex].key.latLngCoords;
@@ -80,23 +80,33 @@ function MapContainer(props) {
         lat={coords.lat}
         lng={coords.lng}
         id={currentCardIndex}
-        aria-label={'Your #' + currentCardIndex + ' Match'}
+        aria-label={'Your #' + (currentCardIndex + 1) + ' Match'}
       />
     );
     const numOfMarkers = Math.min(restaurants.length, 3);
     for (let i = 1; i <= numOfMarkers; i++) {
-      const afterIndex = currentCardIndex + i;
-      if (afterIndex < restaurants.length) {
-        coords = restaurants[afterIndex].key.latLngCoords;
+      const nextCardIndex = currentCardIndex + i;
+      if (nextCardIndex < restaurants.length) {
+        coords = restaurants[nextCardIndex].key.latLngCoords;
         markers.push(
-          <MarkerIcon lat={coords.lat} lng={coords.lng} id={afterIndex} />
+          <MarkerIcon
+            lat={coords.lat}
+            lng={coords.lng}
+            id={nextCardIndex}
+            aria-label={'Your #' + (nextCardIndex + 1) + ' Match'}
+          />
         );
       }
-      const beforeIndex = currentCardIndex - i;
-      if (!(beforeIndex < 0)) {
-        coords = restaurants[beforeIndex].key.latLngCoords;
+      const previousCardIndex = currentCardIndex - i;
+      if (previousCardIndex >= 0) {
+        coords = restaurants[previousCardIndex].key.latLngCoords;
         markers.push(
-          <MarkerIcon lat={coords.lat} lng={coords.lng} id={beforeIndex} />
+          <MarkerIcon
+            lat={coords.lat}
+            lng={coords.lng}
+            id={previousCardIndex}
+            aria-label={'Your #' + (previousCardIndex + 1) + ' Match'}
+          />
         );
       }
     }
