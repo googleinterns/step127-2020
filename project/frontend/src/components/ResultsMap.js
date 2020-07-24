@@ -84,9 +84,10 @@ function MapContainer(props) {
       />
     );
     const numOfMarkers = Math.min(restaurants.length, 3);
+    // TODO: explain logic of for loop.
     for (let i = 1; i <= numOfMarkers; i++) {
       const nextCardIndex = currentCardIndex + i;
-      if (nextCardIndex < restaurants.length) {
+      if (isValidIndex(nextCardIndex)) {
         coords = restaurants[nextCardIndex].key.latLngCoords;
         markers.push(
           <MarkerIcon
@@ -98,7 +99,7 @@ function MapContainer(props) {
         );
       }
       const previousCardIndex = currentCardIndex - i;
-      if (previousCardIndex >= 0) {
+      if (isValidIndex(previousCardIndex)) {
         coords = restaurants[previousCardIndex].key.latLngCoords;
         markers.push(
           <MarkerIcon
@@ -111,6 +112,13 @@ function MapContainer(props) {
       }
     }
     return markers;
+  };
+
+  /** Checks that the current index is a valid index for
+   * the restaurant matches list.
+   */
+  const isValidIndex = (index) => {
+    return index >= 0 && index < restaurants.length;
   };
 
   /** Info Window with name and match appears when the mouse hovers
