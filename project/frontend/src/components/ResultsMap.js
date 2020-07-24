@@ -1,3 +1,4 @@
+// TODO: Change file name to MapContainer.js to match the component name.
 import React, { Fragment, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import Lunch from '../assets/lunch.svg';
