@@ -28,13 +28,15 @@ public final class TestRestaurantParser {
 
   @Test
   public void noOptionalFields() throws JSONException {
-    JSONObject body = new JSONObject(
-      "{'geometry' : {'location' : {'lat' : " + COORDS_A.get("lat") + ", 'lng' : " + COORDS_A.get("lng") + "}}," + 
-      "'place_id' : " + PLACE_ID_A + 
-      ",'name' : " + RESTAURANT_A + 
-      ",'vicinity' : " + VICINITY_A + 
-      ",'types' : [],}"
-    );
+    JSONObject body = new JSONObject();
+    JSONObject geometry = new JSONObject();
+    geometry.put("location", COORDS_A);
+    body.put("place_id", PLACE_ID_A);
+    body.put("name", RESTAURANT_A);
+    body.put("vicinity", VICINITY_A);
+    body.put("types", EMPTY_TYPES);
+    body.put("geometry", geometry);
+    
     Restaurant expected = Restaurant.create(
       PLACE_ID_A, RESTAURANT_A, VICINITY_A, COORDS_A, -1, -1, -1, EMPTY_TYPES);
     Restaurant result = JsonToRestaurantParser.toRestaurant(body);
