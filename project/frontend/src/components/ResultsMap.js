@@ -1,3 +1,4 @@
+// TODO: Change file name to MapContainer.js to match the component name.
 import React, { Fragment, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import Lunch from '../assets/lunch.svg';
@@ -5,9 +6,9 @@ import Lunch from '../assets/lunch.svg';
 function MapContainer(props) {
   const {
     restaurants,
+    userLocation,
     currentCardIndex,
     setCurrentCardIndex,
-    userLocation,
   } = props;
   const center =
     restaurants.length === 0
@@ -51,14 +52,14 @@ function MapContainer(props) {
   // TODO: Add marker for "you are here location".
   const MarkerIcon = (props) => {
     const markerID = props.id;
-    const markerName = 'marker' + markerID;
+    const markerName = `marker${props.id}`;
     // TODO: Check the casing of the restaurant name (some come back all caps).
     const restaurantName = restaurants[markerID].key.name;
     const percentValue = Math.round(restaurants[markerID].value * 100);
     return (
       <Fragment>
         <img src={Lunch} alt={'lunch icon'} />
-        {showInfoWindows[markerName] && (
+        {(markerID === currentCardIndex || showInfoWindows[markerName]) && (
           <InfoWindow
             restaurantName={restaurantName}
             percentMatch={percentValue + '%'}
@@ -69,8 +70,7 @@ function MapContainer(props) {
   };
 
   const InfoWindow = (props) => {
-    const restaurantName = props.restaurantName;
-    const percentMatch = props.percentMatch;
+    const { restaurantName, percentMatch } = props;
     const infoWindowStyle = {
       position: 'relative',
       bottom: 80,
@@ -105,27 +105,45 @@ function MapContainer(props) {
         lat={coords.lat}
         lng={coords.lng}
         id={currentCardIndex}
-        aria-label={'Your #' + currentCardIndex + ' Match'}
+        aria-label={'Your #' + (currentCardIndex + 1) + ' Match'}
       />
     );
     const numOfMarkers = Math.min(restaurants.length, 3);
+    // TODO: explain logic of for loop.
     for (let i = 1; i <= numOfMarkers; i++) {
-      const afterIndex = currentCardIndex + i;
-      if (afterIndex < restaurants.length) {
-        coords = restaurants[afterIndex].key.latLngCoords;
+      const nextCardIndex = currentCardIndex + i;
+      if (isValidIndex(nextCardIndex)) {
+        coords = restaurants[nextCardIndex].key.latLngCoords;
         markers.push(
-          <MarkerIcon lat={coords.lat} lng={coords.lng} id={afterIndex} />
+          <MarkerIcon
+            lat={coords.lat}
+            lng={coords.lng}
+            id={nextCardIndex}
+            aria-label={'Your #' + (nextCardIndex + 1) + ' Match'}
+          />
         );
       }
-      const beforeIndex = currentCardIndex - i;
-      if (!(beforeIndex < 0)) {
-        coords = restaurants[beforeIndex].key.latLngCoords;
+      const previousCardIndex = currentCardIndex - i;
+      if (isValidIndex(previousCardIndex)) {
+        coords = restaurants[previousCardIndex].key.latLngCoords;
         markers.push(
-          <MarkerIcon lat={coords.lat} lng={coords.lng} id={beforeIndex} />
+          <MarkerIcon
+            lat={coords.lat}
+            lng={coords.lng}
+            id={previousCardIndex}
+            aria-label={'Your #' + (previousCardIndex + 1) + ' Match'}
+          />
         );
       }
     }
     return markers;
+  };
+
+  /** Checks that the current index is a valid index for
+   * the restaurant matches list.
+   */
+  const isValidIndex = (index) => {
+    return index >= 0 && index < restaurants.length;
   };
 
   /** Info Window with name and match appears when the mouse hovers
