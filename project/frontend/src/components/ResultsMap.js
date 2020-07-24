@@ -5,9 +5,9 @@ import Lunch from '../assets/lunch.svg';
 function MapContainer(props) {
   const {
     restaurants,
+    userLocation,
     currentCardIndex,
     setCurrentCardIndex,
-    userLocation,
   } = props;
   const center =
     restaurants.length === 0
