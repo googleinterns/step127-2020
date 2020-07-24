@@ -13,11 +13,30 @@ import HomePage from './pages/HomePage.js';
 import MatchResultsPage from './pages/MatchResultsPage.js';
 
 import RestaurantCard from './components/RestaurantCard.js';
+import RestaurantCardDeck from './components/RestaurantCardDeck.js';
+import RestaurantCardStack from './components/RestaurantCardStack.js';
 
 import * as serviceWorker from './serviceWorker';
 
 // TODO: remove
-import { restaurant, details } from './components/SampleRestaurant.js';
+import generateRestaurant from './components/SampleRestaurant.js';
+const numberOfCardsToGenerate = 20;
+const cards = [];
+for (let i = 0; i < numberOfCardsToGenerate; i++) {
+  const data = generateRestaurant(
+    'Amarena ' + i,
+    'apr75h4bni2pf98h4inujnksjrliu34' + i
+  );
+  if (i === 3) {
+    data.restaurant.key.name += ' Of the California State of the US';
+  } else if (i === 4) {
+    data.restaurant.key.address = '123 Main Street';
+  } else if (i === 7) {
+    data.details.result.website +=
+      '?somethingextra=123&antherthing=1234567890&type=json';
+  }
+  cards.push(data);
+}
 
 // TODO: Use Redirect component
 ReactDOM.render(
@@ -26,8 +45,21 @@ ReactDOM.render(
       <Router>
         <Header />
         <Switch>
+          <Route path='/deck'>
+            <div className='container'>
+              <div className='row'>
+                <div className='one-half column'>
+                  <RestaurantCardDeck cards={cards} />
+                </div>
+                <div className='one-half column'>
+                  <RestaurantCardStack cards={cards} />
+                </div>
+              </div>
+            </div>
+          </Route>
+
           <Route path='/card'>
-            <RestaurantCard restaurant={restaurant} details={details} />
+            <RestaurantCard {...generateRestaurant()} />
           </Route>
 
           <Route path='/match-results' component={MatchResultsPage} />
