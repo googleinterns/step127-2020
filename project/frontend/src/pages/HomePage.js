@@ -94,11 +94,8 @@ function HomePage(props) {
       centerHorizontal={true}
       top='64px'
       bottom='64px'
-      style={{paddingBottom: '0px'}}>
-      <PreferenceForm
-        currLocation={currLocation}
-        locationName={locationName}
-      />
+      style={{ paddingBottom: '0px' }}>
+      <PreferenceForm currLocation={currLocation} locationName={locationName} />
     </Modal>,
   ];
 }
