@@ -2,7 +2,9 @@ import './PreferenceForm.css';
 
 import React, { useState, useEffect, useContext } from 'react';
 
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import Autocomplete, {
+  createFilterOptions,
+} from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import { Slider } from 'rsuite';
 import { useHistory } from 'react-router-dom';
@@ -17,7 +19,7 @@ import Place from '../assets/place.svg';
  *
  * @param {!Object<string, number>} currLocation The latitude and longitude
  *     coordinates of the user in the form {lat: 0.0, lng: 0.0}.
- * @return {!Array<string>} An array of all local cuisine types. 
+ * @return {!Array<string>} An array of all local cuisine types.
  */
 async function getLocalCuisines(currLocation) {
   const baseUrl = 'https://developers.zomato.com/api/v2.1/cuisines?';
@@ -28,20 +30,20 @@ async function getLocalCuisines(currLocation) {
     'content-type': 'application/json',
     'user-key': process.env.REACT_APP_ZOMATO_API_KEY,
   };
-  
+
   const response = await fetch(baseUrl + searchParams, { headers });
   const data = await response.json();
-  if (!data || !(data.cuisines)) {
+  if (!data || !data.cuisines) {
     return [];
   }
-  
+
   return data.cuisines.map((entry) => entry.cuisine.cuisine_name);
-};
+}
 
 /**
  * A form used to gather the restaurant preferences of a user for the 'Find My Match'
  * service.
- * 
+ *
  * @param {!Object<string, number>} currLocation The current latitude and longitude
  *     coordinates of the user.
  * @param {string} locationName The formatted address of the current user.
@@ -68,7 +70,7 @@ function PreferenceForm(props) {
       setCuisineOptions(options);
     })();
   }, [currLocation]);
-  
+
   const handleSubmit = (event) => {
     event.preventDefault();
     history.push({
@@ -76,15 +78,15 @@ function PreferenceForm(props) {
       state: {
         currLocation,
         cuisine,
-        radius: {pref: radius, weight: radiusWeight},
-        diningExp: {pref: diningExp, weight: diningExpWeight},
-        priceLevel: {pref: priceLevel, weight: priceLevelWeight},
+        radius: { pref: radius, weight: radiusWeight },
+        diningExp: { pref: diningExp, weight: diningExpWeight },
+        priceLevel: { pref: priceLevel, weight: priceLevelWeight },
         open,
         cuisineOptions,
       },
     });
   };
-  
+
   const getSlider = (value, setValue, disabled) => {
     return (
       <div className='preference-form-slider-container'>
@@ -107,13 +109,9 @@ function PreferenceForm(props) {
       const value = event.target.value;
       setValue(event.target.name === 'diningExp' ? value : parseInt(value));
     };
-    
+
     return (
-      <select
-        name={name}
-        className='pref'
-        value={value}
-        onChange={onChange}>
+      <select name={name} className='pref' value={value} onChange={onChange}>
         <option label='Select...' key='default' value={''} />
         {Object.entries(options).map(([label, value]) => (
           <option label={label} key={label} value={value} />
@@ -126,10 +124,10 @@ function PreferenceForm(props) {
     const trimmedInput = input.trim();
     return (
       trimmedInput !== '' &&
-        trimmedInput.length < 25 &&
-        // RegEx to make sure input is only chars and spaces.
+      trimmedInput.length < 25 &&
+      // RegEx to make sure input is only chars and spaces.
       /^[a-z\s]+$/i.test(trimmedInput) &&
-        // Make sure we don't display duplicates.
+      // Make sure we don't display duplicates.
       !(options.includes(trimmedInput) && options.includes(input))
     );
   };
@@ -138,7 +136,7 @@ function PreferenceForm(props) {
     if (!cuisineOptions) {
       return null;
     }
-    
+
     const filter = createFilterOptions();
     return (
       <Autocomplete
@@ -177,67 +175,70 @@ function PreferenceForm(props) {
       />
     );
   };
-  
+
   const distancesInMiles = {
     '1 mile': 1,
     '5 miles': 5,
     '10 miles': 10,
     '25 miles': 25,
   };
-  
+
   const diningExperiences = {
     Takeout: 'meal_takeaway',
     Delivery: 'meal_delivery',
     'Eat In': 'restaurant',
   };
-  
+
   const prices = {
     Low: 1,
     Medium: 2,
     High: 3,
     'Very High': 4,
   };
-  
+
   return (
     <form className='preference-form' onSubmit={handleSubmit}>
-      {authContext.currentUser.get && !authContext.currentUser.get.isSignedIn() &&
-       <div className='preference-form-sign-in'>
-         <h4>Sign in for better results.</h4>
-         <p>
-           By signing in and allowing us to save your preferences, dietary restrictions,
-           restaurant history, and more, we can make our algorithm stronger and your
-           recommendations better! You will always be able to view, edit, or delete any
-           personal data we have stored from the profile page!
-         </p>
-         <button
-           onClick={(event) => {
-             event.preventDefault();
-             authContext.signIn();
-           }}>
-           Sign in with Google
-         </button>
-         <div className='preference-form-divider'>
-           <div />
-           <p>Continue as guest</p>
-           <div />
-         </div>
-       </div>}
+      {authContext.currentUser.get &&
+        !authContext.currentUser.get.isSignedIn() && (
+          <div className='preference-form-sign-in'>
+            <h4>Sign in for better results.</h4>
+            <p>
+              By signing in and allowing us to save your preferences, dietary
+              restrictions, restaurant history, and more, we can make our
+              algorithm stronger and your recommendations better! You will
+              always be able to view, edit, or delete any personal data we have
+              stored from the profile page!
+            </p>
+            <button
+              onClick={(event) => {
+                event.preventDefault();
+                authContext.signIn();
+              }}>
+              Sign in with Google
+            </button>
+            <div className='preference-form-divider'>
+              <div />
+              <p>Continue as guest</p>
+              <div />
+            </div>
+          </div>
+        )}
 
       <h4>Your preferences.</h4>
       <p>
-        Please enter your restaurant preferences below. You may leave any field blank
-        if you have no preference. Specify an importance to indicate your priority
-        for different fields.
+        Please enter your restaurant preferences below. You may leave any field
+        blank if you have no preference. Specify an importance to indicate your
+        priority for different fields.
       </p>
 
       <div className='preference-form-row'>
-        <img src={Place} alt=''/>
+        <img src={Place} alt='' />
         <label>Location</label>
         <p>{locationName}</p>
       </div>
 
       <div className='preference-form-row'>
-        <img src={Place} alt=''/>
+        <img src={Place} alt='' />
         <label htmlFor='cuisine'>Cuisines</label>
         {showCuisineOptions()}
       </div>
@@ -245,19 +246,19 @@ function PreferenceForm(props) {
       <div className='preference-form-row'>
         <div className='preference-form-column'>
           <div className='preference-form-row'>
-            <img src={Place} alt=''/>
-            <label htmlFor='radius'>Distance</label>        
+            <img src={Place} alt='' />
+            <label htmlFor='radius'>Distance</label>
             {getSelect('radius', radius, setRadius, distancesInMiles)}
           </div>
-          
+
           <div className='preference-form-row'>
-            <img src={Place} alt=''/>
+            <img src={Place} alt='' />
             <label htmlFor='diningExp'>Experience</label>
             {getSelect('diningExp', diningExp, setDiningExp, diningExperiences)}
           </div>
 
           <div className='preference-form-row'>
-            <img src={Place} alt=''/>
+            <img src={Place} alt='' />
             <label htmlFor='priceLevel'>Price Level</label>
             {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
           </div>
@@ -272,14 +273,18 @@ function PreferenceForm(props) {
             <label>Importance</label>
             {getSlider(diningExpWeight, setDiningExpWeight, diningExp === '')}
           </div>
-          <div className='preference-form-row'>          
+          <div className='preference-form-row'>
             <label>Importance</label>
-            {getSlider(priceLevelWeight, setPriceLevelWeight, priceLevel === '')}
+            {getSlider(
+              priceLevelWeight,
+              setPriceLevelWeight,
+              priceLevel === ''
+            )}
           </div>
         </div>
       </div>
 
-      <div className='preference-form-row' style={{justifyContent: 'center'}}>
+      <div className='preference-form-row' style={{ justifyContent: 'center' }}>
         <label htmlFor='open'>Open Now</label>
         <input
           name='open'
