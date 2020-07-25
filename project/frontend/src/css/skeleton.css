@@ -191,8 +191,8 @@ body {
   font-size: 1.6em; /* currently ems cause chrome bug misinterpreting rems on body element */
   line-height: 1.4;
   font-weight: 400;
-  font-family: 'Montserrat', 'Roboto', serif, 'HelveticaNeue',
-    'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', 'Roboto', serif, 'HelveticaNeue', 'Helvetica Neue',
+    Helvetica, Arial, sans-serif;
   color: #222;
 }
 
