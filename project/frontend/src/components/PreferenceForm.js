@@ -207,7 +207,7 @@ function PreferenceForm(props) {
               restrictions, restaurant history, and more, we can make our
               algorithm stronger and your recommendations better! You will
               always be able to view, edit, or delete any personal data we have
-              stored from the profile page!
+              stored from the profile page.
             </p>
             <button
               onClick={(event) => {
