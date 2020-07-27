@@ -20,7 +20,7 @@ function Header(props) {
     return (
       <div id='header'>
         <h5 className='header-logo'>MAKMatch</h5>
-        <Loading />
+        <Loading style={{ marginRight: '16px' }} />
       </div>
     );
   }
