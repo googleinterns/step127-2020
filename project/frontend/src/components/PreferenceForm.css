@@ -3,13 +3,13 @@
   text-align: left;
 }
 
-.preference-form {
-  margin-bottom: 0px;
-}
-
-.preference-form button {
+.preference-form-container button {
   display: block;
   margin: 16px auto;
+}
+
+.preference-form {
+  margin-bottom: 0px;
 }
 
 .preference-form-submit-container {
