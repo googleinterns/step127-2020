@@ -141,7 +141,7 @@ function PreferenceForm(props) {
   };
 
   return (
-    <form className='preference-form' onSubmit={handleSubmit}>
+    <div>
       {authContext.currentUser.get &&
         !authContext.currentUser.get.isSignedIn() && (
           <div className='preference-form-sign-in'>
@@ -167,77 +167,84 @@ function PreferenceForm(props) {
             </div>
           </div>
         )}
-      <h4>Your preferences.</h4>
-      <p>
-        Please enter your restaurant preferences below. You may leave any field
-        blank if you have no preference. Specify an importance to indicate your
-        priority for different fields.
-      </p>
-      <div className='preference-form-row'>
-        <img src={Place} alt='' />
-        <label>Location</label>
-        <p>{locationName}</p>
-      </div>
-      <div className='preference-form-row'>
-        <img src={Cuisine} alt='' />
-        <label htmlFor='cuisine'>Cuisines</label>
-        <CuisineAutocomplete
-          cuisineOptions={cuisineOptions}
-          setCuisine={setCuisine}
-        />
-      </div>
-      <div className='preference-form-row'>
-        <div className='preference-form-column'>
-          <div className='preference-form-row'>
-            <img src={Distance} alt='' />
-            <label htmlFor='radius'>Distance</label>
-            {getSelect('radius', radius, setRadius, distancesInMiles)}
+      <form className='preference-form' onSubmit={handleSubmit}>
+        <h4>Your preferences.</h4>
+        <p>
+          Please enter your restaurant preferences below. You may leave any
+          field blank if you have no preference. Specify an importance to
+          indicate your priority for different fields.
+        </p>
+        <div className='preference-form-row'>
+          <img src={Place} alt='' />
+          <label>Location</label>
+          <p>{locationName}</p>
+        </div>
+        <div className='preference-form-row'>
+          <img src={Cuisine} alt='' />
+          <label htmlFor='cuisine'>Cuisines</label>
+          <CuisineAutocomplete
+            cuisineOptions={cuisineOptions}
+            setCuisine={setCuisine}
+          />
+        </div>
+        <div className='preference-form-row'>
+          <div className='preference-form-column'>
+            <div className='preference-form-row'>
+              <img src={Distance} alt='' />
+              <label htmlFor='radius'>Distance</label>
+              {getSelect('radius', radius, setRadius, distancesInMiles)}
+            </div>
+            <div className='preference-form-row'>
+              <img src={Experience} alt='' />
+              <label htmlFor='diningExp'>Experience</label>
+              {getSelect(
+                'diningExp',
+                diningExp,
+                setDiningExp,
+                diningExperiences
+              )}
+            </div>
+            <div className='preference-form-row'>
+              <img src={Price} alt='' />
+              <label htmlFor='priceLevel'>Price Level</label>
+              {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
+            </div>
           </div>
-          <div className='preference-form-row'>
-            <img src={Experience} alt='' />
-            <label htmlFor='diningExp'>Experience</label>
-            {getSelect('diningExp', diningExp, setDiningExp, diningExperiences)}
-          </div>
-          <div className='preference-form-row'>
-            <img src={Price} alt='' />
-            <label htmlFor='priceLevel'>Price Level</label>
-            {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
+          <div className='preference-form-column'>
+            <div className='preference-form-row'>
+              <label>Importance</label>
+              {getSlider(radiusWeight, setRadiusWeight, radius === '')}
+            </div>
+            <div className='preference-form-row'>
+              <label>Importance</label>
+              {getSlider(diningExpWeight, setDiningExpWeight, diningExp === '')}
+            </div>
+            <div className='preference-form-row'>
+              <label>Importance</label>
+              {getSlider(
+                priceLevelWeight,
+                setPriceLevelWeight,
+                priceLevel === ''
+              )}
+            </div>
           </div>
         </div>
-        <div className='preference-form-column'>
-          <div className='preference-form-row'>
-            <label>Importance</label>
-            {getSlider(radiusWeight, setRadiusWeight, radius === '')}
-          </div>
-          <div className='preference-form-row'>
-            <label>Importance</label>
-            {getSlider(diningExpWeight, setDiningExpWeight, diningExp === '')}
-          </div>
-          <div className='preference-form-row'>
-            <label>Importance</label>
-            {getSlider(
-              priceLevelWeight,
-              setPriceLevelWeight,
-              priceLevel === ''
-            )}
-          </div>
+        <div
+          className='preference-form-row'
+          style={{ justifyContent: 'center', margin: '32px 0px' }}>
+          <label htmlFor='open'>Open Now</label>
+          <input
+            name='open'
+            type='checkbox'
+            checked={open}
+            onChange={(event) => setOpen(event.target.checked)}
+          />
         </div>
-      </div>
-      <div
-        className='preference-form-row'
-        style={{ justifyContent: 'center', margin: '32px 0px' }}>
-        <label htmlFor='open'>Open Now</label>
-        <input
-          name='open'
-          type='checkbox'
-          checked={open}
-          onChange={(event) => setOpen(event.target.checked)}
-        />
-      </div>
-      <div className='preference-form-submit-container'>
-        <button type='submit'>Find my match</button>
-      </div>
-    </form>
+        <div className='preference-form-submit-container'>
+          <button type='submit'>Find my match</button>
+        </div>
+      </form>
+    </div>
   );
 }
 
