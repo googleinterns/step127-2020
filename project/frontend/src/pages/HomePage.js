@@ -40,9 +40,7 @@ function HomePage(props) {
               style={buttonStyle}>
               Find My Match
             </button>
-            <button
-              className='welcome-button'
-              style={buttonStyle}>
+            <button className='welcome-button' style={buttonStyle}>
               Swipe Match
             </button>
           </div>
