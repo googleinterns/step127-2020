@@ -114,23 +114,4 @@ public final class JsonToRestaurantParserTest {
       .put("types", EMPTY_TYPES);
     Restaurant actual = JsonToRestaurantParser.toRestaurant(body);
   }
-
-  @Test
-  public void wrongOptionalFieldUnits() throws JSONException {
-    // JSON object has incorrect unit for an optional field.
-    // We should see the default value for that field.
-    JSONObject geometry = new JSONObject().put("location", COORDS);
-    JSONObject body = new JSONObject()
-      .put("place_id", PLACE_ID)
-      .put("name", RESTAURANT_NAME)
-      .put("vicinity", VICINITY)
-      .put("types", ALL_TYPES)
-      .put("geometry", geometry)
-      .put("price_level", "hello");
-    Restaurant actual = JsonToRestaurantParser.toRestaurant(body);
-    Restaurant expected = Restaurant.create(
-      PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, /* avgRating= */ -1, 
-      /* numRatings= */ -1, /* priceNum= */ -1, ALL_TYPES);
-    Assert.assertEquals(actual, expected);
-  }
 }
