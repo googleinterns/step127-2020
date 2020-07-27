@@ -130,7 +130,7 @@ function PreferenceForm(props) {
   const diningExperiences = {
     Takeout: 'meal_takeaway',
     Delivery: 'meal_delivery',
-    'Eat In': 'restaurant',
+    'Dine In': 'restaurant',
   };
 
   const prices = {
