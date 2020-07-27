@@ -8,27 +8,23 @@
   background-image: url(/food-background-large.jpg),
     url(/food-background-small.jpg);
   background-size: cover;
-  background-position: top 20% left 0%;
+  background-position: top 8% left 0%;
   background-repeat: no-repeat;
 }
 
-#welcome button {
-  margin: 16px 32px 0px 32px;
+.welcome-button {
+  margin: 0px 16px;
   background-color: white;
+  transition: opacity 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97),
+              transform 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97);
 }
 
-#logo {
-  margin-top: 150px;
+.logo {
+  margin-top: 200px;
   font-size: 8rem;
   font-weight: bold;
-}
-
-#location-finder {
-  color: black;
-}
-
-#location-finder .highlighted-label {
-  background-color: white;
+  font-style: italic;
+  text-shadow: 6px 6px rgba(32, 32, 32, 0.66);
 }
 
 .title {
