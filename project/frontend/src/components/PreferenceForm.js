@@ -6,7 +6,12 @@ import CuisineAutocomplete from './CuisineAutocomplete.js';
 import { Slider } from 'rsuite';
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from './Authentication.js';
+
 import Place from '../assets/place.svg';
+import Cuisine from '../assets/cuisine.svg';
+import Distance from '../assets/distance.svg';
+import Experience from '../assets/food_service.svg';
+import Price from '../assets/dollar.svg';
 
 /**
  * Returns a list of cuisine types of local restaurants using the Zomato API.
@@ -174,7 +179,7 @@ function PreferenceForm(props) {
         <p>{locationName}</p>
       </div>
       <div className='preference-form-row'>
-        <img src={Place} alt='' />
+        <img src={Cuisine} alt='' />
         <label htmlFor='cuisine'>Cuisines</label>
         <CuisineAutocomplete
           cuisineOptions={cuisineOptions}
@@ -184,17 +189,17 @@ function PreferenceForm(props) {
       <div className='preference-form-row'>
         <div className='preference-form-column'>
           <div className='preference-form-row'>
-            <img src={Place} alt='' />
+            <img src={Distance} alt='' />
             <label htmlFor='radius'>Distance</label>
             {getSelect('radius', radius, setRadius, distancesInMiles)}
           </div>
           <div className='preference-form-row'>
-            <img src={Place} alt='' />
+            <img src={Experience} alt='' />
             <label htmlFor='diningExp'>Experience</label>
             {getSelect('diningExp', diningExp, setDiningExp, diningExperiences)}
           </div>
           <div className='preference-form-row'>
-            <img src={Place} alt='' />
+            <img src={Price} alt='' />
             <label htmlFor='priceLevel'>Price Level</label>
             {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
           </div>
@@ -218,7 +223,7 @@ function PreferenceForm(props) {
           </div>
         </div>
       </div>
-      <div className='preference-form-row' style={{ justifyContent: 'center' }}>
+      <div className='preference-form-row' style={{ justifyContent: 'center', margin: '32px 0px' }}>
         <label htmlFor='open'>Open Now</label>
         <input
           name='open'
