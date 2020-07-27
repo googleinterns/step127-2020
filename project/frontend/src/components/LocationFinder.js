@@ -1,6 +1,7 @@
 import './LocationFinder.css';
 
 import React from 'react';
+import Loading from './Loading.js';
 import MyLocation from '../assets/gps.svg';
 
 class LocationFinder extends React.Component {
@@ -12,6 +13,7 @@ class LocationFinder extends React.Component {
       submitted: false,
       error: false,
       autocomplete: null,
+      geolocateLoading: false,
     };
     this.changeState = this.changeState.bind(this);
     this.getLocationFromGeolocate = this.getLocationFromGeolocate.bind(this);
@@ -58,6 +60,7 @@ class LocationFinder extends React.Component {
         this.handleGeolocateSuccess,
         this.handleGeolocateError
       );
+      this.setState({ geolocateLoading: true });
     } else {
       alert(
         'Cannot find your location. Try entering a location in the text box below.'
@@ -80,10 +83,11 @@ class LocationFinder extends React.Component {
           locationName,
           submitted: true,
           error: false,
+          geolocateLoading: false,
         });
         this.props.sendData({ currLocation, locationName });
       } else {
-        this.setState({ error: true });
+        this.setState({ error: true, geolocateLoading: false });
         const result = document.getElementById('error-label');
         result.innerHTML =
           'Geocode was not successful for the following reason: ' +
@@ -94,7 +98,7 @@ class LocationFinder extends React.Component {
   }
 
   handleGeolocateError(error) {
-    this.setState({ error: true });
+    this.setState({ error: true, geolocateLoading: false });
     const result = document.getElementById('error-label');
     if (error.code === 1) {
       result.innerHTML =
@@ -117,7 +121,11 @@ class LocationFinder extends React.Component {
           <button
             className='location-finder-my-location'
             onClick={this.getLocationFromGeolocate}>
-            <img src={MyLocation} alt='Get your location.' />
+            {this.state.geolocateLoading ? (
+              <Loading />
+            ) : (
+              <img src={MyLocation} alt='Get your location.' />
+            )}
           </button>
           <input
             id='location-finder-autocomplete-input'
