@@ -141,7 +141,7 @@ function PreferenceForm(props) {
   };
 
   return (
-    <div>
+    <div className='preference-form-container'>
       {authContext.currentUser.get &&
         !authContext.currentUser.get.isSignedIn() && (
           <div className='preference-form-sign-in'>

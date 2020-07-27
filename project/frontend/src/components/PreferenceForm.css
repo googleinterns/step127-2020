@@ -1,6 +1,9 @@
-.preference-form {
+.preference-form-container {
   max-width: 600px;
   text-align: left;
+}
+
+.preference-form {
   margin-bottom: 0px;
 }
 
