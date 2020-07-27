@@ -1,5 +1,6 @@
 package com.google.sps;
 
+import static com.google.common.truth.Truth.assertThat;
 import com.google.sps.data.JsonToRestaurantParser;
 import com.google.sps.data.Restaurant;
 import java.util.ArrayList;
@@ -67,12 +68,8 @@ public final class JsonToRestaurantParserTest {
       .put("types", randomTypes)
       .put("geometry", geometry);
 
-    Restaurant expected = Restaurant.create(
-      PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, /* avgRating= */ -1, 
-      /* numRatings= */ -1, /* priceNum= */ -1, ALL_TYPES);
     Restaurant actual = JsonToRestaurantParser.toRestaurant(body);
-    Assert.assertTrue(actual.getPlaceTypes().size() == ALL_TYPES.size() 
-      && actual.getPlaceTypes().containsAll(ALL_TYPES) && ALL_TYPES.containsAll(actual.getPlaceTypes()));
+    assertThat(actual.getPlaceTypes()).containsExactlyElementsIn(ALL_TYPES);
   }
 
   @Test
@@ -89,8 +86,8 @@ public final class JsonToRestaurantParserTest {
       .put("geometry", geometry);
 
     Restaurant expected = Restaurant.create(
-      PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, /* avgRating= */ -1, 
-      /* numRatings= */ -1, /* priceNum= */ -1, EMPTY_TYPES);
+      PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, /* avgRating= */ MISSING_FIELD, 
+      /* numRatings= */ MISSING_FIELD, /* priceNum= */ MISSING_FIELD, EMPTY_TYPES);
     Restaurant actual = JsonToRestaurantParser.toRestaurant(body);
     Assert.assertEquals(actual, expected);
   }
