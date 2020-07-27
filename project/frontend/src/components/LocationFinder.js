@@ -124,7 +124,7 @@ class LocationFinder extends React.Component {
             {this.state.geolocateLoading ? (
               <Loading />
             ) : (
-              <img src={MyLocation} alt='Get your location.' />
+              <img src={MyLocation} alt='Get your location.' style={{padding: '0px 7px'}} />
             )}
           </button>
           <input
