@@ -27,6 +27,14 @@
   flex-direction: column;
 }
 
+.preference-form-column > .preference-form-row:first-child {
+  margin: 0px;
+}
+
+.preference-form-column > .preference-form-row:last-child {
+  margin: 0px;
+}
+
 .preference-form-row {
   display: flex;
   align-items: center;
