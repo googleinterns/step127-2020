@@ -35,7 +35,12 @@ class LocationFinder extends React.Component {
       lat: addressObj.geometry.location.lat(),
       lng: addressObj.geometry.location.lng(),
     };
-    this.setState({ userInput: locationName, locationName, submitted: true, error: false });
+    this.setState({
+      userInput: locationName,
+      locationName,
+      submitted: true,
+      error: false,
+    });
     this.props.sendData({ currLocation, locationName });
   }
 
@@ -70,7 +75,12 @@ class LocationFinder extends React.Component {
     geocoder.geocode({ location: currLocation }, (results, status) => {
       if (status === 'OK') {
         const locationName = results[0].formatted_address;
-        this.setState({ userInput: locationName, locationName, submitted: true, error: false });
+        this.setState({
+          userInput: locationName,
+          locationName,
+          submitted: true,
+          error: false,
+        });
         this.props.sendData({ currLocation, locationName });
       } else {
         this.setState({ error: true });
@@ -107,7 +117,7 @@ class LocationFinder extends React.Component {
           <button
             className='location-finder-my-location'
             onClick={this.getLocationFromGeolocate}>
-            <img src={MyLocation} alt='Get your location.'/>
+            <img src={MyLocation} alt='Get your location.' />
           </button>
           <input
             id='location-finder-autocomplete-input'
@@ -117,7 +127,7 @@ class LocationFinder extends React.Component {
             value={this.state.userInput}
             onChange={this.changeState}
           />
-        </div>        
+        </div>
         {this.state.error ? (
           <p id='error-label' className='highlighted-label' />
         ) : null}
