@@ -10,7 +10,7 @@ import React from 'react';
  */
 function Loading(props) {
   const { style } = props;
-  
+
   return (
     <div className='loading-ripple' style={style}>
       <div></div>
