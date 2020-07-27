@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -52,7 +50,7 @@ public final class JsonToRestaurantParserTest {
       PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, RATING, NUM_RATINGS,
       PRICE_LEVEL, EMPTY_TYPES);
     Restaurant actual = JsonToRestaurantParser.toRestaurant(body);
-    Assert.assertEquals(actual, expected);
+    assertThat(actual).isEqualTo(expected);
   }
 
   @Test
@@ -89,7 +87,7 @@ public final class JsonToRestaurantParserTest {
       PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, /* avgRating= */ MISSING_FIELD, 
       /* numRatings= */ MISSING_FIELD, /* priceNum= */ MISSING_FIELD, EMPTY_TYPES);
     Restaurant actual = JsonToRestaurantParser.toRestaurant(body);
-    Assert.assertEquals(actual, expected);
+    assertThat(actual).isEqualTo(expected);
   }
 
   @Test(expected = JSONException.class)
