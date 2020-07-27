@@ -21,9 +21,9 @@ public final class JsonToRestaurantParser {
     String stringifiedLocation =
         body.getJSONObject("geometry").getJSONObject("location").toString();
     Map<String, Double> latLngCoords = new Gson().fromJson(stringifiedLocation, HashMap.class);
-    double avgRating = body.has("rating") ? body.getDouble("rating") : -1;
-    int numRatings = body.has("user_ratings_total") ? body.getInt("user_ratings_total") : -1;
-    int priceLevel = body.has("price_level") ? body.getInt("price_level") : -1;
+    double avgRating = getDoubleOrDefault(body, "rating"); //body.has("rating") ? body.getDouble("rating") : -1;
+    int numRatings = getIntOrDefault(body, "user_ratings_total");
+    int priceLevel = getIntOrDefault(body, "price_level");
     List<String> placeTypes = getTypes(body.getJSONArray("types"));
     return Restaurant.create(
         id, name, address, latLngCoords, avgRating, numRatings, priceLevel, placeTypes);
@@ -39,5 +39,21 @@ public final class JsonToRestaurantParser {
       }
     }
     return placeTypes;
+  }
+
+  private static int getIntOrDefault(JSONObject body, String field) {
+    try {
+      return body.getInt(field);
+    } catch (JSONException e) {
+      return -1;
+    }
+  }
+
+  private static double getDoubleOrDefault(JSONObject body, String field) {
+    try {
+      return body.getDouble(field);
+    } catch (JSONException e) {
+      return -1;
+    }
   }
 }
