@@ -2,15 +2,10 @@ import './PreferenceForm.css';
 
 import React, { useState, useEffect, useContext } from 'react';
 
-import Autocomplete, {
-  createFilterOptions,
-} from '@material-ui/lab/Autocomplete';
-import TextField from '@material-ui/core/TextField';
+import CuisineAutocomplete from './CuisineAutocomplete.js';
 import { Slider } from 'rsuite';
 import { useHistory } from 'react-router-dom';
-
 import { AuthContext } from './Authentication.js';
-
 import Place from '../assets/place.svg';
 
 /**
@@ -87,23 +82,6 @@ function PreferenceForm(props) {
     });
   };
 
-  const getSlider = (value, setValue, disabled) => {
-    return (
-      <div className='preference-form-slider-container'>
-        <Slider
-          defaultValue={value}
-          min={1}
-          step={1}
-          max={5}
-          onChange={setValue}
-          disabled={disabled}
-          graduated
-          progress
-        />
-      </div>
-    );
-  };
-
   const getSelect = (name, value, setValue, options) => {
     const onChange = (event) => {
       const value = event.target.value;
@@ -120,59 +98,20 @@ function PreferenceForm(props) {
     );
   };
 
-  const inputIsNewAndValid = (input, options) => {
-    const trimmedInput = input.trim();
+  const getSlider = (value, setValue, disabled) => {
     return (
-      trimmedInput !== '' &&
-      trimmedInput.length < 25 &&
-      // RegEx to make sure input is only chars and spaces.
-      /^[a-z\s]+$/i.test(trimmedInput) &&
-      // Make sure we don't display duplicates.
-      !(options.includes(trimmedInput) && options.includes(input))
-    );
-  };
-
-  const showCuisineOptions = () => {
-    if (!cuisineOptions) {
-      return null;
-    }
-
-    const filter = createFilterOptions();
-    return (
-      <Autocomplete
-        name='cuisine'
-        id='cuisine'
-        options={cuisineOptions}
-        classes={{
-          root: 'autocomplete-root',
-          focused: 'autocomplete-root-focused',
-          inputRoot: 'autocomplete-input-root',
-          input: 'autocomplete-input',
-          endAdornment: 'autocomplete-end-adornment',
-          tag: 'autocomplete-tag',
-          listbox: 'autocomplete-listbox',
-        }}
-        fullWidth={true}
-        autoHighlight={true}
-        onChange={(_event, newCuisineList) => {
-          setCuisine(newCuisineList);
-        }}
-        filterOptions={(options, state) => {
-          const filtered = filter(options, state);
-          if (inputIsNewAndValid(state.inputValue, options)) {
-            filtered.push(state.inputValue.trim());
-          }
-          return filtered;
-        }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            variant='standard'
-            placeholder='Select Cuisine Types'
-          />
-        )}
-        multiple
-      />
+      <div className='preference-form-slider-container'>
+        <Slider
+          defaultValue={value}
+          min={1}
+          step={1}
+          max={5}
+          onChange={setValue}
+          disabled={disabled}
+          graduated
+          progress
+        />
+      </div>
     );
   };
 
@@ -223,26 +162,22 @@ function PreferenceForm(props) {
             </div>
           </div>
         )}
-
       <h4>Your preferences.</h4>
       <p>
         Please enter your restaurant preferences below. You may leave any field
         blank if you have no preference. Specify an importance to indicate your
         priority for different fields.
       </p>
-
       <div className='preference-form-row'>
         <img src={Place} alt='' />
         <label>Location</label>
         <p>{locationName}</p>
       </div>
-
       <div className='preference-form-row'>
         <img src={Place} alt='' />
         <label htmlFor='cuisine'>Cuisines</label>
-        {showCuisineOptions()}
+        <CuisineAutocomplete cuisineOptions={cuisineOptions} setCuisine={setCuisine} />
       </div>
-
       <div className='preference-form-row'>
         <div className='preference-form-column'>
           <div className='preference-form-row'>
@@ -250,20 +185,17 @@ function PreferenceForm(props) {
             <label htmlFor='radius'>Distance</label>
             {getSelect('radius', radius, setRadius, distancesInMiles)}
           </div>
-
           <div className='preference-form-row'>
             <img src={Place} alt='' />
             <label htmlFor='diningExp'>Experience</label>
             {getSelect('diningExp', diningExp, setDiningExp, diningExperiences)}
           </div>
-
           <div className='preference-form-row'>
             <img src={Place} alt='' />
             <label htmlFor='priceLevel'>Price Level</label>
             {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
           </div>
         </div>
-
         <div className='preference-form-column'>
           <div className='preference-form-row'>
             <label>Importance</label>
@@ -283,7 +215,6 @@ function PreferenceForm(props) {
           </div>
         </div>
       </div>
-
       <div className='preference-form-row' style={{ justifyContent: 'center' }}>
         <label htmlFor='open'>Open Now</label>
         <input
@@ -293,7 +224,6 @@ function PreferenceForm(props) {
           onChange={(event) => setOpen(event.target.checked)}
         />
       </div>
-
       <div className='preference-form-submit-container'>
         <button type='submit'>Find my match</button>
       </div>
