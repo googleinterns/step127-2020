@@ -1,5 +1,7 @@
+import './LocationFinder.css';
+
 import React from 'react';
-import MyLocation from '@material-ui/icons/MyLocation';
+import MyLocation from '../assets/gps.svg';
 
 class LocationFinder extends React.Component {
   constructor(props) {
@@ -21,7 +23,7 @@ class LocationFinder extends React.Component {
   componentDidMount() {
     const google = window.google;
     this.autocomplete = new google.maps.places.Autocomplete(
-      document.getElementById('autocomplete-input')
+      document.getElementById('location-finder-autocomplete-input')
     );
     this.autocomplete.addListener('place_changed', this.handlePlaceSelect);
   }
@@ -33,7 +35,7 @@ class LocationFinder extends React.Component {
       lat: addressObj.geometry.location.lat(),
       lng: addressObj.geometry.location.lng(),
     };
-    this.setState({ locationName, submitted: true, error: false });
+    this.setState({ userInput: locationName, locationName, submitted: true, error: false });
     this.props.sendData({ currLocation, locationName });
   }
 
@@ -68,7 +70,7 @@ class LocationFinder extends React.Component {
     geocoder.geocode({ location: currLocation }, (results, status) => {
       if (status === 'OK') {
         const locationName = results[0].formatted_address;
-        this.setState({ locationName, submitted: true, error: false });
+        this.setState({ userInput: locationName, locationName, submitted: true, error: false });
         this.props.sendData({ currLocation, locationName });
       } else {
         this.setState({ error: true });
@@ -100,23 +102,24 @@ class LocationFinder extends React.Component {
 
   render() {
     return (
-      <div>
-        <label htmlFor='autocomplete-input' />
-        <input
-          id='autocomplete-input'
-          name='userInput'
-          onChange={this.changeState}
-        />
-        <button onClick={this.getLocationFromGeolocate}>
-          <MyLocation />
-        </button>
+      <div className='location-finder'>
+        <div className='location-finder-autocomplete-container'>
+          <button
+            className='location-finder-my-location'
+            onClick={this.getLocationFromGeolocate}>
+            <img src={MyLocation} alt='Get your location.'/>
+          </button>
+          <input
+            id='location-finder-autocomplete-input'
+            className='location-finder-autocomplete-input'
+            name='userInput'
+            placeholder='Enter your location'
+            value={this.state.userInput}
+            onChange={this.changeState}
+          />
+        </div>        
         {this.state.error ? (
           <p id='error-label' className='highlighted-label' />
-        ) : null}
-        {this.state.submitted ? (
-          <p id='location-label' className='highlighted-label'>
-            Your current location: {this.state.locationName}
-          </p>
         ) : null}
       </div>
     );
