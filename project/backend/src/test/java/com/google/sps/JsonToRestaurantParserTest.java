@@ -33,8 +33,6 @@ public final class JsonToRestaurantParserTest {
 
   @Test
   public void allRequiredAndOptionalFields() throws JSONException {
-    // JSON object has all required and all optional fields.
-    // We should see a restaurant with all the values in the JSON object.
     JSONObject geometry = new JSONObject().put("location", COORDS);
     JSONObject body = new JSONObject()
       .put("place_id", PLACE_ID)
@@ -54,9 +52,7 @@ public final class JsonToRestaurantParserTest {
   }
 
   @Test
-  public void extraneousTypes() throws JSONException {
-    // JSON object has types that should be disregarded.
-    // We should see a restaurant with only the three relevant types.
+  public void extraneousTypes_onlyIncludeRelevantTypes() throws JSONException {
     List<String> randomTypes = Arrays.asList(new String[]{"type a", "meal_takeaway", "type b", "meal_delivery", "restaurant"});
     JSONObject geometry = new JSONObject().put("location", COORDS);
     JSONObject body = new JSONObject()
@@ -71,10 +67,7 @@ public final class JsonToRestaurantParserTest {
   }
 
   @Test
-  public void noOptionalFields() throws JSONException {
-    // JSON object has all required fields and no optional fields.
-    // We should see a restaurant that has the required fields and 
-    // default values for optional fields.
+  public void noOptionalFields_useDefaultValues() throws JSONException {
     JSONObject geometry = new JSONObject().put("location", COORDS);
     JSONObject body = new JSONObject()
       .put("place_id", PLACE_ID)
@@ -92,16 +85,12 @@ public final class JsonToRestaurantParserTest {
 
   @Test(expected = JSONException.class)
   public void noFields() throws JSONException {
-    // JSON object has no fields.
-    // We should see a JSONException thrown.
     JSONObject body = new JSONObject();
     Restaurant actual = JsonToRestaurantParser.toRestaurant(body);
   }
 
   @Test(expected = JSONException.class)
   public void missingMandatoryField() throws JSONException {
-    // JSON object is missing a required field.
-    // We should see a JSONException thrown.
     JSONObject body = new JSONObject()
       .put("place_id", PLACE_ID)
       .put("name", RESTAURANT_NAME)
