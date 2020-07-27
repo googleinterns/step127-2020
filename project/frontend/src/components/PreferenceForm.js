@@ -223,7 +223,9 @@ function PreferenceForm(props) {
           </div>
         </div>
       </div>
-      <div className='preference-form-row' style={{ justifyContent: 'center', margin: '32px 0px' }}>
+      <div
+        className='preference-form-row'
+        style={{ justifyContent: 'center', margin: '32px 0px' }}>
         <label htmlFor='open'>Open Now</label>
         <input
           name='open'
