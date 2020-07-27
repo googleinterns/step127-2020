@@ -176,7 +176,10 @@ function PreferenceForm(props) {
       <div className='preference-form-row'>
         <img src={Place} alt='' />
         <label htmlFor='cuisine'>Cuisines</label>
-        <CuisineAutocomplete cuisineOptions={cuisineOptions} setCuisine={setCuisine} />
+        <CuisineAutocomplete
+          cuisineOptions={cuisineOptions}
+          setCuisine={setCuisine}
+        />
       </div>
       <div className='preference-form-row'>
         <div className='preference-form-column'>

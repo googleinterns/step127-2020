@@ -21,18 +21,18 @@ function inputIsNewAndValid(input, options) {
   const trimmedInput = input.trim();
   return (
     trimmedInput !== '' &&
-      trimmedInput.length < 25 &&
-      // RegEx to make sure input is only chars and spaces.
+    trimmedInput.length < 25 &&
+    // RegEx to make sure input is only chars and spaces.
     /^[a-z\s]+$/i.test(trimmedInput) &&
-      // Make sure we don't display duplicates.
+    // Make sure we don't display duplicates.
     !(options.includes(trimmedInput) && options.includes(input))
   );
-};
+}
 
 /**
  * A Material-UI Autocomplete component to be used for selecting cuisine types.
  * @see https://material-ui.com/api/autocomplete/
- * 
+ *
  * @param {!Array<string>} props.cuisineOptions The complete list of cuisine options.
  * @param {function(Array<string>): undefined} props.setCuisine A state setter function
  *     with which the selected cuisine types may be updated from this component.
@@ -41,7 +41,7 @@ function CuisineAutocomplete(props) {
   const { cuisineOptions, setCuisine } = props;
 
   const filter = createFilterOptions();
-  
+
   return (
     <Autocomplete
       name='cuisine'
