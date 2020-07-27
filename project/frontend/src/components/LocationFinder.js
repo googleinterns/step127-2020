@@ -120,7 +120,8 @@ class LocationFinder extends React.Component {
         <div className='location-finder-autocomplete-container'>
           <button
             className='location-finder-my-location'
-            onClick={this.getLocationFromGeolocate}>
+            onClick={this.getLocationFromGeolocate}
+            disabled={this.state.geolocateLoading}>
             {this.state.geolocateLoading ? (
               <Loading />
             ) : (
