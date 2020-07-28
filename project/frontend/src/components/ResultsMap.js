@@ -14,15 +14,7 @@ function MapContainer(props) {
     restaurants.length === 0
       ? userLocation
       : restaurants[currentCardIndex].key.latLngCoords;
-  const [showInfoWindows, setShowInfoWindows] = useState({
-    marker0: false,
-    marker1: false,
-    marker2: false,
-    marker3: false,
-    marker4: false,
-    marker5: false,
-    marker6: false,
-  });
+  const [showInfoWindows, setShowInfoWindows] = useState({});
 
   const MarkerIcon = (props) => {
     const markerID = props.id;
@@ -78,40 +70,17 @@ function MapContainer(props) {
       return null;
     }
     const markers = [];
-    let coords = restaurants[currentCardIndex].key.latLngCoords;
-    markers.push(
-      <MarkerIcon
-        lat={coords.lat}
-        lng={coords.lng}
-        id={currentCardIndex}
-        aria-label={'Your #' + (currentCardIndex + 1) + ' Match'}
-      />
-    );
     const numOfMarkers = Math.min(restaurants.length, 3);
-    // Initialized i as 1 instead of 0 because the marker
-    // at currentCardIndex was already pushed to markers.
-    for (let i = 1; i <= numOfMarkers; i++) {
-      const nextCardIndex = currentCardIndex + i;
-      if (isValidIndex(nextCardIndex)) {
-        coords = restaurants[nextCardIndex].key.latLngCoords;
+    for (let delta = -3; delta <= numOfMarkers; delta++) {
+      const addMarkerIndex = currentCardIndex + delta;
+      if (isValidIndex(addMarkerIndex)) {
+        const coords = restaurants[addMarkerIndex].key.latLngCoords;
         markers.push(
           <MarkerIcon
             lat={coords.lat}
             lng={coords.lng}
-            id={nextCardIndex}
-            aria-label={'Your #' + (nextCardIndex + 1) + ' Match'}
-          />
-        );
-      }
-      const previousCardIndex = currentCardIndex - i;
-      if (isValidIndex(previousCardIndex)) {
-        coords = restaurants[previousCardIndex].key.latLngCoords;
-        markers.push(
-          <MarkerIcon
-            lat={coords.lat}
-            lng={coords.lng}
-            id={previousCardIndex}
-            aria-label={'Your #' + (previousCardIndex + 1) + ' Match'}
+            id={addMarkerIndex}
+            aria-label={'Your #' + (addMarkerIndex + 1) + ' Match'}
           />
         );
       }
