@@ -20,10 +20,9 @@ function HomePage(props) {
     setLocationName(locationData.locationName);
   };
 
-  const buttonStyle = {
-    opacity: locationName ? 1 : 0,
-    transform: locationName ? 'translateY(0px)' : 'translateY(-24px)',
-  };
+  const buttonStyle = locationName
+    ? { opacity: 1, transform: 'translateY(0px)' }
+    : { opacity: 0, transform: 'translateY(-24px)' };
 
   return [
     <div key='home-page' className='container u-full-width'>
