@@ -61,17 +61,21 @@ function MapContainer(props) {
 
   /** Creates all the markers that are going to be displayed
    *  on the screen. It creates the marker corresponding
-   *  to the restaurant at currentCardIndex, the 3 markers
-   *  before that and the 3 markers after that if they are
-   *  valid indicies in the restaurants list.
+   *  to the restaurant at currentCardIndex, the numAdjacentMarkers
+   *  markers before that and the numAdjacentMarkers markers
+   * after that.
    */
   const createMarkers = () => {
     if (restaurants.length === 0) {
       return null;
     }
     const markers = [];
-    const numOfMarkers = Math.min(restaurants.length, 3);
-    for (let delta = -3; delta <= numOfMarkers; delta++) {
+    const numAdjacentMarkers = 3;
+    for (
+      let delta = -numAdjacentMarkers;
+      delta <= numAdjacentMarkers;
+      delta++
+    ) {
       const addMarkerIndex = currentCardIndex + delta;
       if (isValidIndex(addMarkerIndex)) {
         const coords = restaurants[addMarkerIndex].key.latLngCoords;
