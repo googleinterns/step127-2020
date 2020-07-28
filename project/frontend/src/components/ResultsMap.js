@@ -27,7 +27,7 @@ function MapContainer(props) {
   // TODO: Add marker for "you are here location".
   const MarkerIcon = (props) => {
     const markerID = props.id;
-    const markerName = `marker${props.id}`;
+    const markerName = 'marker' + markerID;
     // TODO: Check the casing of the restaurant name (some come back all caps).
     const restaurantName = restaurants[markerID].key.name;
     const percentValue = Math.round(restaurants[markerID].value * 100);
