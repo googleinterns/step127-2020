@@ -187,7 +187,11 @@ function MapContainer(props) {
       onChildClick={onMouseClickMarker}
       aria-label={'Google Map with top 4 restaurant markers.'}>
       {createMarkers()}
-      <YouAreHereIcon lat={userLocation.lat} lng={userLocation.lng} />
+      <YouAreHereIcon
+        lat={userLocation.lat}
+        lng={userLocation.lng}
+        aria-label={'Your current location!'}
+      />
     </GoogleMapReact>
   );
 }
