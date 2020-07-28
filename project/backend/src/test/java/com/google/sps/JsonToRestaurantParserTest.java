@@ -85,8 +85,7 @@ public final class JsonToRestaurantParserTest {
 
   @Test(expected = JSONException.class)
   public void noFields() throws JSONException {
-    JSONObject body = new JSONObject();
-    Restaurant actual = JsonToRestaurantParser.toRestaurant(body);
+    Restaurant actual = JsonToRestaurantParser.toRestaurant(new JSONObject());
   }
 
   @Test(expected = JSONException.class)
@@ -96,6 +95,6 @@ public final class JsonToRestaurantParserTest {
       .put("name", RESTAURANT_NAME)
       .put("vicinity", VICINITY)
       .put("types", EMPTY_TYPES);
-    Restaurant actual = JsonToRestaurantParser.toRestaurant(body);
+    JsonToRestaurantParser.toRestaurant(body);
   }
 }
