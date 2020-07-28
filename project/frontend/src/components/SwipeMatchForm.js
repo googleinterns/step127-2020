@@ -73,34 +73,36 @@ function SwipeMatchForm(props) {
           join your session.
         </p>
         <table className='swipe-match-table'>
-          <tr>
-            <td>
-              <img src={Username} alt='' />
-            </td>
-            <td>
-              <label htmlFor='username'>Username</label>
-            </td>
-            <td>
-              <input
-                type='text'
-                name='username'
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
-                placeholder={anonUsername.current}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <img src={Place} alt='' />
-            </td>
-            <td>
-              <label>Location</label>
-            </td>
-            <td>
-              <p>{locationName}</p>
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <td>
+                <img src={Username} alt='' />
+              </td>
+              <td>
+                <label htmlFor='username'>Username</label>
+              </td>
+              <td>
+                <input
+                  type='text'
+                  name='username'
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
+                  placeholder={anonUsername.current}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img src={Place} alt='' />
+              </td>
+              <td>
+                <label>Location</label>
+              </td>
+              <td>
+                <p>{locationName}</p>
+              </td>
+            </tr>
+          </tbody>
         </table>
         <button type='submit'>Create</button>
       </form>
@@ -117,40 +119,42 @@ function SwipeMatchForm(props) {
           provide a username which will be visible to others in the session.
         </p>
         <table className='swipe-match-table'>
-          <tr>
-            <td>
-              <img src={Username} alt='' />
-            </td>
-            <td>
-              <label htmlFor='username'>Username</label>
-            </td>
-            <td>
-              <input
-                type='text'
-                name='username'
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
-                placeholder={anonUsername.current}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <img src={Fingerprint} alt='' />
-            </td>
-            <td>
-              <label htmlFor='groupId'>Group ID</label>
-            </td>
-            <td>
-              <input
-                type='text'
-                name='groupId'
-                value={groupId}
-                onChange={(event) => setGroupId(event.target.value)}
-                placeholder='Enter a group ID'
-              />
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <td>
+                <img src={Username} alt='' />
+              </td>
+              <td>
+                <label htmlFor='username'>Username</label>
+              </td>
+              <td>
+                <input
+                  type='text'
+                  name='username'
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
+                  placeholder={anonUsername.current}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img src={Fingerprint} alt='' />
+              </td>
+              <td>
+                <label htmlFor='groupId'>Group ID</label>
+              </td>
+              <td>
+                <input
+                  type='text'
+                  name='groupId'
+                  value={groupId}
+                  onChange={(event) => setGroupId(event.target.value)}
+                  placeholder='Enter a group ID'
+                />
+              </td>
+            </tr>
+          </tbody>
         </table>
         <button type='submit'>Join</button>
       </form>
