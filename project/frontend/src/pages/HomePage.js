@@ -20,20 +20,28 @@ function HomePage(props) {
     setLocationName(locationData.locationName);
   };
 
+  const buttonStyle = locationName
+    ? { opacity: 1, transform: 'translateY(0px)' }
+    : { opacity: 0, transform: 'translateY(-24px)' };
+
   return [
     <div key='home-page' className='container u-full-width'>
       <div className='row'>
         <div id='welcome' className='column'>
-          <h1 id='logo'>[LOGO]</h1>
-          <h4>Discover your restaurant match</h4>
-          <div id='location-finder'>
-            <LocationFinder sendData={handleLocationData} />
-          </div>
+          <h1 className='logo'>MAKMatch</h1>
+          <h4>Discover your restaurant match.</h4>
+          <LocationFinder sendData={handleLocationData} />
           <div>
-            <button disabled={!locationName} onClick={togglePreferenceForm}>
+            <button
+              className='welcome-button'
+              disabled={!locationName}
+              onClick={togglePreferenceForm}
+              style={buttonStyle}>
               Find My Match
             </button>
-            <button>Swipe Match</button>
+            <button className='welcome-button' style={buttonStyle}>
+              Swipe Match
+            </button>
           </div>
         </div>
       </div>
