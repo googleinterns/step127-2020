@@ -62,6 +62,7 @@ function MapContainer(props) {
           <InfoWindow
             restaurantName={restaurantName}
             percentMatch={percentValue + '%'}
+            aria-label={restaurantName + 'info window.'}
           />
         )}
       </Fragment>
