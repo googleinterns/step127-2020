@@ -7,7 +7,7 @@ function SwipeMatchPage(props) {
   
   return (
     <div>
-      {currLocation}
+      {JSON.stringify(currLocation)}
       {action}
       {username}
       {groupId}
