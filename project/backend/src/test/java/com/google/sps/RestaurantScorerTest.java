@@ -17,6 +17,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class RestaurantScorerTest {
   
+  private static final int MISSING_FIELD = -1;
   private static final int PRICE_LEVEL = 2;
   private static final double AVG_RATING = 3.78;
   private static final int NUM_RATINGS = 75;
@@ -24,6 +25,9 @@ public final class RestaurantScorerTest {
   private static final double MID_RATING = 3;
   private static final DescriptiveStatistics STATS = new  DescriptiveStatistics(new double[] {10, 30, 50, 60, 90, 100});
   private static final double AVG_NUM_RATINGS = STATS.getMean();
+  private static final int WEIGHT_2 = 2;
+  private static final int WEIGHT_3 = 3;
+  private static final int WEIGHT_4 = 4;
   private static final double EXPECTED_RATING_SCORE = 
       (Math.round(AVG_NUM_RATINGS / 5) * MID_RATING + NUM_RATINGS * AVG_RATING) / 
       ((NUM_RATINGS + Math.round(AVG_NUM_RATINGS / 5)) * (MAX_RATING - MID_RATING)) - 
@@ -35,6 +39,10 @@ public final class RestaurantScorerTest {
   private static final Restaurant RESTAURANT_ALL_FIELDS = Restaurant.create(
       /* id= */ "A12345", /* name= */ "RESTAURANT_A", /* address= */ "10 Main Street", 
       COORDS, AVG_RATING, NUM_RATINGS, PRICE_LEVEL, /* placeTypes= */ 
+      Arrays.asList(new String[] {"meal_takeaway", "restaurant"}));
+  private static final Restaurant RESTAURANT_MISSING_FIELD = Restaurant.create(
+      /* id= */ "A12345", /* name= */ "RESTAURANT_A", /* address= */ "10 Main Street", 
+      COORDS, AVG_RATING, NUM_RATINGS, MISSING_FIELD, /* placeTypes= */ 
       Arrays.asList(new String[] {"meal_takeaway", "restaurant"}));
 
   @Test
@@ -49,11 +57,24 @@ public final class RestaurantScorerTest {
   public void allPrefFieldsPresentAndMatching() throws JSONException {
     JSONObject preferences = new JSONObject()
       .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
-      .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", 2))
-      .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", 3))
-      .put("radius", new JSONObject().put("pref", 10000).put("weight", 4));
+      .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
+      .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
+      .put("radius", new JSONObject().put("pref", 10000).put("weight", WEIGHT_4));
     double actualScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, preferences, STATS);
-    double expectedScore = (EXPECTED_RATING_SCORE + 9) / 10;
+    double expectedScore = (EXPECTED_RATING_SCORE + WEIGHT_2 + WEIGHT_3 + WEIGHT_4) / 
+      (1 + WEIGHT_2 + WEIGHT_3 + WEIGHT_4);
+    assertThat(actualScore).isEqualTo(expectedScore);
+  }
+
+  @Test
+  public void restaurantMissingField_doNotConsider() throws JSONException {
+    JSONObject preferences = new JSONObject()
+      .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
+      .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
+      .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
+      .put("radius", new JSONObject().put("pref", 10000).put("weight", WEIGHT_4));
+    double actualScore = RestaurantScorer.score(RESTAURANT_MISSING_FIELD, preferences, STATS);
+    double expectedScore = (EXPECTED_RATING_SCORE + WEIGHT_3 + WEIGHT_4) / (1 + WEIGHT_3 + WEIGHT_4);
     assertThat(actualScore).isEqualTo(expectedScore);
   }
 }
