@@ -11,6 +11,7 @@ import Footer from './pages/Footer.js';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
 import MatchResultsPage from './pages/MatchResultsPage.js';
+import SwipeMatchPage from './pages/SwipeMatchPage.js';
 
 import RestaurantCard from './components/RestaurantCard.js';
 import RestaurantCardDeck from './components/RestaurantCardDeck.js';
@@ -50,8 +51,9 @@ ReactDOM.render(
           <Route path='/card'>
             <RestaurantCard restaurant={generateRestaurant()} />
           </Route>
-
+          
           <Route path='/match-results' component={MatchResultsPage} />
+          <Route path='/swipe-match' component={SwipeMatchPage} />
           <Route path='/' component={HomePage} />
         </Switch>
         <Footer />
