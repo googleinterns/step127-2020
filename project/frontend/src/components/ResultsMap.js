@@ -24,7 +24,6 @@ function MapContainer(props) {
     marker6: false,
   });
 
-  // TODO: Add marker for "you are here location".
   const MarkerIcon = (props) => {
     const markerID = props.id;
     const markerName = 'marker' + markerID;
@@ -68,7 +67,12 @@ function MapContainer(props) {
     );
   };
 
-  // TODO: add a spec here to explain what's happening.
+  /** Creates all the markers that are going to be displayed
+   *  on the screen. It creates the marker corresponding
+   *  to the restaurant at currentCardIndex, the 3 markers
+   *  before that and the 3 markers after that if they are
+   *  valid indicies in the restaurants list.
+   */
   const createMarkers = () => {
     if (restaurants.length === 0) {
       return null;
@@ -84,7 +88,8 @@ function MapContainer(props) {
       />
     );
     const numOfMarkers = Math.min(restaurants.length, 3);
-    // TODO: explain logic of for loop.
+    // Initialized i as 1 instead of 0 because the marker
+    // at currentCardIndex was already pushed to markers.
     for (let i = 1; i <= numOfMarkers; i++) {
       const nextCardIndex = currentCardIndex + i;
       if (isValidIndex(nextCardIndex)) {
