@@ -1,4 +1,4 @@
-export default Animals = [
+const animals = [
   "Aardvark",
   "Albatross",
   "Alligator",
@@ -24,9 +24,7 @@ export default Animals = [
   "Capybara",
   "Caribou",
   "Cassowary",
-  "Cat",
   "Caterpillar",
-  "Cattle",
   "Chamois",
   "Cheetah",
   "Chicken",
@@ -42,7 +40,6 @@ export default Animals = [
   "Crocodile",
   "Crow",
   "Deer",
-  "Dog",
   "Dogfish",
   "Dolphin",
   "Dotterel",
@@ -159,7 +156,7 @@ export default Animals = [
   "Ram",
   "Rat",
   "Raven",
-  "Red panda",
+  "Red Panda",
   "Reindeer",
   "Rhinoceros",
   "Salamander",
@@ -210,3 +207,9 @@ export default Animals = [
   "Yak",
   "Zebra",
 ];
+
+const Animals = {
+  random: () => animals[Math.floor(Math.random() * Math.floor(animals.length))],
+};
+
+export default Animals;
