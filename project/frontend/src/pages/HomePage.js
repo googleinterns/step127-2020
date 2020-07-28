@@ -121,8 +121,7 @@ function HomePage(props) {
       onDismiss={toggleSwipeMatchForm}
       centerHorizontal={true}
       top='64px'
-      bottom='64px'
-      style={{ paddingBottom: '0px' }}>
+      bottom='64px'>
       <SwipeMatchForm currLocation={currLocation} locationName={locationName} />
     </Modal>,
   ];
