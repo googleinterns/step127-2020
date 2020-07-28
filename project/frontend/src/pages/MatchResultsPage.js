@@ -9,6 +9,7 @@ function MatchResultsPage(props) {
 
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentRestaurantIndex, setCurrentRestaurantIndex] = useState(0);
 
   useEffect(() => {
     getRecommendation(formState, (result) => {
@@ -23,9 +24,12 @@ function MatchResultsPage(props) {
         <p>Hi there your results are loading...</p>
       </div>
     </Modal>,
-    <div style={{ height: '100%', width: '50%', position: 'relative' }}>
-      <MapContainer restaurants={restaurants} userLocation={userLocation} />{' '}
-    </div>,
+    <MapContainer
+      restaurants={restaurants}
+      userLocation={userLocation}
+      currentCardIndex={currentRestaurantIndex}
+      setCurrentCardIndex={setCurrentRestaurantIndex}
+    />,
   ];
 }
 
