@@ -44,11 +44,11 @@ public final class JsonToRestaurantParserTest {
       .put("user_ratings_total", NUM_RATINGS)
       .put("price_level", PRICE_LEVEL);
 
-    Restaurant expected = Restaurant.create(
+    Restaurant expectedRestaurant = Restaurant.create(
       PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, RATING, NUM_RATINGS,
       PRICE_LEVEL, EMPTY_TYPES);
-    Restaurant actual = JsonToRestaurantParser.toRestaurant(body);
-    assertThat(actual).isEqualTo(expected);
+    Restaurant actualRestaurant = JsonToRestaurantParser.toRestaurant(body);
+    assertThat(actualRestaurant).isEqualTo(expectedRestaurant);
   }
 
   @Test
@@ -62,8 +62,8 @@ public final class JsonToRestaurantParserTest {
       .put("types", randomTypes)
       .put("geometry", geometry);
 
-    Restaurant actual = JsonToRestaurantParser.toRestaurant(body);
-    assertThat(actual.getPlaceTypes()).containsExactlyElementsIn(ALL_TYPES);
+    Restaurant actualRestaurant = JsonToRestaurantParser.toRestaurant(body);
+    assertThat(actualRestaurant.getPlaceTypes()).containsExactlyElementsIn(ALL_TYPES);
   }
 
   @Test
@@ -76,16 +76,16 @@ public final class JsonToRestaurantParserTest {
       .put("types", EMPTY_TYPES)
       .put("geometry", geometry);
 
-    Restaurant expected = Restaurant.create(
+    Restaurant expectedRestaurant = Restaurant.create(
       PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, /* avgRating= */ MISSING_FIELD, 
       /* numRatings= */ MISSING_FIELD, /* priceNum= */ MISSING_FIELD, EMPTY_TYPES);
-    Restaurant actual = JsonToRestaurantParser.toRestaurant(body);
-    assertThat(actual).isEqualTo(expected);
+    Restaurant actualRestaurant = JsonToRestaurantParser.toRestaurant(body);
+    assertThat(actualRestaurant).isEqualTo(expectedRestaurant);
   }
 
   @Test(expected = JSONException.class)
   public void noFields() throws JSONException {
-    Restaurant actual = JsonToRestaurantParser.toRestaurant(new JSONObject());
+    JsonToRestaurantParser.toRestaurant(new JSONObject());
   }
 
   @Test(expected = JSONException.class)
