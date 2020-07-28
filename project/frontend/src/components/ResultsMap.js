@@ -91,9 +91,7 @@ function MapContainer(props) {
   /** Checks that the current index is a valid index for
    * the restaurant matches list.
    */
-  const isValidIndex = (index) => {
-    return index >= 0 && index < restaurants.length;
-  };
+  const isValidIndex = (index) => index >= 0 && index < restaurants.length;
 
   /** Info Window with name and match appears when the mouse hovers
    * over the marker.
