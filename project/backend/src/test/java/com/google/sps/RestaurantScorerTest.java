@@ -17,6 +17,10 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class RestaurantScorerTest {
   
+  private static final List<String> SOME_TYPES = Arrays.asList(new String[]{"meal_takeaway", "restaurant"});
+  private static final String RESTAURANT_NAME = "RESTAURANT_A";
+  private static final String PLACE_ID = "A12345";
+  private static final String VICINITY = "10 Main Street";
   private static final int MISSING_FIELD = -1;
   private static final int PRICE_LEVEL = 2;
   private static final double AVG_RATING = 3.78;
@@ -37,13 +41,7 @@ public final class RestaurantScorerTest {
     put("lng", 20.0);
   }};
   private static final Restaurant RESTAURANT_ALL_FIELDS = Restaurant.create(
-      /* id= */ "A12345", /* name= */ "RESTAURANT_A", /* address= */ "10 Main Street", 
-      COORDS, AVG_RATING, NUM_RATINGS, PRICE_LEVEL, /* placeTypes= */ 
-      Arrays.asList(new String[] {"meal_takeaway", "restaurant"}));
-  private static final Restaurant RESTAURANT_MISSING_FIELD = Restaurant.create(
-      /* id= */ "A12345", /* name= */ "RESTAURANT_A", /* address= */ "10 Main Street", 
-      COORDS, AVG_RATING, NUM_RATINGS, MISSING_FIELD, /* placeTypes= */ 
-      Arrays.asList(new String[] {"meal_takeaway", "restaurant"}));
+      PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, AVG_RATING, NUM_RATINGS, PRICE_LEVEL, SOME_TYPES);
 
   @Test
   public void noOptionalPrefFieldsPresent_useRatingScore() throws JSONException {
@@ -68,12 +66,15 @@ public final class RestaurantScorerTest {
 
   @Test
   public void restaurantMissingField_doNotConsider() throws JSONException {
+    Restaurant restaurantMissingField = Restaurant.create(
+      PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, AVG_RATING, NUM_RATINGS, 
+      /* priceNum= */ MISSING_FIELD, SOME_TYPES);
     JSONObject preferences = new JSONObject()
       .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
       .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
       .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
       .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
-    double actualScore = RestaurantScorer.score(RESTAURANT_MISSING_FIELD, preferences, STATS);
+    double actualScore = RestaurantScorer.score(restaurantMissingField, preferences, STATS);
     double expectedScore = (EXPECTED_RATING_SCORE + WEIGHT_3 + WEIGHT_4) / (1 + WEIGHT_3 + WEIGHT_4);
     assertThat(actualScore).isEqualTo(expectedScore);
   }
@@ -89,5 +90,20 @@ public final class RestaurantScorerTest {
       double expectedScore = (EXPECTED_RATING_SCORE - 1.423969 * WEIGHT_4) / (1 + WEIGHT_4);
       // Account for margin of error in rounding from online calculator.
       assertThat(actualScore).isWithin(0.001).of(expectedScore);
+  }
+
+  @Test
+  public void restaurantMissingRating() throws JSONException {
+    Restaurant restaurantWithoutRatings = Restaurant.create(
+      PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, /* avgRating= */ MISSING_FIELD, 
+      /** numRatings= */ MISSING_FIELD, PRICE_LEVEL, SOME_TYPES);
+    JSONObject preferences = new JSONObject()
+      .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
+      .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
+      .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
+      .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
+    double actualScore = RestaurantScorer.score(restaurantWithoutRatings, preferences, STATS);
+    double expectedScore = (double) (WEIGHT_2 + WEIGHT_3 + WEIGHT_4) / (1 + WEIGHT_2 + WEIGHT_3 + WEIGHT_4);
+    assertThat(actualScore).isEqualTo(expectedScore);
   }
 }
