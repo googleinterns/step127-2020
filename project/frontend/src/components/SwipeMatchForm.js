@@ -25,14 +25,12 @@ function SwipeMatchForm(props) {
       state: { currLocation },
     });
   };
-  
+
   return (
     <div className='preference-form-container'>
       <form onSubmit={createSession}>
         <h4>Create a new session.</h4>
-        <p>
-          This is some instruction.
-        </p>
+        <p>This is some instruction.</p>
         <div className='preference-form-row'>
           <img src={Place} alt='' />
           <label>Location</label>
@@ -47,15 +45,14 @@ function SwipeMatchForm(props) {
       </div>
       <form onSubmit={joinSession}>
         <h4>Join an existing session.</h4>
-        <p>
-          This is some different instruction.
-        </p>
+        <p>This is some different instruction.</p>
         <input
           type='text'
           name='groupId'
           value={groupId}
           onChange={(event) => setGroupId(event.target.value)}
-          placeholder='Enter a group ID' />
+          placeholder='Enter a group ID'
+        />
         <button type='submit'>Join</button>
       </form>
     </div>
