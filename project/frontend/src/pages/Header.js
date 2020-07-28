@@ -19,7 +19,8 @@ function Header(props) {
   if (!user) {
     return (
       <div id='header'>
-        <Loading />
+        <h5 className='header-logo'>MAKMatch</h5>
+        <Loading style={{ marginRight: '16px' }} />
       </div>
     );
   }
@@ -27,6 +28,7 @@ function Header(props) {
   if (user.isSignedIn()) {
     return (
       <div id='header'>
+        <h5 className='header-logo'>MAKMatch</h5>
         <img
           className='profile-pic'
           src={user.getBasicProfile().getImageUrl()}
@@ -48,6 +50,7 @@ function Header(props) {
 
   return (
     <div id='header'>
+      <h5 className='header-logo'>MAKMatch</h5>
       <button className='sign-in' onClick={authContext.signIn}>
         Sign In with Google
       </button>

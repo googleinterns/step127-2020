@@ -15,6 +15,8 @@ import React from 'react';
  *     of this modal.
  * @param {string} props.left Space from the left of the viewport to the left
  *     of this modal.
+ * @param {Object<string, *>=} props.style An optional style object to be applied to
+ *     the parent container of this modal.
  * @param {function(): undefined} props.onDismiss Callback for when modal is
  *     dismissed by touching modal backdrop, should update props.open to false.
  * @param {boolean=} props.center True if the modal should be horizontally and vertically
@@ -29,6 +31,7 @@ function Modal(props) {
     right,
     bottom,
     left,
+    style = {},
     onDismiss,
     center = false,
     centerHorizontal = false,
@@ -36,7 +39,7 @@ function Modal(props) {
 
   const backdropStyle = { height: open ? '' : '0px' };
 
-  let modalStyle = { opacity: open ? 1 : 0 };
+  let modalStyle = { opacity: open ? 1 : 0, ...style };
   if (center) {
     modalStyle = {
       top: '50%',

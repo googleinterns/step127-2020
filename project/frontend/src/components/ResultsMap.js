@@ -15,19 +15,27 @@ function MapContainer(props) {
 
   // TODO: Add marker for "you are here location".
   const MarkerIcon = (props) => {
-    const markerName = 'marker' + props.id;
+    const markerID = props.id;
+    const markerName = 'marker' + markerID;
+    // TODO: Check the casing of the restaurant name (some come back all caps).
+    const restaurantName = restaurants[markerID].key.name;
+    const percentValue = Math.round(restaurants[markerID].value * 100);
     return (
       <Fragment>
         <img src={Lunch} alt={'lunch icon'} />
-        {showInfoWindows[markerName] && <InfoWindow marker={activeMarker} />}
+        {showInfoWindows[markerName] && (
+          <InfoWindow
+            marker={activeMarker}
+            restaurantName={restaurantName}
+            percentMatch={percentValue + '%'}
+          />
+        )}
       </Fragment>
     );
   };
 
   const InfoWindow = (props) => {
-    // TODO: Remove hard coded data and add name and percent match from the backend.
-    const restaurantName = 'Applebees';
-    const percentMatch = '96%';
+    const { restaurantName, percentMatch } = props;
     const infoWindowStyle = {
       position: 'relative',
       bottom: 80,

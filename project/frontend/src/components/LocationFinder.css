@@ -1,0 +1,38 @@
+.location-finder {
+  color: black;
+}
+
+.location-finder-autocomplete-container {
+  display: flex;
+  height: 48px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background-color: white;
+  margin: 32px 0px;
+  overflow: hidden;
+}
+
+.location-finder-my-location {
+  height: 46px;
+  border: none;
+  border-right: 1px solid #bbb;
+  border-radius: 0px;
+  margin: 0px !important;
+  font-size: 18px;
+  line-height: 46px;
+  padding: 0px 16px;
+}
+
+.location-finder-autocomplete-input {
+  width: 600px;
+  height: 46px;
+  line-height: 46px;
+  border: none;
+  margin: 0px;
+  padding-left: 16px;
+  outline: none !important;
+}
+
+.highlighted-label {
+  background-color: white;
+}
