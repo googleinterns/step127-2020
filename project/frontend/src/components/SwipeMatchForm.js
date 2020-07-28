@@ -45,7 +45,7 @@ function SwipeMatchForm(props) {
       state: {
         currLocation,
         action: 'create',
-        username: username ? username : anonUsername,
+        username: username ? username : anonUsername.current,
       },
     });
   };
@@ -57,7 +57,7 @@ function SwipeMatchForm(props) {
       state: {
         currLocation,
         action: 'join',
-        username: username ? username : anonUsername,
+        username: username ? username : anonUsername.current,
         groupId,
       },
     });
