@@ -93,12 +93,9 @@ function HomePage(props) {
       onDismiss={togglePreferenceForm}
       centerHorizontal={true}
       top='64px'
-      bottom='64px'>
-      <PreferenceForm
-        history={props.history}
-        currLocation={currLocation}
-        locationName={locationName}
-      />
+      bottom='64px'
+      style={{ paddingBottom: '0px' }}>
+      <PreferenceForm currLocation={currLocation} locationName={locationName} />
     </Modal>,
   ];
 }
