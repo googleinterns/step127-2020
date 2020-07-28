@@ -45,6 +45,7 @@ function SwipeMatchForm(props) {
       state: {
         currLocation,
         action: 'create',
+        username: username ? username : anonUsername,
       },
     });
   };
@@ -56,6 +57,7 @@ function SwipeMatchForm(props) {
       state: {
         currLocation,
         action: 'join',
+        username: username ? username : anonUsername,
         groupId,
       },
     });
@@ -151,6 +153,7 @@ function SwipeMatchForm(props) {
                   value={groupId}
                   onChange={(event) => setGroupId(event.target.value)}
                   placeholder='Enter a group ID'
+                  required
                 />
               </td>
             </tr>
