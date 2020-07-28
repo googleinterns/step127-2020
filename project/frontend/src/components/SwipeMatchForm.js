@@ -23,7 +23,7 @@ function SwipeMatchForm(props) {
 
   const history = useHistory();
   const authContext = useContext(AuthContext);
-  
+
   const [username, setUsername] = useState('wack');
   const [groupId, setGroupId] = useState('');
 
@@ -37,7 +37,7 @@ function SwipeMatchForm(props) {
       setUsername('');
     }
   }, [authContext]);
-  
+
   const createSession = (event) => {
     event.preventDefault();
     history.push({
@@ -66,16 +66,20 @@ function SwipeMatchForm(props) {
       <form onSubmit={createSession}>
         <h4>Create a new session.</h4>
         <p>
-          The restaurants presented in this Swipe Match session will be based
-          on the location below. You may optionally provide futher filters for
-          the restaurants to be shown by expanding the filter dropdown. Upon
-          creation, you will be provided with a group ID which others may use
-          to join your session.
+          The restaurants presented in this Swipe Match session will be based on
+          the location below. You may optionally provide futher filters for the
+          restaurants to be shown by expanding the filter dropdown. Upon
+          creation, you will be provided with a group ID which others may use to
+          join your session.
         </p>
         <table className='swipe-match-table'>
           <tr>
-            <td><img src={Username} alt='' /></td>
-            <td><label htmlFor='username'>Username</label></td>
+            <td>
+              <img src={Username} alt='' />
+            </td>
+            <td>
+              <label htmlFor='username'>Username</label>
+            </td>
             <td>
               <input
                 type='text'
@@ -87,9 +91,15 @@ function SwipeMatchForm(props) {
             </td>
           </tr>
           <tr>
-            <td><img src={Place} alt='' /></td>
-            <td><label>Location</label></td>
-            <td><p>{locationName}</p></td>
+            <td>
+              <img src={Place} alt='' />
+            </td>
+            <td>
+              <label>Location</label>
+            </td>
+            <td>
+              <p>{locationName}</p>
+            </td>
           </tr>
         </table>
         <button type='submit'>Create</button>
@@ -108,8 +118,12 @@ function SwipeMatchForm(props) {
         </p>
         <table className='swipe-match-table'>
           <tr>
-            <td><img src={Username} alt='' /></td>
-            <td><label htmlFor='username'>Username</label></td>
+            <td>
+              <img src={Username} alt='' />
+            </td>
+            <td>
+              <label htmlFor='username'>Username</label>
+            </td>
             <td>
               <input
                 type='text'
@@ -121,8 +135,12 @@ function SwipeMatchForm(props) {
             </td>
           </tr>
           <tr>
-            <td><img src={Fingerprint} alt='' /></td>
-            <td><label htmlFor='groupId'>Group ID</label></td>
+            <td>
+              <img src={Fingerprint} alt='' />
+            </td>
+            <td>
+              <label htmlFor='groupId'>Group ID</label>
+            </td>
             <td>
               <input
                 type='text'
