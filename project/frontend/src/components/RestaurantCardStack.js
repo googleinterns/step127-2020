@@ -1,17 +1,17 @@
 import './RestaurantCardStack.css';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import RestaurantCard from './RestaurantCard.js';
 
 /**
  * A navigable stack of restaurant cards.
  *
- * @param {!Array<Object<string, *>>} props.cards A list of restaurant objects whose
- * data will be displayed in RestaurantCard components within this stack.
+ * @param {!Array<Object<string, *>>} props.restaurants A list of restaurant objects
+ * whose data will be displayed in RestaurantCard components within this stack.
  */
 function RestaurantCardStack(props) {
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const { restaurants, currentCardIndex, setCurrentCardIndex } = props;
 
   const maxScaleFactor = 1.0;
   const minScaleFactor = 0.85;
@@ -24,7 +24,7 @@ function RestaurantCardStack(props) {
     'top 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'opacity 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'transform 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
-  const cards = props.cards.map((card, index) => {
+  const cards = restaurants.map((restaurant, index) => {
     if (
       index < currentCardIndex - numberOfRenderedCards ||
       index > currentCardIndex + numberOfRenderedCards
@@ -52,7 +52,7 @@ function RestaurantCardStack(props) {
 
     const top = offset + 'px';
     const opacity = relativeIndexAbs <= numberOfCollapsedCards ? 1 : 0;
-    const zIndex = props.cards.length - relativeIndexAbs;
+    const zIndex = restaurants.length - relativeIndexAbs;
     const transform =
       'scale(' +
       Math.min(
@@ -72,10 +72,9 @@ function RestaurantCardStack(props) {
 
     return (
       <RestaurantCard
-        key={card.restaurant.key.id}
+        key={restaurant.key.id}
         style={style}
-        restaurant={card.restaurant}
-        details={card.details}
+        restaurant={restaurant}
         collapsed={index !== currentCardIndex}
       />
     );
