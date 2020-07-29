@@ -88,7 +88,7 @@ function SwipeMatchForm(props) {
               <tbody>
                 <tr>
                   <td>
-                    <img src={Username} alt='' />
+                    <img src={Username} alt='Username icon' />
                   </td>
                   <td>
                     <label htmlFor='username'>Username</label>
@@ -106,7 +106,7 @@ function SwipeMatchForm(props) {
                 </tr>
                 <tr>
                   <td>
-                    <img src={Place} alt='' />
+                    <img src={Place} alt='Location icon' />
                   </td>
                   <td>
                     <label>Location</label>
@@ -144,7 +144,7 @@ function SwipeMatchForm(props) {
           <tbody>
             <tr>
               <td>
-                <img src={Username} alt='' />
+                <img src={Username} alt='Username icon' />
               </td>
               <td>
                 <label htmlFor='username'>Username</label>
@@ -161,7 +161,7 @@ function SwipeMatchForm(props) {
             </tr>
             <tr>
               <td>
-                <img src={Fingerprint} alt='' />
+                <img src={Fingerprint} alt='Group ID icon' />
               </td>
               <td>
                 <label htmlFor='groupId'>Group ID</label>
