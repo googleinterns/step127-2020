@@ -1,5 +1,8 @@
+import './LocationFinder.css';
+
 import React from 'react';
-import MyLocation from '@material-ui/icons/MyLocation';
+import Loading from './Loading.js';
+import MyLocation from '../assets/gps.svg';
 
 class LocationFinder extends React.Component {
   constructor(props) {
@@ -10,6 +13,7 @@ class LocationFinder extends React.Component {
       submitted: false,
       error: false,
       autocomplete: null,
+      geolocateLoading: false,
     };
     this.changeState = this.changeState.bind(this);
     this.getLocationFromGeolocate = this.getLocationFromGeolocate.bind(this);
@@ -21,7 +25,7 @@ class LocationFinder extends React.Component {
   componentDidMount() {
     const google = window.google;
     this.autocomplete = new google.maps.places.Autocomplete(
-      document.getElementById('autocomplete-input')
+      document.getElementById('location-finder-autocomplete-input')
     );
     this.autocomplete.addListener('place_changed', this.handlePlaceSelect);
   }
@@ -33,7 +37,12 @@ class LocationFinder extends React.Component {
       lat: addressObj.geometry.location.lat(),
       lng: addressObj.geometry.location.lng(),
     };
-    this.setState({ locationName, submitted: true, error: false });
+    this.setState({
+      userInput: locationName,
+      locationName,
+      submitted: true,
+      error: false,
+    });
     this.props.sendData({ currLocation, locationName });
   }
 
@@ -51,6 +60,7 @@ class LocationFinder extends React.Component {
         this.handleGeolocateSuccess,
         this.handleGeolocateError
       );
+      this.setState({ geolocateLoading: true });
     } else {
       alert(
         'Cannot find your location. Try entering a location in the text box below.'
@@ -68,10 +78,16 @@ class LocationFinder extends React.Component {
     geocoder.geocode({ location: currLocation }, (results, status) => {
       if (status === 'OK') {
         const locationName = results[0].formatted_address;
-        this.setState({ locationName, submitted: true, error: false });
+        this.setState({
+          userInput: locationName,
+          locationName,
+          submitted: true,
+          error: false,
+          geolocateLoading: false,
+        });
         this.props.sendData({ currLocation, locationName });
       } else {
-        this.setState({ error: true });
+        this.setState({ error: true, geolocateLoading: false });
         const result = document.getElementById('error-label');
         result.innerHTML =
           'Geocode was not successful for the following reason: ' +
@@ -82,7 +98,7 @@ class LocationFinder extends React.Component {
   }
 
   handleGeolocateError(error) {
-    this.setState({ error: true });
+    this.setState({ error: true, geolocateLoading: false });
     const result = document.getElementById('error-label');
     if (error.code === 1) {
       result.innerHTML =
@@ -100,23 +116,33 @@ class LocationFinder extends React.Component {
 
   render() {
     return (
-      <div>
-        <label htmlFor='autocomplete-input' />
-        <input
-          id='autocomplete-input'
-          name='userInput'
-          onChange={this.changeState}
-        />
-        <button onClick={this.getLocationFromGeolocate}>
-          <MyLocation />
-        </button>
+      <div className='location-finder'>
+        <div className='location-finder-autocomplete-container'>
+          <button
+            className='location-finder-my-location'
+            onClick={this.getLocationFromGeolocate}
+            disabled={this.state.geolocateLoading}>
+            {this.state.geolocateLoading ? (
+              <Loading />
+            ) : (
+              <img
+                src={MyLocation}
+                alt='Get your location.'
+                style={{ padding: '0px 7px' }}
+              />
+            )}
+          </button>
+          <input
+            id='location-finder-autocomplete-input'
+            className='location-finder-autocomplete-input'
+            name='userInput'
+            placeholder='Enter your location'
+            value={this.state.userInput}
+            onChange={this.changeState}
+          />
+        </div>
         {this.state.error ? (
           <p id='error-label' className='highlighted-label' />
-        ) : null}
-        {this.state.submitted ? (
-          <p id='location-label' className='highlighted-label'>
-            Your current location: {this.state.locationName}
-          </p>
         ) : null}
       </div>
     );

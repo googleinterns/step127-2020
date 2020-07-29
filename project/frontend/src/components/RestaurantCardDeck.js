@@ -45,13 +45,13 @@ function reducer(previous, action) {
 /**
  * A navigable deck of restaurant cards.
  *
- * @param {!Array<Object<string, *>>} props.cards A list of restaurant objects whose
- * data will be displayed in RestaurantCard components within this stack.
+ * @param {!Array<Object<string, *>>} props.restaurants A list of restaurant objects
+ * whose data will be displayed in RestaurantCard components within this stack.
  */
 function RestaurantCardDeck(props) {
   const [state, dispatch] = useReducer(reducer, {
     index: 0,
-    history: new Array(props.cards.length),
+    history: new Array(props.restaurants.length),
   });
 
   const maxScaleFactor = 1.0;
@@ -64,7 +64,7 @@ function RestaurantCardDeck(props) {
     'left 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'transform 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'opacity 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
-  const cards = props.cards.map((card, index) => {
+  const cards = props.restaurants.map((restaurant, index) => {
     if (
       index < state.index - numberOfRenderedCards ||
       index > state.index + numberOfRenderedCards
@@ -81,7 +81,7 @@ function RestaurantCardDeck(props) {
         'px',
       left: '0px',
       opacity: relativeIndex < numberOfVisibleCards ? 1 : 0,
-      zIndex: props.cards.length - index,
+      zIndex: props.restaurants.length - index,
       transform:
         'scale(' +
         Math.min(
@@ -101,10 +101,9 @@ function RestaurantCardDeck(props) {
 
     return (
       <RestaurantCard
-        key={card.restaurant.key.id}
+        key={restaurant.key.id}
         style={style}
-        restaurant={card.restaurant}
-        details={card.details}
+        restaurant={restaurant}
       />
     );
   });

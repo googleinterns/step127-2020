@@ -188,11 +188,11 @@ html {
   font-size: 62.5%;
 }
 body {
-  font-size: 1.7em; /* currently ems cause chrome bug misinterpreting rems on body element */
+  font-size: 1.6em; /* currently ems cause chrome bug misinterpreting rems on body element */
   line-height: 1.4;
   font-weight: 400;
-  font-family: 'Montserrat', 'Crimson Text', serif, 'HelveticaNeue',
-    'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', 'Roboto', serif, 'HelveticaNeue', 'Helvetica Neue',
+    Helvetica, Arial, sans-serif;
   color: #222;
 }
 
@@ -206,6 +206,7 @@ h5,
 h6 {
   margin-top: 0;
   margin-bottom: 0;
+  cursor: default;
 }
 h1 {
   font-size: 4rem;
@@ -255,8 +256,14 @@ h6 {
 }
 
 p {
-  font-family: 'Crimson Text';
+  font-family: 'Roboto';
+  line-height: 24px;
   margin-top: 0;
+  cursor: default;
+}
+
+span {
+  cursor: default;
 }
 
 /* Links

@@ -1,0 +1,38 @@
+.autocomplete-root {
+  border: 1px solid #d1d1d1;
+  border-radius: 4px;
+}
+
+.autocomplete-root-focused {
+  border: 1px solid #57ba98;
+}
+
+.autocomplete-input-root {
+  padding: 0px !important;
+  font-family: 'Roboto' !important;
+  font-size: 1.2rem !important;
+}
+
+.autocomplete-input-root::before,
+.autocomplete-input-root::after {
+  border: none !important;
+}
+
+.autocomplete-input {
+  padding: 0px 8px !important;
+  border: none !important;
+}
+
+.autocomplete-end-adornment {
+  display: none;
+}
+
+.autocomplete-tag {
+  font-family: 'Roboto' !important;
+  font-size: 1.2rem !important;
+}
+
+.autocomplete-listbox {
+  font-family: 'Roboto' !important;
+  font-size: 1.2rem !important;
+}

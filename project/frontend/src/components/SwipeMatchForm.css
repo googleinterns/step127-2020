@@ -1,0 +1,64 @@
+.swipe-match-form-container {
+  max-width: 600px;
+  text-align: left;
+}
+
+.swipe-match-form-container form {
+  margin-bottom: 0px;
+}
+
+.swipe-match-form-container button {
+  display: block;
+  margin: 0px auto 8px auto;
+}
+
+.swipe-match-table {
+  margin: 0px auto 32px auto;
+}
+
+.swipe-match-table td {
+  border: none;
+  padding: 8px 16px 8px 0px;
+  vertical-align: middle;
+}
+
+.swipe-match-table td:last-of-type {
+  padding-right: 0px;
+}
+
+.swipe-match-table tr:first-of-type > td {
+  padding-top: 0px;
+}
+
+.swipe-match-table tr:last-of-type > td {
+  padding-bottom: 0px;
+}
+
+.swipe-match-table td > * {
+  margin: 0px;
+}
+
+.swipe-match-table td > p {
+  margin-bottom: 0px;
+  padding: 6px 8px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background-color: #f3f3f3;
+}
+
+.swipe-match-table td > input {
+  font-family: 'Roboto';
+}
+
+.swipe-match-authentication-lock {
+  position: relative;
+}
+
+.swipe-match-authentication-lock > button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0px;
+  background-color: white;
+}

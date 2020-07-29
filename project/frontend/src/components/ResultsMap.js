@@ -14,15 +14,7 @@ function MapContainer(props) {
     restaurants.length === 0
       ? userLocation
       : restaurants[currentCardIndex].key.latLngCoords;
-  const [showInfoWindows, setShowInfoWindows] = useState({
-    marker0: false,
-    marker1: false,
-    marker2: false,
-    marker3: false,
-    marker4: false,
-    marker5: false,
-    marker6: false,
-  });
+  const [showInfoWindows, setShowInfoWindows] = useState({});
 
   const YouAreHereIcon = (props) => {
     return (
@@ -62,7 +54,7 @@ function MapContainer(props) {
           <InfoWindow
             restaurantName={restaurantName}
             percentMatch={percentValue + '%'}
-            aria-label={restaurantName + 'Info Window'}
+            aria-label={restaurantName + ' Info Window'}
           />
         )}
       </Fragment>
@@ -95,49 +87,30 @@ function MapContainer(props) {
 
   /** Creates all the markers that are going to be displayed
    *  on the screen. It creates the marker corresponding
-   *  to the restaurant at currentCardIndex, the 3 markers
-   *  before that and the 3 markers after that if they are
-   *  valid indicies in the restaurants list.
+   *  to the restaurant at currentCardIndex, the numAdjacentMarkers
+   *  markers before that and the numAdjacentMarkers markers
+   * after that.
    */
   const createMarkers = () => {
     if (restaurants.length === 0) {
       return null;
     }
     const markers = [];
-    let coords = restaurants[currentCardIndex].key.latLngCoords;
-    markers.push(
-      <MarkerIcon
-        lat={coords.lat}
-        lng={coords.lng}
-        id={currentCardIndex}
-        aria-label={'Your #' + (currentCardIndex + 1) + ' Match'}
-      />
-    );
-    const numOfMarkers = Math.min(restaurants.length, 3);
-    // Initialized i as 1 instead of 0 because the marker
-    // at currentCardIndex was already pushed to markers.
-    for (let i = 1; i <= numOfMarkers; i++) {
-      const nextCardIndex = currentCardIndex + i;
-      if (isValidIndex(nextCardIndex)) {
-        coords = restaurants[nextCardIndex].key.latLngCoords;
+    const numAdjacentMarkers = 3;
+    for (
+      let delta = -numAdjacentMarkers;
+      delta <= numAdjacentMarkers;
+      delta++
+    ) {
+      const addMarkerIndex = currentCardIndex + delta;
+      if (isValidIndex(addMarkerIndex)) {
+        const coords = restaurants[addMarkerIndex].key.latLngCoords;
         markers.push(
           <MarkerIcon
             lat={coords.lat}
             lng={coords.lng}
-            id={nextCardIndex}
-            aria-label={'Your #' + (nextCardIndex + 1) + ' Match'}
-          />
-        );
-      }
-      const previousCardIndex = currentCardIndex - i;
-      if (isValidIndex(previousCardIndex)) {
-        coords = restaurants[previousCardIndex].key.latLngCoords;
-        markers.push(
-          <MarkerIcon
-            lat={coords.lat}
-            lng={coords.lng}
-            id={previousCardIndex}
-            aria-label={'Your #' + (previousCardIndex + 1) + ' Match'}
+            id={addMarkerIndex}
+            aria-label={'Your #' + (addMarkerIndex + 1) + ' Match'}
           />
         );
       }
@@ -148,9 +121,7 @@ function MapContainer(props) {
   /** Checks that the current index is a valid index for
    * the restaurant matches list.
    */
-  const isValidIndex = (index) => {
-    return index >= 0 && index < restaurants.length;
-  };
+  const isValidIndex = (index) => index >= 0 && index < restaurants.length;
 
   /** Info Window with name and match appears when the mouse hovers
    * over the marker.

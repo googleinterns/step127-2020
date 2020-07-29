@@ -1,6 +1,6 @@
 import './ImageSlider.css';
 
-import React, { useState, useReducer, useRef, useLayoutEffect } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
 import Next from '../assets/next.svg';
@@ -16,7 +16,22 @@ const Action = {
   SWIPED_RIGHT: 2,
   PREV_SLIDE: 3,
   NEXT_SLIDE: 4,
+  RESET: 5,
 };
+
+/**
+ * Initializes the state for this ImageSlider.
+ *
+ * @param {number} count The number of images in this slider.
+ */
+function initState(count) {
+  return {
+    left: 0,
+    lastLeft: 0,
+    slide: 0,
+    slideCount: count,
+  };
+}
 
 // TODO: Scale RestaurantCard dimensions based on screen size.
 /**
@@ -89,6 +104,8 @@ function reducer(previous, action) {
     case Action.NEXT_SLIDE:
       if (slide < slideCount - 1) slide++;
       break;
+    case Action.RESET:
+      return initState(action.count);
     default:
       throw new Error();
   }
@@ -109,20 +126,21 @@ function reducer(previous, action) {
  *
  * @param {!Array<string>} props.images An array of image URLs pointing to the
  *     images that should be displayed in this slider.
- * @param {boolean=} props.collapsed An optional control over whether this slider
- *     is in a collapsed or full view (default: false).
+ * @param {?Object<string, *>} props.parentRef An optional ref to the parent
+ *     container of this component.
+ * @param {?Object<string, *>} props.style An optional style object to be applied
+ *     to the parent container of this component.
  */
 function ImageSlider(props) {
-  const { images, collapsed = false } = props;
+  const { images, parentRef, style } = props;
 
   const [areControlsVisible, setAreControlsVisible] = useState(false);
 
-  const [state, dispatch] = useReducer(reducer, {
-    left: 0,
-    lastLeft: 0,
-    slide: 0,
-    slideCount: images.length,
-  });
+  const [state, dispatch] = useReducer(reducer, images.length, initState);
+
+  useEffect(() => {
+    dispatch({ type: Action.RESET, count: images.length });
+  }, [images.length]);
 
   const handleSwipedUpOrDown = (event) => {
     if (event.deltaX > 0) {
@@ -150,61 +168,13 @@ function ImageSlider(props) {
     preventDefaultTouchmoveEvent: true,
   });
 
-  const slider = useRef(null);
-  const sliderMaxHeight = useRef(null);
-
-  useLayoutEffect(() => {
-    sliderMaxHeight.current = slider.current.offsetHeight;
-    if (collapsed) {
-      slider.current.style.height = '0px';
-    } else {
-      slider.current.style.height = sliderMaxHeight.current + 'px';
-    }
-    // We only want this effect to run once (the very first time this component
-    // is laid out) so that we may capture the uncollapsed height of this slider
-    // and save it to a persistent ref (sliderMaxHeight).
-    // Adding `collapsed` to the dependency array below, as eslint would have us do,
-    // would cause the value of `sliderMaxHeight` to be updated to 0px when the
-    // slider goes from a collapsed -> uncollapsed state.
-    //
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // On the first render event of this component, the slider will be rendered with
-  // a default full height of 200px regardless of whether `collapsed` is true or false.
-  // This allows the full height to be captured in the above layoutEffect before this
-  // component is painted to the screen.
-  // This full height may actually be less than the explicitly set 200px because this
-  // slider is a child of a flexbox parent (RestaurantCard) which may give this slider
-  // a smaller height if the text content of the RestaurantCard requires more vertical
-  // space (line wrapping from long name, address, website, etc.).
-  // The layoutEffect also updates the slider's height according to the value of
-  // `collapsed` before painting so there is no flicker even though an initially
-  // collapsed slider will be first rendered at full height.
-  //
-  // This is all necessary to avoid hardcoding the maximum height of the slider when
-  // animating between collapsed and uncollapsed states so that animation timing is
-  // consistent between RestaurantCards with different content heights. The variable
-  // height of this slider also allows the RestaurantCard total height to be constant
-  // across all RestaurantCards regardless of line wrapping in text content.
-  const sliderStyle = {
-    height: !sliderMaxHeight.current
-      ? '200px'
-      : collapsed
-      ? '0px'
-      : sliderMaxHeight.current,
-    transition: !sliderMaxHeight.current
-      ? 'none'
-      : 'height 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)',
-  };
-
   return (
     <div
       className='slider'
-      ref={slider}
+      ref={parentRef}
       onMouseEnter={() => setAreControlsVisible(true)}
       onMouseLeave={() => setAreControlsVisible(false)}
-      style={sliderStyle}>
+      style={style}>
       <div
         className={`slider-wrapper ${state.shifting ? 'shifting' : ''}`}
         style={{ left: state.left + 'px' }}
