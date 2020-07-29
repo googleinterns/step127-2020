@@ -50,3 +50,16 @@
 .swipe-match-table td > input {
   font-family: 'Roboto';
 }
+
+.swipe-match-authentication-lock {
+  position: relative;
+}
+
+.swipe-match-authentication-lock > button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0px;
+  background-color: white;
+}
