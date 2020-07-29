@@ -47,6 +47,7 @@ public final class RestaurantScorerTest {
   public void noOptionalPrefFieldsPresent_useRatingScore() throws JSONException {
     JSONObject preferences = new JSONObject()
       .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")));
+
     double actualScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, preferences, STATS);
     assertThat(actualScore).isEqualTo(EXPECTED_RATING_SCORE);
   }
@@ -58,6 +59,7 @@ public final class RestaurantScorerTest {
       .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
       .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
       .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
+
     double actualScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, preferences, STATS);
     double expectedScore = (EXPECTED_RATING_SCORE + WEIGHT_2 + WEIGHT_3 + WEIGHT_4) / 
       (1 + WEIGHT_2 + WEIGHT_3 + WEIGHT_4);
@@ -74,6 +76,7 @@ public final class RestaurantScorerTest {
       .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
       .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
       .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
+
     double actualScore = RestaurantScorer.score(restaurantMissingField, preferences, STATS);
     double expectedScore = (EXPECTED_RATING_SCORE + WEIGHT_3 + WEIGHT_4) / (1 + WEIGHT_3 + WEIGHT_4);
     assertThat(actualScore).isEqualTo(expectedScore);
@@ -86,8 +89,9 @@ public final class RestaurantScorerTest {
       .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
       // Distance calculated using Haversine formula calculator: http://www.movable-type.co.uk/scripts/latlong.html
       double percentDistDiff = 1.423969;
+
       double actualScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, preferences, STATS);
-      double expectedScore = (EXPECTED_RATING_SCORE - 1.423969 * WEIGHT_4) / (1 + WEIGHT_4);
+      double expectedScore = (EXPECTED_RATING_SCORE - percentDistDiff * WEIGHT_4) / (1 + WEIGHT_4);
       // Account for margin of error in rounding from online calculator.
       assertThat(actualScore).isWithin(0.001).of(expectedScore);
   }
@@ -102,6 +106,7 @@ public final class RestaurantScorerTest {
       .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
       .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
       .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
+
     double actualScore = RestaurantScorer.score(restaurantWithoutRatings, preferences, STATS);
     double expectedScore = (double) (WEIGHT_2 + WEIGHT_3 + WEIGHT_4) / (1 + WEIGHT_2 + WEIGHT_3 + WEIGHT_4);
     assertThat(actualScore).isEqualTo(expectedScore);
@@ -114,6 +119,7 @@ public final class RestaurantScorerTest {
       .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
       .put("diningExp", new JSONObject().put("pref", "meal_delivery").put("weight", WEIGHT_3))
       .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
+
     double actualScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, preferences, STATS);
     double expectedScore = (EXPECTED_RATING_SCORE + WEIGHT_2 + WEIGHT_4) / (1 + WEIGHT_2 + WEIGHT_3 + WEIGHT_4);
     assertThat(actualScore).isEqualTo(expectedScore);
@@ -128,6 +134,7 @@ public final class RestaurantScorerTest {
       .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
     Restaurant restaurantWithHigherRating = Restaurant.create( PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, 
       /* avgRating= */ 5, /* numRatings= */ 5, PRICE_LEVEL, SOME_TYPES);
+      
     double lowerScore = RestaurantScorer.score(restaurantWithHigherRating, preferences, STATS);
     double higherScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, preferences, STATS);
     assertThat(higherScore).isGreaterThan(lowerScore);
