@@ -65,6 +65,11 @@ function SwipeMatchForm(props) {
     });
   };
 
+  const signIn = (event) => {
+    event.preventDefault();
+    authContext.signIn();
+  };
+
   return (
     <div className='swipe-match-form-container'>
       <form onSubmit={createSession}>
@@ -117,7 +122,7 @@ function SwipeMatchForm(props) {
             </button>
           </div>
           <button
-            onClick={authContext.signIn}
+            onClick={signIn}
             style={{ display: signedIn ? 'none' : 'block' }}>
             Sign in with Google
           </button>
