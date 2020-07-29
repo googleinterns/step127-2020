@@ -23,7 +23,7 @@ public final class RestaurantScorerTest {
   private static final String VICINITY = "10 Main Street";
   private static final int MISSING_FIELD = -1;
   private static final int PRICE_LEVEL = 2;
-  private static final double AVG_RATING = 3.78;
+  private static final double AVG_RATING = 4.78;
   private static final int NUM_RATINGS = 75;
   private static final double MAX_RATING = 5;
   private static final double MID_RATING = 3;
@@ -117,5 +117,19 @@ public final class RestaurantScorerTest {
     double actualScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, preferences, STATS);
     double expectedScore = (EXPECTED_RATING_SCORE + WEIGHT_2 + WEIGHT_4) / (1 + WEIGHT_2 + WEIGHT_3 + WEIGHT_4);
     assertThat(actualScore).isEqualTo(expectedScore);
+  }
+
+  @Test
+  public void confidenceScoreIsTiebreaker_lowerRatingScoresHigher() throws JSONException {
+    JSONObject preferences = new JSONObject()
+      .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
+      .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
+      .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
+      .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
+    Restaurant restaurantWithHigherRating = Restaurant.create( PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, 
+      /* avgRating= */ 5, /* numRatings= */ 5, PRICE_LEVEL, SOME_TYPES);
+    double lowerScore = RestaurantScorer.score(restaurantWithHigherRating, preferences, STATS);
+    double higherScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, preferences, STATS);
+    assertThat(higherScore).isGreaterThan(lowerScore);
   }
 }
