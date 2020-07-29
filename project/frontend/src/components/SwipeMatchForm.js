@@ -23,8 +23,10 @@ function SwipeMatchForm(props) {
 
   const history = useHistory();
   const authContext = useContext(AuthContext);
+  const signedIn = authContext.currentUser.get &&
+        authContext.currentUser.get.isSignedIn();
 
-  const [username, setUsername] = useState('wack');
+  const [username, setUsername] = useState('');
   const [groupId, setGroupId] = useState('');
 
   const anonUsername = useRef('Anonymous ' + Animals.random());
@@ -72,41 +74,52 @@ function SwipeMatchForm(props) {
           the location below. You may optionally provide futher filters for the
           restaurants to be shown by expanding the filter dropdown. Upon
           creation, you will be provided with a group ID which others may use to
-          join your session.
+          join your session. You must be signed in to create a Swipe Match
+          session, though you may still use an anonymous username.
         </p>
-        <table className='swipe-match-table'>
-          <tbody>
-            <tr>
-              <td>
-                <img src={Username} alt='' />
-              </td>
-              <td>
-                <label htmlFor='username'>Username</label>
-              </td>
-              <td>
-                <input
-                  type='text'
-                  name='username'
-                  value={username}
-                  onChange={(event) => setUsername(event.target.value)}
-                  placeholder={anonUsername.current}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <img src={Place} alt='' />
-              </td>
-              <td>
-                <label>Location</label>
-              </td>
-              <td>
-                <p>{locationName}</p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <button type='submit'>Create</button>
+        <div className='swipe-match-authentication-lock'>
+          <div style={{opacity: signedIn ? 1 : 0.25}}>
+            <table className='swipe-match-table'>
+              <tbody>
+                <tr>
+                  <td>
+                    <img src={Username} alt='' />
+                  </td>
+                  <td>
+                    <label htmlFor='username'>Username</label>
+                  </td>
+                  <td>
+                    <input
+                      type='text'
+                      name='username'
+                      value={username}
+                      onChange={(event) => setUsername(event.target.value)}
+                      placeholder={anonUsername.current}
+                      disabled={!signedIn}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <img src={Place} alt='' />
+                  </td>
+                  <td>
+                    <label>Location</label>
+                  </td>
+                  <td>
+                    <p>{locationName}</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button type='submit' disabled={!signedIn}>Create</button>
+          </div>
+          <button
+            onClick={authContext.signIn}
+            style={{display: signedIn ? 'none' : 'block'}}>
+            Sign in with Google
+          </button>
+        </div>
       </form>
       <div className='preference-form-divider'>
         <div />
