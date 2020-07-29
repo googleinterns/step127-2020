@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -43,19 +44,15 @@ public final class RestaurantScorerTest {
   }};
   private static final Restaurant RESTAURANT_ALL_FIELDS = Restaurant.create(
       PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, AVG_RATING, NUM_RATINGS, PRICE_LEVEL, SOME_TYPES);
-  private static final JSONObject PREFS_ALL_FIELDS;
-  static {
-    JSONObject prefs = null;
-    try {
-      prefs = new JSONObject()
-        .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
-        .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
-        .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
-        .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
-    } catch (JSONException e) {
-      throw new ExceptionInInitializerError(e);
-    }
-    PREFS_ALL_FIELDS = prefs;
+  private static final JSONObject PREFS_ALL_FIELDS = new JSONObject();
+
+  @Before
+  public void setPrefs() throws JSONException {
+    PREFS_ALL_FIELDS
+      .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
+      .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
+      .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
+      .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
   }
 
   @Test
