@@ -31,7 +31,7 @@ public final class RestaurantScorer {
       DescriptiveStatistics statistics) throws JSONException {
     double score = 0;
     int maxPoints = 1; // add 1 because rating score has an upper bound of 1
-    if (isValidIntField(preferences, "priceLevel")) {
+    if (isValidIntField(preferences, "priceLevel") && restaurant.getPriceLevel() != -1) {
       int priceLevelWeight = preferences.getJSONObject("priceLevel").getInt("weight");
       maxPoints += priceLevelWeight;
       if (restaurant.getPriceLevel() == preferences.getJSONObject("priceLevel").getInt("pref")) {
