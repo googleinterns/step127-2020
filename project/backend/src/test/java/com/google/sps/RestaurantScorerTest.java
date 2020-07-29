@@ -106,4 +106,16 @@ public final class RestaurantScorerTest {
     double expectedScore = (double) (WEIGHT_2 + WEIGHT_3 + WEIGHT_4) / (1 + WEIGHT_2 + WEIGHT_3 + WEIGHT_4);
     assertThat(actualScore).isEqualTo(expectedScore);
   }
+
+  @Test
+  public void prefDiningExpNotMatching() throws JSONException {
+    JSONObject preferences = new JSONObject()
+      .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
+      .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
+      .put("diningExp", new JSONObject().put("pref", "meal_delivery").put("weight", WEIGHT_3))
+      .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
+    double actualScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, preferences, STATS);
+    double expectedScore = (EXPECTED_RATING_SCORE + WEIGHT_2 + WEIGHT_4) / (1 + WEIGHT_2 + WEIGHT_3 + WEIGHT_4);
+    assertThat(actualScore).isEqualTo(expectedScore);
+  }
 }
