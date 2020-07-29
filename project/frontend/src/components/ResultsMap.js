@@ -62,6 +62,7 @@ function MapContainer(props) {
           <InfoWindow
             restaurantName={restaurantName}
             percentMatch={percentValue + '%'}
+            aria-label={restaurantName + 'Info Window'}
           />
         )}
       </Fragment>
@@ -185,7 +186,7 @@ function MapContainer(props) {
       onChildMouseEnter={onMouseEnterMarker}
       onChildMouseLeave={onMouseLeaveMarker}
       onChildClick={onMouseClickMarker}
-      aria-label={'Google Map with top 4 restaurant markers.'}>
+      aria-label={'Google Map with restaurant markers.'}>
       {createMarkers()}
       <YouAreHereIcon
         lat={userLocation.lat}
