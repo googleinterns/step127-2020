@@ -51,7 +51,7 @@ ReactDOM.render(
           <Route path='/card'>
             <RestaurantCard restaurant={generateRestaurant()} />
           </Route>
-          
+
           <Route path='/match-results' component={MatchResultsPage} />
           <Route path='/swipe-match' component={SwipeMatchPage} />
           <Route path='/' component={HomePage} />
