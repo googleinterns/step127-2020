@@ -16,6 +16,31 @@ function MapContainer(props) {
       : restaurants[currentCardIndex].key.latLngCoords;
   const [showInfoWindows, setShowInfoWindows] = useState({});
 
+  const YouAreHereIcon = (props) => {
+    return (
+      <div
+        style={{
+          height: '25px',
+          width: '25px',
+          backgroundColor: '#F8F8F8',
+          borderRadius: '50%',
+          position: 'relative',
+        }}>
+        <div
+          style={{
+            height: '15px',
+            width: '15px',
+            top: '5px',
+            left: '5px',
+            backgroundColor: '#007AFF',
+            borderRadius: '50%',
+            position: 'absolute',
+          }}
+        />
+      </div>
+    );
+  };
+
   const MarkerIcon = (props) => {
     const markerID = props.id;
     const markerName = 'marker' + markerID;
@@ -29,6 +54,7 @@ function MapContainer(props) {
           <InfoWindow
             restaurantName={restaurantName}
             percentMatch={percentValue + '%'}
+            aria-label={restaurantName + ' Info Window'}
           />
         )}
       </Fragment>
@@ -131,8 +157,13 @@ function MapContainer(props) {
       onChildMouseEnter={onMouseEnterMarker}
       onChildMouseLeave={onMouseLeaveMarker}
       onChildClick={onMouseClickMarker}
-      aria-label={'Google Map with top 4 restaurant markers.'}>
+      aria-label={'Google Map with restaurant markers.'}>
       {createMarkers()}
+      <YouAreHereIcon
+        lat={userLocation.lat}
+        lng={userLocation.lng}
+        aria-label={'Your current location!'}
+      />
     </GoogleMapReact>
   );
 }
