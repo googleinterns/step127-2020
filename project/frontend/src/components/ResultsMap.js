@@ -1,19 +1,21 @@
+// TODO: Change file name to MapContainer.js to match the component name.
 import React, { Fragment, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import Lunch from '../assets/lunch.svg';
 
 function MapContainer(props) {
-  const restaurants = props.restaurants;
-  const userCenter = props.userLocation;
-  const [activeMarker, setActiveMarker] = useState({});
-  const [showInfoWindows, setShowInfoWindows] = useState({
-    marker0: false,
-    marker1: false,
-    marker2: false,
-    marker3: false,
-  });
+  const {
+    restaurants,
+    userLocation,
+    currentCardIndex,
+    setCurrentCardIndex,
+  } = props;
+  const center =
+    restaurants.length === 0
+      ? userLocation
+      : restaurants[currentCardIndex].key.latLngCoords;
+  const [showInfoWindows, setShowInfoWindows] = useState({});
 
-  // TODO: Add marker for "you are here location".
   const MarkerIcon = (props) => {
     const markerID = props.id;
     const markerName = 'marker' + markerID;
@@ -23,9 +25,8 @@ function MapContainer(props) {
     return (
       <Fragment>
         <img src={Lunch} alt={'lunch icon'} />
-        {showInfoWindows[markerName] && (
+        {(markerID === currentCardIndex || showInfoWindows[markerName]) && (
           <InfoWindow
-            marker={activeMarker}
             restaurantName={restaurantName}
             percentMatch={percentValue + '%'}
           />
@@ -58,26 +59,43 @@ function MapContainer(props) {
     );
   };
 
+  /** Creates all the markers that are going to be displayed
+   *  on the screen. It creates the marker corresponding
+   *  to the restaurant at currentCardIndex, the numAdjacentMarkers
+   *  markers before that and the numAdjacentMarkers markers
+   * after that.
+   */
   const createMarkers = () => {
-    if (!restaurants) {
-      return;
+    if (restaurants.length === 0) {
+      return null;
     }
-    let markers = [];
-    const numOfMarkers = Math.min(restaurants.length, 4);
-    for (let i = 0; i < numOfMarkers; i++) {
-      const coords = restaurants[i].key.latLngCoords;
-      const numInList = (i + 1).toString();
-      markers.push(
-        <MarkerIcon
-          lat={coords.lat}
-          lng={coords.lng}
-          id={i}
-          aria-label={'Your #' + numInList + ' Match'}
-        />
-      );
+    const markers = [];
+    const numAdjacentMarkers = 3;
+    for (
+      let delta = -numAdjacentMarkers;
+      delta <= numAdjacentMarkers;
+      delta++
+    ) {
+      const addMarkerIndex = currentCardIndex + delta;
+      if (isValidIndex(addMarkerIndex)) {
+        const coords = restaurants[addMarkerIndex].key.latLngCoords;
+        markers.push(
+          <MarkerIcon
+            lat={coords.lat}
+            lng={coords.lng}
+            id={addMarkerIndex}
+            aria-label={'Your #' + (addMarkerIndex + 1) + ' Match'}
+          />
+        );
+      }
     }
     return markers;
   };
+
+  /** Checks that the current index is a valid index for
+   * the restaurant matches list.
+   */
+  const isValidIndex = (index) => index >= 0 && index < restaurants.length;
 
   /** Info Window with name and match appears when the mouse hovers
    * over the marker.
@@ -85,7 +103,6 @@ function MapContainer(props) {
   const onMouseEnterMarker = (props, marker) => {
     const markerName = 'marker' + marker.id;
     let showInfoWindowsChange = showInfoWindows;
-    setActiveMarker(marker);
     showInfoWindowsChange[markerName] = true;
     setShowInfoWindows(showInfoWindowsChange);
   };
@@ -100,15 +117,20 @@ function MapContainer(props) {
     setShowInfoWindows(showInfoWindowsChange);
   };
 
+  const onMouseClickMarker = (props, marker) => {
+    setCurrentCardIndex(marker.id);
+  };
+
   const mapStyle = { height: '100vh', width: '50%' };
   return (
     <GoogleMapReact
       bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
-      defaultCenter={userCenter}
-      defaultZoom={10}
+      center={center}
+      defaultZoom={14}
       style={mapStyle}
       onChildMouseEnter={onMouseEnterMarker}
       onChildMouseLeave={onMouseLeaveMarker}
+      onChildClick={onMouseClickMarker}
       aria-label={'Google Map with top 4 restaurant markers.'}>
       {createMarkers()}
     </GoogleMapReact>
