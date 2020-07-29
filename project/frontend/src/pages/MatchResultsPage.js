@@ -3,7 +3,7 @@ import './MatchResultsPage.css';
 import React, { useState, useEffect } from 'react';
 
 import getRecommendation from '../scripts/recommendation_script.js';
-import MapContainer from '../components/ResultsMap.js';
+import MapContainer from '../components/MapContainer.js';
 import Modal from '../components/Modal.js';
 import RestaurantCardStack from '../components/RestaurantCardStack.js';
 
