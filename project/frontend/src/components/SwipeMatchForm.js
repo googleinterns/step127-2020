@@ -23,8 +23,8 @@ function SwipeMatchForm(props) {
 
   const history = useHistory();
   const authContext = useContext(AuthContext);
-  const signedIn = authContext.currentUser.get &&
-        authContext.currentUser.get.isSignedIn();
+  const signedIn =
+    authContext.currentUser.get && authContext.currentUser.get.isSignedIn();
 
   const [username, setUsername] = useState('');
   const [groupId, setGroupId] = useState('');
@@ -78,7 +78,7 @@ function SwipeMatchForm(props) {
           session, though you may still use an anonymous username.
         </p>
         <div className='swipe-match-authentication-lock'>
-          <div style={{opacity: signedIn ? 1 : 0.25}}>
+          <div style={{ opacity: signedIn ? 1 : 0.25 }}>
             <table className='swipe-match-table'>
               <tbody>
                 <tr>
@@ -112,11 +112,13 @@ function SwipeMatchForm(props) {
                 </tr>
               </tbody>
             </table>
-            <button type='submit' disabled={!signedIn}>Create</button>
+            <button type='submit' disabled={!signedIn}>
+              Create
+            </button>
           </div>
           <button
             onClick={authContext.signIn}
-            style={{display: signedIn ? 'none' : 'block'}}>
+            style={{ display: signedIn ? 'none' : 'block' }}>
             Sign in with Google
           </button>
         </div>
