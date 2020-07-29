@@ -4,6 +4,7 @@ import static com.google.common.truth.Truth.assertThat;
 import com.google.sps.data.Restaurant;
 import com.google.sps.data.RestaurantScorer;
 import java.util.Arrays;
+import java.lang.ExceptionInInitializerError;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,20 @@ public final class RestaurantScorerTest {
   }};
   private static final Restaurant RESTAURANT_ALL_FIELDS = Restaurant.create(
       PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, AVG_RATING, NUM_RATINGS, PRICE_LEVEL, SOME_TYPES);
+  private static final JSONObject PREFS_ALL_FIELDS;
+  static {
+    JSONObject prefs = null;
+    try {
+      prefs = new JSONObject()
+        .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
+        .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
+        .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
+        .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
+    } catch (JSONException e) {
+      throw new ExceptionInInitializerError(e);
+    }
+    PREFS_ALL_FIELDS = prefs;
+  }
 
   @Test
   public void noOptionalPrefFieldsPresent_useRatingScore() throws JSONException {
@@ -54,13 +69,7 @@ public final class RestaurantScorerTest {
 
   @Test
   public void allPrefFieldsPresentAndMatching() throws JSONException {
-    JSONObject preferences = new JSONObject()
-      .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
-      .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
-      .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
-      .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
-
-    double actualScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, preferences, STATS);
+    double actualScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, PREFS_ALL_FIELDS, STATS);
     double expectedScore = (EXPECTED_RATING_SCORE + WEIGHT_2 + WEIGHT_3 + WEIGHT_4) / 
       (1 + WEIGHT_2 + WEIGHT_3 + WEIGHT_4);
     assertThat(actualScore).isEqualTo(expectedScore);
@@ -71,13 +80,8 @@ public final class RestaurantScorerTest {
     Restaurant restaurantMissingField = Restaurant.create(
       PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, AVG_RATING, NUM_RATINGS, 
       /* priceNum= */ MISSING_FIELD, SOME_TYPES);
-    JSONObject preferences = new JSONObject()
-      .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
-      .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
-      .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
-      .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
 
-    double actualScore = RestaurantScorer.score(restaurantMissingField, preferences, STATS);
+    double actualScore = RestaurantScorer.score(restaurantMissingField, PREFS_ALL_FIELDS, STATS);
     double expectedScore = (EXPECTED_RATING_SCORE + WEIGHT_3 + WEIGHT_4) / (1 + WEIGHT_3 + WEIGHT_4);
     assertThat(actualScore).isEqualTo(expectedScore);
   }
@@ -101,24 +105,16 @@ public final class RestaurantScorerTest {
     Restaurant restaurantWithoutRatings = Restaurant.create(
       PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, /* avgRating= */ MISSING_FIELD, 
       /** numRatings= */ MISSING_FIELD, PRICE_LEVEL, SOME_TYPES);
-    JSONObject preferences = new JSONObject()
-      .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
-      .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
-      .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
-      .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
 
-    double actualScore = RestaurantScorer.score(restaurantWithoutRatings, preferences, STATS);
+    double actualScore = RestaurantScorer.score(restaurantWithoutRatings, PREFS_ALL_FIELDS, STATS);
     double expectedScore = (double) (WEIGHT_2 + WEIGHT_3 + WEIGHT_4) / (1 + WEIGHT_2 + WEIGHT_3 + WEIGHT_4);
     assertThat(actualScore).isEqualTo(expectedScore);
   }
 
   @Test
   public void prefDiningExpNotMatching() throws JSONException {
-    JSONObject preferences = new JSONObject()
-      .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
-      .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
-      .put("diningExp", new JSONObject().put("pref", "meal_delivery").put("weight", WEIGHT_3))
-      .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
+    JSONObject preferences = PREFS_ALL_FIELDS; 
+    preferences.getJSONObject("diningExp").put("pref", "meal_delivery");
 
     double actualScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, preferences, STATS);
     double expectedScore = (EXPECTED_RATING_SCORE + WEIGHT_2 + WEIGHT_4) / (1 + WEIGHT_2 + WEIGHT_3 + WEIGHT_4);
@@ -127,16 +123,11 @@ public final class RestaurantScorerTest {
 
   @Test
   public void confidenceScoreIsTiebreaker_lowerRatingScoresHigher() throws JSONException {
-    JSONObject preferences = new JSONObject()
-      .put("currLocation", new JSONObject().put("lat", COORDS.get("lat")).put("lng", COORDS.get("lng")))
-      .put("priceLevel", new JSONObject().put("pref", PRICE_LEVEL).put("weight", WEIGHT_2))
-      .put("diningExp", new JSONObject().put("pref", "meal_takeaway").put("weight", WEIGHT_3))
-      .put("radius", new JSONObject().put("pref", 10).put("weight", WEIGHT_4));
     Restaurant restaurantWithHigherRating = Restaurant.create( PLACE_ID, RESTAURANT_NAME, VICINITY, COORDS, 
       /* avgRating= */ 5, /* numRatings= */ 5, PRICE_LEVEL, SOME_TYPES);
-      
-    double lowerScore = RestaurantScorer.score(restaurantWithHigherRating, preferences, STATS);
-    double higherScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, preferences, STATS);
+
+    double lowerScore = RestaurantScorer.score(restaurantWithHigherRating, PREFS_ALL_FIELDS, STATS);
+    double higherScore = RestaurantScorer.score(RESTAURANT_ALL_FIELDS, PREFS_ALL_FIELDS, STATS);
     assertThat(higherScore).isGreaterThan(lowerScore);
   }
 }
