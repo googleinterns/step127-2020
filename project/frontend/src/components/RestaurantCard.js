@@ -52,14 +52,14 @@ const bannedTags = ['food', 'point_of_interest', 'establishment'];
  * @return {!Array<string>} An array of more readable tags.
  */
 function prettifyTags(tags) {
-  const out = [];
+  const newTags = [];
   for (let tag of tags) {
     if (!bannedTags.includes(tag)) {
       tag = tag.replace('meal_', '');
-      out.push(tag);
+      newTags.push(tag);
     }
   }
-  return out;
+  return newTags;
 }
 
 /**
