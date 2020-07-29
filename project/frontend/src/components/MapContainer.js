@@ -51,7 +51,7 @@ function MapContainer(props) {
     const percentValue = Math.round(restaurants[markerID].value * 100);
     return (
       <Fragment>
-        <img src={Lunch} alt={'lunch icon'} />
+        <img src={Lunch} alt='lunch icon' />
         {(markerID === currentCardIndex || showInfoWindows[markerName]) && (
           <InfoWindow
             restaurantName={restaurantName}
@@ -80,7 +80,7 @@ function MapContainer(props) {
 
     return (
       <div className='restaurant-header' style={infoWindowStyle}>
-        <h5 className={'restaurant-name'}>{restaurantName}</h5>
+        <h5 className='restaurant-name'>{restaurantName}</h5>
         <h5 className='restaurant-score'>{percentMatch}</h5>
       </div>
     );
@@ -163,12 +163,12 @@ function MapContainer(props) {
       onChildMouseEnter={onMouseEnterMarker}
       onChildMouseLeave={onMouseLeaveMarker}
       onChildClick={onMouseClickMarker}
-      aria-label={'Google Map with restaurant markers.'}>
+      aria-label='Google Map with restaurant markers.'>
       {createMarkers()}
       <YouAreHereIcon
         lat={userLocation.lat}
         lng={userLocation.lng}
-        aria-label={'Your current location!'}
+        aria-label='Your current location!'
       />
     </GoogleMapReact>
   );
