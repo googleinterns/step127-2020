@@ -70,102 +70,33 @@ function ProfileForm(props) {
     );
   };
 
-  const distancesInMiles = {
-    '1 mile': 1,
-    '5 miles': 5,
-    '10 miles': 10,
-    '25 miles': 25,
-  };
-
-  const diningExperiences = {
-    Takeout: 'meal_takeaway',
-    Delivery: 'meal_delivery',
-    'Dine In': 'restaurant',
-  };
-
-  const prices = {
-    Low: 1,
-    Medium: 2,
-    High: 3,
-    'Very High': 4,
-  };
-
   return (
     <div className='preference-form-container'>
-      {authContext.currentUser.get &&
-        !authContext.currentUser.get.isSignedIn() && (
-          <div className='preference-form-sign-in'>
-            <h4>Sign in for better results.</h4>
-            <p>
-              By signing in and allowing us to save your preferences, dietary
-              restrictions, restaurant history, and more, we can make our
-              algorithm stronger and your recommendations better! You will
-              always be able to view, edit, or delete any personal data we have
-              stored from the profile page.
-            </p>
-            <button
-              onClick={(event) => {
-                event.preventDefault();
-                authContext.signIn();
-              }}>
-              Sign in with Google
-            </button>
-            <div className='preference-form-divider'>
-              <div />
-              <p>Continue as guest</p>
-              <div />
-            </div>
-          </div>
-        )}
       <form className='preference-form' onSubmit={handleSubmit}>
         <h4>Your profile.</h4>
         <div className='preference-form-row'>
           <img src={Place} alt='' />
           <label>Location</label>
-          <p>{'Your location'}</p>
+          {/* TODO: change so that if a location isn't inputted then we are going to need to have a fill in optiob. */}
+          <p>Your location</p>
         </div>
         <div className='preference-form-row'>
           <img src={Cuisine} alt='' />
-          <label htmlFor='cuisine'>Cuisines</label>
+          <label htmlFor='cuisine'>Preffered Cuisines</label>
           <CuisineAutocomplete
             cuisineOptions={cuisineOptions}
             setCuisine={setCuisine}
           />
         </div>
         <div className='preference-form-row'>
-          <div className='preference-form-column'>
-            <div className='preference-form-row'>
-              <img src={Distance} alt='' />
-              <label htmlFor='radius'>Distance</label>
-              {getSelect('radius', radius, setRadius, distancesInMiles)}
-            </div>
-            <div className='preference-form-row'>
-              <img src={Experience} alt='' />
-              <label htmlFor='diningExp'>Experience</label>
-              {getSelect(
-                'diningExp',
-                diningExp,
-                setDiningExp,
-                diningExperiences
-              )}
-            </div>
-            <div className='preference-form-row'>
-              <img src={Price} alt='' />
-              <label htmlFor='priceLevel'>Price Level</label>
-              {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
-            </div>
+          <img src={Distance} alt='' />
+          <label htmlFor='distance'>Ideal Distance</label>
+          <div class='btn-group'>
+            <button>$</button>
+            <button>$$</button>
+            <button>$$$</button>
+            <button>$$$$</button>
           </div>
-        </div>
-        <div
-          className='preference-form-row'
-          style={{ justifyContent: 'center', margin: '32px 0px' }}>
-          <label htmlFor='open'>Open Now</label>
-          <input
-            name='open'
-            type='checkbox'
-            checked={open}
-            onChange={(event) => setOpen(event.target.checked)}
-          />
         </div>
         <div className='preference-form-submit-container'>
           <button type='submit'>Update Profile</button>

@@ -3,7 +3,7 @@ import PreferenceForm from '../components/PreferenceForm';
 import React from 'react';
 
 function ProfilePage(props) {
-  return <PreferenceForm isPreference={false} />;
+  return <ProfileForm />;
 }
 
 export default ProfilePage;
