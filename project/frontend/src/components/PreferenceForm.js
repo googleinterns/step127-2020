@@ -1,6 +1,6 @@
 import './PreferenceForm.css';
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 
 import CuisineAutocomplete from './CuisineAutocomplete.js';
 import { Slider } from 'rsuite';
@@ -71,6 +71,12 @@ function PreferenceForm(props) {
     })();
   }, [currLocation]);
 
+  useLayoutEffect(() => {
+    setTooltipVal(radiusWeight, 0);
+    setTooltipVal(diningExpWeight, 1);
+    setTooltipVal(priceLevelWeight, 2);
+  }, [radiusWeight, diningExpWeight, priceLevelWeight]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     history.push({
@@ -105,7 +111,7 @@ function PreferenceForm(props) {
 
   const getSlider = (value, setValue, disabled) => {
     return (
-      <div className='preference-form-slider-container'>
+      <div className='preference-form-slider-container' style={{ paddingLeft: 15}}>
         <Slider
           defaultValue={value}
           min={1}
@@ -119,6 +125,21 @@ function PreferenceForm(props) {
       </div>
     );
   };
+
+  const setTooltipVal = (val, tooltipInd) => {
+    const levels = [
+      'Least',
+      'Less',
+      'Medium',
+      'More',
+      'Most'
+    ];
+    const tooltips = document.getElementsByClassName('rs-tooltip-inner');
+    if (tooltipInd >= tooltips.length) {
+      return;
+    }
+    tooltips[tooltipInd].innerHTML = levels[val - 1];
+  }
 
   const distancesInMiles = {
     '1 mile': 1,
