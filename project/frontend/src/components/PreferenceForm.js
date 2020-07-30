@@ -49,7 +49,7 @@ async function getLocalCuisines(currLocation) {
  * @param {string} locationName The formatted address of the current user.
  */
 function PreferenceForm(props) {
-  const { currLocation, locationName, isPreference } = props;
+  const { currLocation, locationName } = props;
 
   const history = useHistory();
   const authContext = useContext(AuthContext);
@@ -66,10 +66,8 @@ function PreferenceForm(props) {
 
   useEffect(() => {
     (async () => {
-      if (isPreference) {
-        const options = await getLocalCuisines(currLocation);
-        setCuisineOptions(options);
-      }
+      const options = await getLocalCuisines(currLocation);
+      setCuisineOptions(options);
     })();
   }, [currLocation]);
 
@@ -107,20 +105,18 @@ function PreferenceForm(props) {
 
   const getSlider = (value, setValue, disabled) => {
     return (
-      isPreference && (
-        <div className='preference-form-slider-container'>
-          <Slider
-            defaultValue={value}
-            min={1}
-            step={1}
-            max={5}
-            onChange={setValue}
-            disabled={disabled}
-            graduated
-            progress
-          />
-        </div>
-      )
+      <div className='preference-form-slider-container'>
+        <Slider
+          defaultValue={value}
+          min={1}
+          step={1}
+          max={5}
+          onChange={setValue}
+          disabled={disabled}
+          graduated
+          progress
+        />
+      </div>
     );
   };
 
@@ -216,15 +212,15 @@ function PreferenceForm(props) {
           </div>
           <div className='preference-form-column'>
             <div className='preference-form-row'>
-              {isPreference && <label>Importance</label>}
+              <label>Importance</label>
               {getSlider(radiusWeight, setRadiusWeight, radius === '')}
             </div>
             <div className='preference-form-row'>
-              {isPreference && <label>Importance</label>}
+              <label>Importance</label>
               {getSlider(diningExpWeight, setDiningExpWeight, diningExp === '')}
             </div>
             <div className='preference-form-row'>
-              {isPreference && <label>Importance</label>}
+              <label>Importance</label>
               {getSlider(
                 priceLevelWeight,
                 setPriceLevelWeight,

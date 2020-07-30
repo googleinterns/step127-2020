@@ -103,11 +103,7 @@ function HomePage(props) {
       top='64px'
       bottom='64px'
       style={{ paddingBottom: '0px' }}>
-      <PreferenceForm
-        currLocation={currLocation}
-        locationName={locationName}
-        isPreference={true}
-      />
+      <PreferenceForm currLocation={currLocation} locationName={locationName} />
     </Modal>,
   ];
 }
