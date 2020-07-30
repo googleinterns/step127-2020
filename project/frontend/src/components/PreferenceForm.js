@@ -6,7 +6,8 @@ import CuisineAutocomplete from './CuisineAutocomplete.js';
 import { Slider } from 'rsuite';
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from './Authentication.js';
-
+import Info from '@material-ui/icons/Info';
+import Tooltip from '@material-ui/core/Tooltip';
 import Place from '../assets/place.svg';
 import Cuisine from '../assets/cuisine.svg';
 import Distance from '../assets/distance.svg';
@@ -189,7 +190,8 @@ function PreferenceForm(props) {
           </div>
         )}
       <form className='preference-form' onSubmit={handleSubmit}>
-        <h4>Your preferences.</h4>
+        <h4>Your preferences. <Tooltip title='hello world'><Info /></Tooltip></h4>
+        <div className='tooltip'>hello world</div>
         <p>
           Please enter your restaurant preferences below. You may leave any
           field blank if you have no preference. Specify an importance to
