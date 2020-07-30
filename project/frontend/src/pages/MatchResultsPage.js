@@ -3,7 +3,7 @@ import './MatchResultsPage.css';
 import React, { useState, useEffect } from 'react';
 
 import getRecommendation from '../scripts/recommendation_script.js';
-import MapContainer from '../components/ResultsMap.js';
+import MapContainer from '../components/MapContainer.js';
 import Modal from '../components/Modal.js';
 import RestaurantCardStack from '../components/RestaurantCardStack.js';
 
@@ -24,7 +24,7 @@ function MatchResultsPage(props) {
 
   return [
     <div key='match-results' className='container u-full-width'>
-      <div className='row'>
+      <div className='row u-flex'>
         <div className='one-half column u-pad32'>
           <h2
             className='your-match-header'
@@ -37,14 +37,12 @@ function MatchResultsPage(props) {
             setCurrentCardIndex={setCurrentRestaurantIndex}
           />
         </div>
-        <div className='one-half column'>
-          <MapContainer
-            restaurants={restaurants}
-            userLocation={userLocation}
-            currentCardIndex={currentRestaurantIndex}
-            setCurrentCardIndex={setCurrentRestaurantIndex}
-          />
-        </div>
+        <MapContainer
+          restaurants={restaurants}
+          userLocation={userLocation}
+          currentCardIndex={currentRestaurantIndex}
+          setCurrentCardIndex={setCurrentRestaurantIndex}
+        />
       </div>
     </div>,
     <Modal key='loading-modal' open={loading} center={true}>
