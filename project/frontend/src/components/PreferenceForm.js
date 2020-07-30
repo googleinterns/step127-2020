@@ -72,9 +72,7 @@ function PreferenceForm(props) {
   }, [currLocation]);
 
   useLayoutEffect(() => {
-    setTooltipVal(radiusWeight, 0);
-    setTooltipVal(diningExpWeight, 1);
-    setTooltipVal(priceLevelWeight, 2);
+    setTooltipVals([radiusWeight, diningExpWeight, priceLevelWeight]);
   }, [radiusWeight, diningExpWeight, priceLevelWeight]);
 
   const handleSubmit = (event) => {
@@ -126,7 +124,7 @@ function PreferenceForm(props) {
     );
   };
 
-  const setTooltipVal = (val, tooltipInd) => {
+  const setTooltipVals = (prefWeights) => {
     const levels = [
       'Least',
       'Less',
@@ -135,10 +133,12 @@ function PreferenceForm(props) {
       'Most'
     ];
     const tooltips = document.getElementsByClassName('rs-tooltip-inner');
-    if (tooltipInd >= tooltips.length) {
-      return;
+    for (let i = 0; i < prefWeights.length; i++) {
+      if (i >= tooltips.length) {
+        return;
+      }
+      tooltips[i].innerHTML = levels[prefWeights[i] - 1];
     }
-    tooltips[tooltipInd].innerHTML = levels[val - 1];
   }
 
   const distancesInMiles = {
