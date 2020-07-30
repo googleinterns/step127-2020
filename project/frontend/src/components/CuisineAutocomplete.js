@@ -1,6 +1,6 @@
 import './CuisineAutocomplete.css';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import Autocomplete, {
   createFilterOptions,
@@ -17,11 +17,9 @@ import TextField from '@material-ui/core/TextField';
  * @param {string} input The input string to be considered.
  * @param {!Array<string>} options The complete list of cuisine options.
  */
-function inputIsNewAndValid(input, options) {
+function inputIsNewAndValid(input, options, numSelected) {
   const trimmedInput = input.trim();
-  const maxNumCuisines = 10;
   return (
-    options.length < maxNumCuisines &&
     trimmedInput !== '' &&
     trimmedInput.length < 25 &&
     // RegEx to make sure input is only chars and spaces.
@@ -41,8 +39,10 @@ function inputIsNewAndValid(input, options) {
  */
 function CuisineAutocomplete(props) {
   const { cuisineOptions, setCuisine } = props;
+  const [numSelected, setNumSelected] = useState(0);
 
   const filter = createFilterOptions();
+  const maxNumCuisines = 10;
 
   return (
     <Autocomplete
@@ -50,15 +50,20 @@ function CuisineAutocomplete(props) {
       id='cuisine'
       options={cuisineOptions}
       multiple
+      limitTags={10}
       fullWidth={true}
       autoHighlight={true}
-      onChange={(_event, newCuisineList) => {
+      onChange={(event, newCuisineList) => {
+        setNumSelected(newCuisineList.length);
         setCuisine(newCuisineList);
       }}
       filterSelectedOptions={true}
       filterOptions={(options, state) => {
+        if (numSelected >= maxNumCuisines) {
+          return [];
+        }
         const filtered = filter(options, state);
-        if (inputIsNewAndValid(state.inputValue, options)) {
+        if (inputIsNewAndValid(state.inputValue, options, numSelected)) {
           filtered.push(state.inputValue.trim());
         }
         return filtered;

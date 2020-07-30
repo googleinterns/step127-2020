@@ -126,13 +126,7 @@ function PreferenceForm(props) {
   };
 
   const setTooltipVals = (prefWeights) => {
-    const levels = [
-      'Least',
-      'Less',
-      'Medium',
-      'More',
-      'Most'
-    ];
+    const levels = ['Least', 'Less', 'Medium', 'More', 'Most'];
     const tooltips = document.getElementsByClassName('rs-tooltip-inner');
     for (let i = 0; i < prefWeights.length; i++) {
       if (i >= tooltips.length) {
@@ -140,7 +134,7 @@ function PreferenceForm(props) {
       }
       tooltips[i].innerHTML = levels[prefWeights[i] - 1];
     }
-  }
+  };
 
   const distancesInMiles = {
     '1 mile': 1,
@@ -190,7 +184,12 @@ function PreferenceForm(props) {
           </div>
         )}
       <form className='preference-form' onSubmit={handleSubmit}>
-        <h4>Your preferences. <Tooltip title='hello world'><Info /></Tooltip></h4>
+        <h4>
+          Your preferences.{' '}
+          <Tooltip title='hello world'>
+            <Info />
+          </Tooltip>
+        </h4>
         <div className='tooltip'>hello world</div>
         <p>
           Please enter your restaurant preferences below. You may leave any
