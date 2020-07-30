@@ -19,7 +19,7 @@ import TextField from '@material-ui/core/TextField';
  */
 function inputIsNewAndValid(input, options) {
   const trimmedInput = input.trim();
-  const maxNumCuisines = 5;
+  const maxNumCuisines = 10;
   return (
     options.length < maxNumCuisines &&
     trimmedInput !== '' &&

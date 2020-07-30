@@ -111,7 +111,7 @@ function PreferenceForm(props) {
 
   const getSlider = (value, setValue, disabled) => {
     return (
-      <div className='preference-form-slider-container' style={{ paddingLeft: 15}}>
+      <div className='preference-form-slider-container'>
         <Slider
           defaultValue={value}
           min={1}
