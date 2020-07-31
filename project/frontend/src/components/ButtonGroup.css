@@ -24,3 +24,7 @@
 .btn-group button:hover {
   background-color: #dcdcdc;
 }
+
+.not-clicked-class {
+  background-color: #dcdcdc;
+}

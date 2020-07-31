@@ -58,9 +58,9 @@ function ProfileForm(props) {
           <label htmlFor='experience'>Dining Experience</label>
           <ButtonGroup labelList={['Takeout', 'Delivery', 'Dine-In']} />
         </div>
-        <div className='profile-form-submit-container'>
+        {/* <div className='profile-form-submit-container'>
           <button type='submit'>Update Profile</button>
-        </div>
+        </div> */}
       </form>
     </div>
   );
