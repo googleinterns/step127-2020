@@ -1,6 +1,7 @@
 /* I STILL HAVE THINGS TO CHANGE HERE */
 .profile-form-container {
-  max-width: 600px;
+  /* max-width: 600px; */
+  max-width: 800px;
   text-align: left;
   margin: 0px auto;
 }
@@ -58,11 +59,14 @@
 }
 
 .btn-group button {
-  border: 1px solid #bbb; /* Green border */
-  color: black; /* White text */
-  cursor: pointer; /* Pointer/hand icon */
-  float: left; /* Float the buttons side by side */
+  border: 1px solid #bbb;
+  color: black;
+  cursor: pointer;
+  float: left;
   border-radius: 0px;
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 
 .btn-group button:not(:last-child) {
@@ -79,4 +83,10 @@
 /* Add a background color on hover */
 .btn-group button:hover {
   background-color: #dcdcdc;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 15px;
 }

@@ -20,24 +20,22 @@ import Price from '../assets/dollar.svg';
  * @param {string} locationName The formatted address of the current user.
  */
 function ProfileForm(props) {
-  const history = useHistory();
-
   const cuisineOptions = ['Italian', 'Mexican', 'Indian'];
   const [cuisine, setCuisine] = useState([]);
 
   return (
     <div className='profile-form-container'>
       <form className='profile-form'>
-        <h4>Your profile.</h4>
+        <h4 className='profile-header'>Your profile.</h4>
         <div className='profile-form-row'>
           <img src={Place} alt='' />
-          <label>Location</label>
+          <label>Your Location</label>
           {/* TODO: change so that if a location isn't inputted then we are going to need to have a fill in optiob. */}
           <p>Your location</p>
         </div>
         <div className='profile-form-row'>
           <img src={Cuisine} alt='' />
-          <label htmlFor='cuisine'>Preffered Cuisines</label>
+          <label htmlFor='cuisine'>Preferred Cuisines</label>
           <CuisineAutocomplete
             cuisineOptions={cuisineOptions}
             setCuisine={setCuisine}
@@ -46,7 +44,18 @@ function ProfileForm(props) {
         <div className='profile-form-row'>
           <img src={Distance} alt='' />
           <label htmlFor='distance'>Ideal Distance</label>
+          <div className='btn-group'>
+            <button className='distance-button'>1 mile</button>
+            <button className='distance-button'>5 miles</button>
+            <button className='distance-button'>10 miles</button>
+            <button className='distance-button'>25 miles</button>
+          </div>
+        </div>
+        <div className='profile-form-row'>
+          <img src={Price} alt='' />
+          <label htmlFor='price'>Price Level</label>
           <div class='btn-group'>
+            {/* im considering making this its own component with a for-loop that adds however many buttons are necessary. */}
             <button>$</button>
             <button>$$</button>
             <button>$$$</button>
