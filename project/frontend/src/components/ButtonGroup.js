@@ -9,13 +9,11 @@ import React, { useState } from 'react';
  */
 function ButtonGroup(props) {
   const { labelList } = props;
-  const [isSelected, setIsSelected] = useState({
-    // TODO: Change how this is initalized because it isn't dynamic
-    button0: false,
-    button1: false,
-    button2: false,
-    button3: false,
-  });
+  const isSelectedInitial = {};
+  for (let buttonIndex = 0; buttonIndex < labelList.length; buttonIndex++) {
+    isSelectedInitial[`button${buttonIndex}`] = false;
+  }
+  const [isSelected, setIsSelected] = useState(isSelectedInitial);
 
   const onClickButton = (props) => {
     let tempIsSelected = Object.assign({}, isSelected);
