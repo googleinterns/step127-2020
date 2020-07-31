@@ -145,29 +145,36 @@ function PreferenceForm(props) {
   };
 
   const diningExperiences = {
-    'Takeout': 'meal_takeaway',
-    'Delivery': 'meal_delivery',
+    Takeout: 'meal_takeaway',
+    Delivery: 'meal_delivery',
     'Dine In': 'restaurant',
   };
 
   const prices = {
-    'Low': 1,
-    'Medium': 2,
-    'High': 3,
+    Low: 1,
+    Medium: 2,
+    High: 3,
     'Very High': 4,
   };
 
-  const tooltipInfo = 
-  (<React.Fragment>
-    <p>We will use your preferences entered here to find a restaurant we think you'd like.</p>
-    <p>You may leave any field blank if you have no preference for that field. If you are looking for a 
-      specific cuisine(s), you may specify up to 10 cuisines in the box. If you leave this 
-      box blank, we will consider restaurants of any cuisine type for you.
-    </p>
-    <p>
-      You can also tell us how important each preference you indicate on the form is using the slider next to it.
-    </p>
-  </React.Fragment>)
+  const tooltipInfo = (
+    <React.Fragment>
+      <p>
+        We will use your preferences entered here to find a restaurant we think
+        you'd like.
+      </p>
+      <p>
+        You may leave any field blank if you have no preference for that field.
+        If you are looking for a specific cuisine(s), you may specify up to 10
+        cuisines in the box. If you leave this box blank, we will consider
+        restaurants of any cuisine type for you.
+      </p>
+      <p>
+        You can also tell us how important each preference you indicate on the
+        form is using the slider next to it.
+      </p>
+    </React.Fragment>
+  );
 
   const StyledTooltip = withStyles((theme) => ({
     tooltip: {
@@ -208,7 +215,7 @@ function PreferenceForm(props) {
         )}
       <form className='preference-form' onSubmit={handleSubmit}>
         <h4>
-          Your preferences. 
+          Your preferences.
           <StyledTooltip title={tooltipInfo} interactive>
             <Info />
           </StyledTooltip>
