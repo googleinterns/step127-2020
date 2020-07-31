@@ -55,7 +55,8 @@ function ProfileForm(props) {
           <img src={Price} alt='' />
           <label htmlFor='price'>Price Level</label>
           <div class='btn-group'>
-            {/* im considering making this its own component with a for-loop that adds however many buttons are necessary. */}
+            {/* im considering making this its own component with a 
+            for-loop that adds however many buttons are necessary. */}
             <button>$</button>
             <button>$$</button>
             <button>$$$</button>
