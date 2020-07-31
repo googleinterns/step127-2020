@@ -9,29 +9,25 @@ import React, { useState } from 'react';
  */
 function ButtonGroup(props) {
   const { labelList } = props;
-  const [buttonBackground, setButtonBackground] = useState({
-    0: false,
-    1: false,
-    2: false,
-    3: false,
+  const [backgroundIsGray, setBackgroundIsGray] = useState({
+    button0: false,
+    button1: false,
+    button2: false,
+    button3: false,
   });
 
   const onClickButton = (props) => {
-    let buttonBackgroundTemp = Object.assign({}, buttonBackground);
-    buttonBackgroundTemp[props] = !buttonBackgroundTemp[props];
-    setButtonBackground(buttonBackgroundTemp);
-    console.log(buttonBackground);
+    let tempBackgroundIsGray = Object.assign({}, backgroundIsGray);
+    tempBackgroundIsGray[props] = !tempBackgroundIsGray[props];
+    setBackgroundIsGray(tempBackgroundIsGray);
   };
 
   const createButtons = () => {
     const buttonList = [];
     for (let delta = 0; delta < labelList.length; delta++) {
-      console.log(buttonBackground[delta]);
-      let className = buttonBackground[delta]
+      let className = backgroundIsGray[delta]
         ? 'not-clicked-class'
         : 'clicked-class';
-      console.log(className);
-      const buttonStyle = { backgroundColor: buttonBackground[delta] };
       buttonList.push(
         <button
           type='button'
@@ -41,7 +37,6 @@ function ButtonGroup(props) {
         </button>
       );
     }
-    console.log(buttonList);
     return buttonList;
   };
 
