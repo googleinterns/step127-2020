@@ -10,8 +10,8 @@ import React, { useState } from 'react';
 function ButtonGroup(props) {
   const { labelList } = props;
   const isSelectedInitial = {};
-  for (let buttonIndex = 0; buttonIndex < labelList.length; buttonIndex++) {
-    isSelectedInitial[`button${buttonIndex}`] = false;
+  for (let labelIndex = 0; labelIndex < labelList.length; labelIndex++) {
+    isSelectedInitial[`button${labelIndex}`] = false;
   }
   const [isSelected, setIsSelected] = useState(isSelectedInitial);
 
