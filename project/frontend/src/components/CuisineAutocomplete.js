@@ -53,7 +53,7 @@ function CuisineAutocomplete(props) {
       limitTags={10}
       fullWidth={true}
       autoHighlight={true}
-      onChange={(event, newCuisineList) => {
+      onChange={(_event, newCuisineList) => {
         setNumSelected(newCuisineList.length);
         setCuisine(newCuisineList);
       }}
@@ -71,7 +71,8 @@ function CuisineAutocomplete(props) {
       renderInput={(params) => (
         <TextField
           {...params}
-          variant='standard'
+          label={`${numSelected}/${maxNumCuisines}`}
+          variant='outlined'
           placeholder='Select Cuisine Types'
         />
       )}
