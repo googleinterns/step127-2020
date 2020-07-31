@@ -22,21 +22,10 @@ import * as serviceWorker from './serviceWorker';
 // TODO: remove
 import generateRestaurant from './components/SampleRestaurant.js';
 const numberOfCardsToGenerate = 20;
-const cards = [];
+const restaurants = [];
 for (let i = 0; i < numberOfCardsToGenerate; i++) {
-  const data = generateRestaurant(
-    'Amarena ' + i,
-    'apr75h4bni2pf98h4inujnksjrliu34' + i
-  );
-  if (i === 3) {
-    data.restaurant.key.name += ' Of the California State of the US';
-  } else if (i === 4) {
-    data.restaurant.key.address = '123 Main Street';
-  } else if (i === 7) {
-    data.details.result.website +=
-      '?somethingextra=123&antherthing=1234567890&type=json';
-  }
-  cards.push(data);
+  const restaurant = generateRestaurant('Olive Garden Italian Restaurant ' + i);
+  restaurants.push(restaurant);
 }
 
 // TODO: Use Redirect component
@@ -51,17 +40,17 @@ ReactDOM.render(
             <div className='container'>
               <div className='row'>
                 <div className='one-half column'>
-                  <RestaurantCardDeck cards={cards} />
+                  <RestaurantCardDeck restaurants={restaurants} />
                 </div>
                 <div className='one-half column'>
-                  <RestaurantCardStack cards={cards} />
+                  <RestaurantCardStack restaurants={restaurants} />
                 </div>
               </div>
             </div>
           </Route>
 
           <Route path='/card'>
-            <RestaurantCard {...generateRestaurant()} />
+            <RestaurantCard restaurant={generateRestaurant()} />
           </Route>
 
           <Route path='/match-results' component={MatchResultsPage} />

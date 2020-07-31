@@ -1,6 +1,14 @@
 import './RestaurantCard.css';
 
-import React, { useRef, useLayoutEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  useLayoutEffect,
+} from 'react';
+
+import PlacesApiContext from '../contexts/PlacesApiContext.js';
 
 import ImageSlider from './ImageSlider.js';
 import RatingStars from './RatingStars.js';
@@ -11,11 +19,53 @@ import Phone from '../assets/phone.svg';
 import Clock from '../assets/clock.svg';
 
 /**
+ * Returns the starting index of the nth instance of a given string
+ * within a specified larger string.
+ *
+ * @param {string} haystack The string in which to search.
+ * @param {string} needle The string for which to search.
+ * @param {number} n Specifies which instance of 'needle' to find.
+ * @return {number} The starting index of the nth 'needle'.
+ */
+function nthIndexOf(haystack, needle, n) {
+  let i = -1;
+  while (n--) {
+    i = haystack.indexOf(needle, ++i);
+    if (i < 0) break;
+  }
+  return i;
+}
+
+/**
+ * A list of nondescript tags that do not need to be displayed
+ * in the RestaurantCard component.
+ *
+ * @type {!Array<string>}
+ */
+const bannedTags = ['food', 'point_of_interest', 'establishment'];
+
+/**
+ * Modifies the list of tags returned from the Places API into
+ * a more readable format.
+ *
+ * @param {!Array<string>} tags The list of tags for a restaurant.
+ * @return {!Array<string>} An array of more readable tags.
+ */
+function prettifyTags(tags) {
+  const newTags = [];
+  for (let tag of tags) {
+    if (!bannedTags.includes(tag)) {
+      tag = tag.replace('meal_', '');
+      newTags.push(tag);
+    }
+  }
+  return newTags;
+}
+
+/**
  * A card displaying a restaurant's basic information.
  *
  * @param {!Object<string, *>} props.restaurant An object containing basic restaurant
- *     information.
- * @param {!Object<string, *>} props.details An object containing detailed restaurant
  *     information.
  * @param {?Object<string, *>} props.style An optional style object to be applied
  *     to the parent container of this component.
@@ -23,66 +73,150 @@ import Clock from '../assets/clock.svg';
  *     a collapsed or full view (default: false).
  */
 function RestaurantCard(props) {
-  const { restaurant, details, style, collapsed = false } = props;
+  const { restaurant, style, collapsed = false } = props;
 
-  const photoUrls = details
-    ? details.result.photos.map(
-        (photo) =>
-          `https://maps.googleapis.com/maps/api/place/photo?photoreference=${photo.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}&maxwidth=344`
-      )
-    : ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
+  const [details, setDetails] = useState(null);
+
+  const placesService = useContext(PlacesApiContext);
+
+  useEffect(() => {
+    const fields = [
+      'url',
+      'formatted_address',
+      'formatted_phone_number',
+      'international_phone_number',
+      'photos',
+      'website',
+      'opening_hours',
+      'utc_offset_minutes',
+      'name',
+    ];
+    placesService.getDetails(
+      { placeId: restaurant.key.id, fields },
+      (details) => {
+        if (details) {
+          setDetails({ result: details });
+        }
+      }
+    );
+  }, [placesService, restaurant.key.id]);
 
   const collapsible = useRef(null);
   const collapsibleMaxHeight = useRef(null);
+  const imageSlider = useRef(null);
+  const imageSliderMaxHeight = useRef(null);
   const restaurantName = useRef(null);
 
   useLayoutEffect(() => {
+    // Temporarily update the collapsible divs to an uncollapsed state.
+    imageSlider.current.style.transition = 'none';
+    restaurantName.current.classList.remove('collapsed');
+    collapsible.current.style.height = '';
+    imageSlider.current.style.height = '200px';
+
+    // Capture uncollapsed heights.
     collapsibleMaxHeight.current = collapsible.current.offsetHeight;
+    imageSliderMaxHeight.current = imageSlider.current.offsetHeight;
+
+    // Reset collapsible divs to their proper heights.
     if (collapsed) {
       collapsible.current.style.height = '0px';
+      imageSlider.current.style.height = '0px';
       restaurantName.current.classList.add('collapsed');
     } else {
       collapsible.current.style.height = collapsibleMaxHeight.current + 'px';
+      imageSlider.current.style.height = imageSliderMaxHeight.current + 'px';
     }
-    // We only want this effect to run once (the very first time this component
-    // is laid out) so that we may capture the uncollapsed height of the collapsible
-    // div within this card and save it to a persistent ref (collapsibleMaxHeight).
+
+    // We need to calculate the offsetHeight of the imageSlider here so that
+    // the following line adding the transition animation back to the imageSlider
+    // does not get batched with the previous update to the imageSlider height
+    // and cause an unwanted animation to play.
+    //
+    // eslint-disable-next-line no-unused-vars
+    const ignore = imageSlider.current.offsetHeight;
+    imageSlider.current.style.transition =
+      'height 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
+
+    // We only want this effect to run twice (the very first time this component
+    // is laid out and when the details of this restaurant are updated) so that
+    // we may capture the uncollapsed heights of the collapsible divs within this
+    // card and save it to a persistent ref (collapsibleMaxHeight and imageSliderMaxHeight).
+    //
     // Adding `collapsed` to the dependency array below, as eslint would have us do,
     // would cause the value of `collapsibleMaxHeight` to be updated to 0px when the
-    // card goes from a collapsed -> uncollapsed state.
+    // card goes from a collapsed -> uncollapsed state and would cause this effect to
+    // be run more than is necessary.
+    //
+    // This is all necessary to avoid hardcoding the maximum height of the collapsible
+    // elements, as their height may vary due to word wrapping within the collapsible
+    // elements (e.g. long addresses or website urls).
     //
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [details]);
 
-  // On the first render event of this component, the collapsible elements will be
-  // rendered with their default full heights (style.height = '') regardless of whether
-  // `collapsed` is true or false. This allows the full height to be captured in the
-  // above layoutEffect before this component is painted to the screen. The layoutEffect
-  // also updates the collapsible elements height according to the value of `collapsed`
-  // before painting so there is no flicker even though an initially collapsed card will
-  // be first rendered at full height.
-  //
-  // This is all necessary to avoid hardcoding the maximum height of the collapsible
-  // elements, as their height may vary due to word wrapping within the collapsible
-  // elements (e.g. long addresses or website urls).
-  const open = details
-    ? details.result.opening_hours.open_now
-      ? 'Open'
-      : 'Closed'
-    : 'loading';
-  const website = details ? details.result.website : 'loading';
+  const sliderStyle = {
+    height: collapsed ? '0px' : imageSliderMaxHeight.current + 'px',
+    transition: 'height 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)',
+  };
+  const photoUrls = details
+    ? details.result.photos.map((photo) => photo.getUrl({ maxWidth: 344 }))
+    : ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
+
+  let open;
+  if (details) {
+    if (details.result.opening_hours) {
+      if (details.result.opening_hours.isOpen()) {
+        open = <span className='restaurant-open-text'>Open.</span>;
+      } else {
+        open = <span className='restaurant-closed-text'>Closed.</span>;
+      }
+    } else {
+      open = <span>unavailable. :(</span>;
+    }
+  } else {
+    open = <span>loading</span>;
+  }
+
+  const websiteFull = details ? details.result.website : 'loading';
+  let website;
+  if (websiteFull) {
+    const end = nthIndexOf(websiteFull, '/', 3);
+    if (end !== -1) {
+      website = websiteFull.slice(0, end + 1);
+    } else {
+      website = websiteFull;
+    }
+  } else {
+    website = 'unavailable :(';
+  }
+
   const phone = details ? details.result.formatted_phone_number : 'loading';
+  const internationalPhone = details
+    ? details.result.international_phone_number
+    : 'loading';
+
+  const address = details ? details.result.formatted_address : 'loading';
+  const googleUrl = details ? details.result.url : null;
+
   return (
     <div className='restaurant-card' style={style}>
-      <ImageSlider images={photoUrls} collapsed={collapsed} />
+      <ImageSlider
+        parentRef={imageSlider}
+        images={photoUrls}
+        style={sliderStyle}
+      />
       <div className='restaurant-content'>
-        <h5
-          className={`restaurant-name ${
-            collapsed && collapsibleMaxHeight.current ? 'collapsed' : ''
-          }`}
-          ref={restaurantName}>
-          {restaurant.key.name}
-        </h5>
+        <div className='restaurant-header'>
+          <h5
+            className={`restaurant-name ${collapsed ? 'collapsed' : ''}`}
+            ref={restaurantName}>
+            {restaurant.key.name}
+          </h5>
+          <h5 className='restaurant-score'>
+            {Math.round(restaurant.value * 100) + '%'}
+          </h5>
+        </div>
         <RatingStars
           avgRating={restaurant.key.avgRating}
           numRatings={restaurant.key.numRatings}
@@ -91,31 +225,37 @@ function RestaurantCard(props) {
           ref={collapsible}
           className='restaurant-collapsible'
           style={{
-            height: !collapsibleMaxHeight.current
-              ? ''
-              : collapsed
-              ? '0px'
-              : collapsibleMaxHeight.current + 'px',
+            height: collapsed ? '0px' : collapsibleMaxHeight.current + 'px',
           }}>
           <p className='restaurant-type'>
-            {'$'.repeat(restaurant.key.priceLevel)} •{' '}
-            {restaurant.key.placeTypes.join(', ')}
+            {'$'.repeat(Math.max(restaurant.key.priceLevel, 1))} •{' '}
+            {prettifyTags(restaurant.key.placeTypes).join(', ')}
           </p>
           <div className='restaurant-detail-container'>
             <img src={Clock} alt='Clock icon' />
-            <span>{open}</span>
+            {open}
           </div>
           <div className='restaurant-detail-container'>
             <img src={Place} alt='Place marker icon' />
-            <span>{restaurant.key.address}</span>
+            <span>
+              <a href={googleUrl} target='_blank' rel='noopener noreferrer'>
+                {address}
+              </a>
+            </span>
           </div>
           <div className='restaurant-detail-container'>
             <img src={Globe} alt='Globe icon' />
-            <span>{website}</span>
+            <span className='restaurant-website'>
+              <a href={websiteFull} target='_blank' rel='noopener noreferrer'>
+                {website}
+              </a>
+            </span>
           </div>
           <div className='restaurant-detail-container'>
             <img src={Phone} alt='Phone icon' />
-            <span>{phone}</span>
+            <span>
+              <a href={'tel:' + internationalPhone}>{phone}</a>
+            </span>
           </div>
         </div>
       </div>

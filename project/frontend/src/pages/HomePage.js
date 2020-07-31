@@ -2,17 +2,23 @@ import './HomePage.css';
 
 import React, { useState } from 'react';
 
+import LocationFinder from '../components/LocationFinder';
 import Modal from '../components/Modal.js';
 import PreferenceForm from '../components/PreferenceForm.js';
-import LocationFinder from '../components/LocationFinder';
+import SwipeMatchForm from '../components/SwipeMatchForm.js';
 
 function HomePage(props) {
   const [isPreferenceFormOpen, setIsPreferenceFormOpen] = useState(false);
+  const [isSwipeMatchFormOpen, setIsSwipeMatchFormOpen] = useState(false);
   const [currLocation, setCurrLocation] = useState({});
   const [locationName, setLocationName] = useState('');
 
   const togglePreferenceForm = () => {
     setIsPreferenceFormOpen((prev) => !prev);
+  };
+
+  const toggleSwipeMatchForm = () => {
+    setIsSwipeMatchFormOpen((prev) => !prev);
   };
 
   const handleLocationData = (locationData) => {
@@ -39,7 +45,11 @@ function HomePage(props) {
               style={buttonStyle}>
               Find My Match
             </button>
-            <button className='welcome-button' style={buttonStyle}>
+            <button
+              className='welcome-button'
+              disabled={!locationName}
+              onClick={toggleSwipeMatchForm}
+              style={buttonStyle}>
               Swipe Match
             </button>
           </div>
@@ -104,6 +114,15 @@ function HomePage(props) {
       bottom='64px'
       style={{ paddingBottom: '0px' }}>
       <PreferenceForm currLocation={currLocation} locationName={locationName} />
+    </Modal>,
+    <Modal
+      key='swipe-match-form'
+      open={isSwipeMatchFormOpen}
+      onDismiss={toggleSwipeMatchForm}
+      centerHorizontal={true}
+      top='64px'
+      bottom='64px'>
+      <SwipeMatchForm currLocation={currLocation} locationName={locationName} />
     </Modal>,
   ];
 }
