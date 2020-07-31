@@ -3,6 +3,7 @@ import './ProfileForm.css';
 import React, { useState } from 'react';
 
 import CuisineAutocomplete from './CuisineAutocomplete.js';
+import ButtonGroup from './ButtonGroup.js';
 import { useHistory } from 'react-router-dom';
 
 import Place from '../assets/place.svg';
@@ -44,26 +45,14 @@ function ProfileForm(props) {
         <div className='profile-form-row'>
           <img src={Distance} alt='' />
           <label htmlFor='distance'>Ideal Distance</label>
-          <div className='btn-group'>
-            {/* im considering making this its own component with a 
-            for-loop that adds however many buttons are necessary. */}
-            <button className='distance-button'>1 mile</button>
-            <button className='distance-button'>5 miles</button>
-            <button className='distance-button'>10 miles</button>
-            <button className='distance-button'>25 miles</button>
-          </div>
+          <ButtonGroup
+            labelList={['1 mile', '5 miles', '10 miles', '25 miles']}
+          />
         </div>
         <div className='profile-form-row'>
           <img src={Price} alt='' />
           <label htmlFor='price'>Price Level</label>
-          <div class='btn-group'>
-            {/* im considering making this its own component with a 
-            for-loop that adds however many buttons are necessary. */}
-            <button>$</button>
-            <button>$$</button>
-            <button>$$$</button>
-            <button>$$$$</button>
-          </div>
+          <ButtonGroup labelList={['$', '$$', '$$$', '$$$$']} />
         </div>
         <div className='profile-form-submit-container'>
           <button type='submit'>Update Profile</button>
