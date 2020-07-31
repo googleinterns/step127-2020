@@ -17,7 +17,7 @@ import TextField from '@material-ui/core/TextField';
  * @param {string} input The input string to be considered.
  * @param {!Array<string>} options The complete list of cuisine options.
  */
-function inputIsNewAndValid(input, options, numSelected) {
+function inputIsNewAndValid(input, options) {
   const trimmedInput = input.trim();
   return (
     trimmedInput !== '' &&
@@ -50,7 +50,7 @@ function CuisineAutocomplete(props) {
       id='cuisine'
       options={cuisineOptions}
       multiple
-      limitTags={10}
+      limitTags={maxNumCuisines}
       fullWidth={true}
       autoHighlight={true}
       onChange={(_event, newCuisineList) => {
@@ -63,7 +63,7 @@ function CuisineAutocomplete(props) {
           return [];
         }
         const filtered = filter(options, state);
-        if (inputIsNewAndValid(state.inputValue, options, numSelected)) {
+        if (inputIsNewAndValid(state.inputValue, options)) {
           filtered.push(state.inputValue.trim());
         }
         return filtered;

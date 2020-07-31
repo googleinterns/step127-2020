@@ -6,6 +6,7 @@ import CuisineAutocomplete from './CuisineAutocomplete.js';
 import { Slider } from 'rsuite';
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from './Authentication.js';
+import { withStyles } from '@material-ui/core/styles';
 import Info from '@material-ui/icons/Info';
 import Tooltip from '@material-ui/core/Tooltip';
 import Place from '../assets/place.svg';
@@ -144,17 +145,39 @@ function PreferenceForm(props) {
   };
 
   const diningExperiences = {
-    Takeout: 'meal_takeaway',
-    Delivery: 'meal_delivery',
+    'Takeout': 'meal_takeaway',
+    'Delivery': 'meal_delivery',
     'Dine In': 'restaurant',
   };
 
   const prices = {
-    Low: 1,
-    Medium: 2,
-    High: 3,
+    'Low': 1,
+    'Medium': 2,
+    'High': 3,
     'Very High': 4,
   };
+
+  const tooltipInfo = 
+  (<React.Fragment>
+    <p>We will use your preferences entered here to find a restaurant we think you'd like.</p>
+    <p>You may leave any field blank if you have no preference for that field. If you are looking for a 
+      specific cuisine(s), you may specify up to 10 cuisines in the box. If you leave this 
+      box blank, we will consider restaurants of any cuisine type for you.
+    </p>
+    <p>
+      You can also tell us how important each preference you indicate on the form is using the slider next to it.
+    </p>
+  </React.Fragment>)
+
+  const StyledTooltip = withStyles((theme) => ({
+    tooltip: {
+      backgroundColor: '#f5f5f9',
+      color: 'rgba(0, 0, 0, 0.87)',
+      maxWidth: 220,
+      fontSize: theme.typography.pxToRem(20),
+      border: '1px solid #dadde9',
+    },
+  }))(Tooltip);
 
   return (
     <div className='preference-form-container'>
@@ -185,12 +208,11 @@ function PreferenceForm(props) {
         )}
       <form className='preference-form' onSubmit={handleSubmit}>
         <h4>
-          Your preferences.{' '}
-          <Tooltip title='hello world'>
+          Your preferences. 
+          <StyledTooltip title={tooltipInfo} interactive>
             <Info />
-          </Tooltip>
+          </StyledTooltip>
         </h4>
-        <div className='tooltip'>hello world</div>
         <p>
           Please enter your restaurant preferences below. You may leave any
           field blank if you have no preference. Specify an importance to
