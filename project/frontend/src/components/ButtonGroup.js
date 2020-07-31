@@ -2,7 +2,7 @@ import React from 'react';
 import './ButtonGroup.css';
 
 function ButtonGroup(props) {
-  // an array of all the button labels is going to be passed into the props.
+  // TODO: Add spec.
   const { labelList } = props;
   const buttonList = [];
   for (let delta = 0; delta < labelList.length; delta++) {
