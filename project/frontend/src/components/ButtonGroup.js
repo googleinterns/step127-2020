@@ -1,5 +1,6 @@
-import React from 'react';
 import './ButtonGroup.css';
+
+import React from 'react';
 
 function ButtonGroup(props) {
   // TODO: Add spec.
