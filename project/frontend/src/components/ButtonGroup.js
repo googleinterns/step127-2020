@@ -9,7 +9,8 @@ import React, { useState } from 'react';
  */
 function ButtonGroup(props) {
   const { labelList } = props;
-  const [backgroundIsGray, setBackgroundIsGray] = useState({
+  const [isSelected, setIsSelected] = useState({
+    // TODO: Change how this is initalized because it isn't dynamic
     button0: false,
     button1: false,
     button2: false,
@@ -17,23 +18,23 @@ function ButtonGroup(props) {
   });
 
   const onClickButton = (props) => {
-    let tempBackgroundIsGray = Object.assign({}, backgroundIsGray);
-    tempBackgroundIsGray[props] = !tempBackgroundIsGray[props];
-    setBackgroundIsGray(tempBackgroundIsGray);
+    let tempIsSelected = Object.assign({}, isSelected);
+    tempIsSelected[props] = !tempIsSelected[props];
+    setIsSelected(tempIsSelected);
   };
 
   const createButtons = () => {
     const buttonList = [];
-    for (let delta = 0; delta < labelList.length; delta++) {
-      let className = backgroundIsGray[delta]
+    for (let buttonIndex = 0; buttonIndex < labelList.length; buttonIndex++) {
+      let className = backgroundIsGray[buttonIndex]
         ? 'not-clicked-class'
         : 'clicked-class';
       buttonList.push(
         <button
           type='button'
-          onClick={() => onClickButton(delta)}
+          onClick={() => onClickButton(buttonIndex)}
           className={className}>
-          {labelList[delta]}
+          {labelList[buttonIndex]}
         </button>
       );
     }
