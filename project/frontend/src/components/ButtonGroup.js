@@ -25,8 +25,8 @@ function ButtonGroup(props) {
     const buttonList = [];
     for (let buttonIndex = 0; buttonIndex < labelList.length; buttonIndex++) {
       let className = isSelected[buttonIndex]
-        ? 'not-clicked-class'
-        : 'clicked-class';
+        ? 'is-selected-class'
+        : 'not-selected-class';
       buttonList.push(
         <button
           type='button'
