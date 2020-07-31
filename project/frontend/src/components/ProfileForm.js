@@ -45,6 +45,8 @@ function ProfileForm(props) {
           <img src={Distance} alt='' />
           <label htmlFor='distance'>Ideal Distance</label>
           <div className='btn-group'>
+            {/* im considering making this its own component with a 
+            for-loop that adds however many buttons are necessary. */}
             <button className='distance-button'>1 mile</button>
             <button className='distance-button'>5 miles</button>
             <button className='distance-button'>10 miles</button>
