@@ -53,6 +53,11 @@ function ProfileForm(props) {
           <label htmlFor='price'>Price Level</label>
           <ButtonGroup labelList={['$', '$$', '$$$', '$$$$']} />
         </div>
+        <div className='profile-form-row'>
+          <img src={Experience} alt='' />
+          <label htmlFor='experience'>Dining Experience</label>
+          <ButtonGroup labelList={['Takeout', 'Delivery', 'Dine-In']} />
+        </div>
         <div className='profile-form-submit-container'>
           <button type='submit'>Update Profile</button>
         </div>
