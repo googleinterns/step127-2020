@@ -2,8 +2,12 @@ import './ButtonGroup.css';
 
 import React from 'react';
 
+/**
+ * A list of labelList.length buttons with the labels in labelList.
+ *
+ * @param {!Array<string>} labelList The list of labels for the buttons
+ */
 function ButtonGroup(props) {
-  // TODO: Add spec.
   const { labelList } = props;
   const buttonList = [];
   for (let delta = 0; delta < labelList.length; delta++) {
