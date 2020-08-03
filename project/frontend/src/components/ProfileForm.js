@@ -1,5 +1,3 @@
-import './ProfileForm.css';
-
 import React, { useState } from 'react';
 
 import CuisineAutocomplete from './CuisineAutocomplete.js';
