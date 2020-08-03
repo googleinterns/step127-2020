@@ -12,30 +12,30 @@ import Experience from '../assets/food_service.svg';
 import Price from '../assets/dollar.svg';
 
 function PreferenceForm(props) {
-  const { headerLabel, labels } = props;
+  const { headerLabel, rowItemLabels } = props;
   const cuisineOptions = ['Italian', 'Mexican'];
   const [cuisine, setCuisine] = useState([]);
   return (
     <div className='form-container'>
       <form className='form'>
         <h4 className='header'>{headerLabel}</h4>
-        <FormItem imageName={Place} label={labels.location}>
+        <FormItem imageName={Place} label={rowItemLabels.location}>
           <p>Your Location</p>
         </FormItem>
-        <FormItem imageName={Cuisine} label={labels.cuisine}>
+        <FormItem imageName={Cuisine} label={rowItemLabels.cuisine}>
           <CuisineAutocomplete
             cuisineOptions={cuisineOptions}
             setCuisine={setCuisine}
           />
         </FormItem>
-        <FormItem imageName={Distance} label={labels.distance}>
+        <FormItem imageName={Distance} label={rowItemLabels.distance}>
           {/** The input types are different for the distance, price and experience so I made this props.children */}
           {props.children[0]}
         </FormItem>
-        <FormItem imageName={Price} label={labels.price}>
+        <FormItem imageName={Price} label={rowItemLabels.price}>
           {props.children[1]}
         </FormItem>
-        <FormItem imageName={Experience} label={labels.experience}>
+        <FormItem imageName={Experience} label={rowItemLabels.experience}>
           {props.children[2]}
         </FormItem>
         <div className='form-submit-container'>
