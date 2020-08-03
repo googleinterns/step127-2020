@@ -26,16 +26,11 @@ function ProfileForm(props) {
   const [cuisine, setCuisine] = useState([]);
 
   return (
-    // <div className='profile-form-container'>
-    //   <form className='profile-form'>
-    //     <h4 className='profile-header'>Your profile.</h4>
     <PreferenceForm headerLabel='Your Profile'>
-      <div className='profile-form-row'>
-        <img src={Place} alt='' />
-        <label>Your Location</label>
-        {/* TODO: change so that if a location isn't inputted then we are going to need to have a fill in optiob. */}
-        <p>Your location</p>
-      </div>
+      {/* TODO: change so that if a location isn't inputted then we are going to need to have a fill in optiob. */}
+      <FormItem imageName={Place} label='Your Location'>
+        <p>Your Location</p>
+      </FormItem>
       <FormItem imageName={Cuisine} label='PreferredCuisine'>
         <CuisineAutocomplete
           cuisineOptions={cuisineOptions}
