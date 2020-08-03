@@ -8,8 +8,8 @@ class LocationFinder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userInput: '',
-      locationName: '',
+      userInput: props.locationName,
+      locationName: props.locationName,
       submitted: false,
       error: false,
       autocomplete: null,
