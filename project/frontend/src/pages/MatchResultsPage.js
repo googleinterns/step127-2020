@@ -1,6 +1,7 @@
 import './MatchResultsPage.css';
 
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 import getRecommendation from '../scripts/recommendation_script.js';
 import MapContainer from '../components/MapContainer.js';
@@ -60,6 +61,7 @@ function MatchResultsPage(props) {
     <Modal key='error-modal' open={Boolean(errorMessage)} center={true}>
       <div style={{ height: '300px', width: '300px' }}>
         <h5>{errorMessage}</h5>
+        <Link to={{ pathname: '/', state: formState }}>Return to Home Page</Link>
       </div>
     </Modal>,
   ];
