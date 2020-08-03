@@ -12,8 +12,15 @@ import PreferenceForm from './PreferenceForm.js';
  * @param {string} locationName The formatted address of the current user.
  */
 function ProfileForm(props) {
+  const itemLabels = {
+    cuisine: 'Preferred Cuisine',
+    location: 'Your Location',
+    distance: 'Preferred Distance',
+    price: 'Price Level',
+    experience: 'Dining Experience',
+  };
   return (
-    <PreferenceForm headerLabel='Your Profile'>
+    <PreferenceForm headerLabel='Your Profile' labels={itemLabels}>
       <ButtonGroup labelList={['1 mile', '5 miles', '10 miles', '25 miles']} />
       <ButtonGroup labelList={['$', '$$', '$$$', '$$$$']} />
       <ButtonGroup labelList={['Takeout', 'Delivery', 'Dine-In']} />
