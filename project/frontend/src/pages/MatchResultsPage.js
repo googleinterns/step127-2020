@@ -61,7 +61,9 @@ function MatchResultsPage(props) {
     <Modal key='error-modal' open={Boolean(errorMessage)} center={true}>
       <div style={{ height: '300px', width: '300px' }}>
         <h5>{errorMessage}</h5>
-        <Link to={{ pathname: '/', state: formState }}>Return to Home Page</Link>
+        <Link to={{ pathname: '/', state: formState }}>
+          Return to Home Page
+        </Link>
       </div>
     </Modal>,
   ];

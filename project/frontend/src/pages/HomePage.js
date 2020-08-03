@@ -8,8 +8,12 @@ import PreferenceForm from '../components/PreferenceForm.js';
 import SwipeMatchForm from '../components/SwipeMatchForm.js';
 
 function HomePage(props) {
-  const retrievedLocation = props.location.state ? props.location.state.currLocation : {};
-  const retrievedLocationName = props.location.state ? props.location.state.locationName : '';
+  const retrievedLocation = props.location.state
+    ? props.location.state.currLocation
+    : {};
+  const retrievedLocationName = props.location.state
+    ? props.location.state.locationName
+    : '';
   const [isPreferenceFormOpen, setIsPreferenceFormOpen] = useState(false);
   const [isSwipeMatchFormOpen, setIsSwipeMatchFormOpen] = useState(false);
   const [currLocation, setCurrLocation] = useState(retrievedLocation);
@@ -38,7 +42,10 @@ function HomePage(props) {
         <div id='welcome' className='column'>
           <h1 className='logo'>MAKMatch</h1>
           <h4>Discover your restaurant match.</h4>
-          <LocationFinder locationName={locationName} sendData={handleLocationData} />
+          <LocationFinder
+            locationName={locationName}
+            sendData={handleLocationData}
+          />
           <div>
             <button
               className='welcome-button'
