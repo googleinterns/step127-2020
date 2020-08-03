@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 
 import CuisineAutocomplete from './CuisineAutocomplete.js';
 import ButtonGroup from './ButtonGroup.js';
+import PreferenceForm from './PreferenceForm.js';
+import FormItem from './FormItem.js';
 
 import Place from '../assets/place.svg';
 import Cuisine from '../assets/cuisine.svg';
@@ -24,45 +26,34 @@ function ProfileForm(props) {
   const [cuisine, setCuisine] = useState([]);
 
   return (
-    <div className='profile-form-container'>
-      <form className='profile-form'>
-        <h4 className='profile-header'>Your profile.</h4>
-        <div className='profile-form-row'>
-          <img src={Place} alt='' />
-          <label>Your Location</label>
-          {/* TODO: change so that if a location isn't inputted then we are going to need to have a fill in optiob. */}
-          <p>Your location</p>
-        </div>
-        <div className='profile-form-row'>
-          <img src={Cuisine} alt='' />
-          <label htmlFor='cuisine'>Preferred Cuisines</label>
-          <CuisineAutocomplete
-            cuisineOptions={cuisineOptions}
-            setCuisine={setCuisine}
-          />
-        </div>
-        <div className='profile-form-row'>
-          <img src={Distance} alt='' />
-          <label htmlFor='distance'>Ideal Distance</label>
-          <ButtonGroup
-            labelList={['1 mile', '5 miles', '10 miles', '25 miles']}
-          />
-        </div>
-        <div className='profile-form-row'>
-          <img src={Price} alt='' />
-          <label htmlFor='price'>Price Level</label>
-          <ButtonGroup labelList={['$', '$$', '$$$', '$$$$']} />
-        </div>
-        <div className='profile-form-row'>
-          <img src={Experience} alt='' />
-          <label htmlFor='experience'>Dining Experience</label>
-          <ButtonGroup labelList={['Takeout', 'Delivery', 'Dine-In']} />
-        </div>
-        <div className='profile-form-submit-container'>
-          <button type='submit'>Update Profile</button>
-        </div>
-      </form>
-    </div>
+    // <div className='profile-form-container'>
+    //   <form className='profile-form'>
+    //     <h4 className='profile-header'>Your profile.</h4>
+    <PreferenceForm headerLabel='Your Profile'>
+      <div className='profile-form-row'>
+        <img src={Place} alt='' />
+        <label>Your Location</label>
+        {/* TODO: change so that if a location isn't inputted then we are going to need to have a fill in optiob. */}
+        <p>Your location</p>
+      </div>
+      <FormItem imageName={Cuisine} label='PreferredCuisine'>
+        <CuisineAutocomplete
+          cuisineOptions={cuisineOptions}
+          setCuisine={setCuisine}
+        />
+      </FormItem>
+      <FormItem imageName={Distance} label='Ideal Distance'>
+        <ButtonGroup
+          labelList={['1 mile', '5 miles', '10 miles', '25 miles']}
+        />
+      </FormItem>
+      <FormItem imageName={Price} label='Price Level'>
+        <ButtonGroup labelList={['$', '$$', '$$$', '$$$$']} />
+      </FormItem>
+      <FormItem imageName={Experience} label='Dining Experience'>
+        <ButtonGroup labelList={['Takeout', 'Delivery', 'Dine-In']} />
+      </FormItem>
+    </PreferenceForm>
   );
 }
 

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 import LocationFinder from '../components/LocationFinder';
 import Modal from '../components/Modal.js';
-import PreferenceForm from '../components/PreferenceForm.js';
+import PreferenceForm from '../components/UserPreferenceForm.js';
 import SwipeMatchForm from '../components/SwipeMatchForm.js';
 
 function HomePage(props) {
