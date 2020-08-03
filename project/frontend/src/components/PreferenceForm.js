@@ -29,7 +29,8 @@ function PreferenceForm(props) {
           />
         </FormItem>
         <FormItem imageName={Distance} label={rowItemLabels.distance}>
-          {/** The input types are different for the distance, price and experience so I made this props.children */}
+          {/** The input types are different for the distance, price and experience
+           * depedning on the form so I made this props.children */}
           {props.children[0]}
         </FormItem>
         <FormItem imageName={Price} label={rowItemLabels.price}>
