@@ -265,19 +265,15 @@ function PreferenceForm(props) {
           <div className='preference-form-column'>
             <div className='preference-form-row'>
               <label>Importance</label>
-              {getSlider(radiusWeight, setRadiusWeight, radius === '')}
+              {getSlider(radiusWeight, setRadiusWeight, !radius)}
             </div>
             <div className='preference-form-row'>
               <label>Importance</label>
-              {getSlider(diningExpWeight, setDiningExpWeight, diningExp === '')}
+              {getSlider(diningExpWeight, setDiningExpWeight, !diningExp)}
             </div>
             <div className='preference-form-row'>
               <label>Importance</label>
-              {getSlider(
-                priceLevelWeight,
-                setPriceLevelWeight,
-                priceLevel === ''
-              )}
+              {getSlider(priceLevelWeight, setPriceLevelWeight, !priceLevel)}
             </div>
           </div>
         </div>
