@@ -6,12 +6,10 @@ import CuisineAutocomplete from './CuisineAutocomplete.js';
 import { Slider } from 'rsuite';
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from './Authentication.js';
+import PreferenceForm from './PreferenceForm.js';
 
 import Place from '../assets/place.svg';
 import Cuisine from '../assets/cuisine.svg';
-import Distance from '../assets/distance.svg';
-import Experience from '../assets/food_service.svg';
-import Price from '../assets/dollar.svg';
 
 /**
  * Returns a list of cuisine types of local restaurants using the Zomato API.
@@ -64,60 +62,12 @@ function UserPreferenceForm(props) {
   const [priceLevelWeight, setPriceLevelWeight] = useState(3);
   const [open, setOpen] = useState(true);
 
-  useEffect(() => {
-    (async () => {
-      const options = await getLocalCuisines(currLocation);
-      setCuisineOptions(options);
-    })();
-  }, [currLocation]);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    history.push({
-      pathname: '/match-results',
-      state: {
-        currLocation,
-        cuisine,
-        radius: { pref: radius, weight: radiusWeight },
-        diningExp: { pref: diningExp, weight: diningExpWeight },
-        priceLevel: { pref: priceLevel, weight: priceLevelWeight },
-        open,
-        cuisineOptions,
-      },
-    });
-  };
-
-  const getSelect = (name, value, setValue, options) => {
-    const onChange = (event) => {
-      const value = event.target.value;
-      setValue(event.target.name === 'diningExp' ? value : parseInt(value));
-    };
-
-    return (
-      <select name={name} className='pref' value={value} onChange={onChange}>
-        <option label='Select...' key='default' value={''} />
-        {Object.entries(options).map(([label, value]) => (
-          <option label={label} key={label} value={value} />
-        ))}
-      </select>
-    );
-  };
-
-  const getSlider = (value, setValue, disabled) => {
-    return (
-      <div className='preference-form-slider-container'>
-        <Slider
-          defaultValue={value}
-          min={1}
-          step={1}
-          max={5}
-          onChange={setValue}
-          disabled={disabled}
-          graduated
-          progress
-        />
-      </div>
-    );
+  const itemLabels = {
+    cuisine: 'Cuisines',
+    location: 'Location',
+    price: 'Price Level',
+    distance: 'Distance',
+    experience: 'Dining Experience',
   };
 
   const distancesInMiles = {
@@ -138,6 +88,46 @@ function UserPreferenceForm(props) {
     Medium: 2,
     High: 3,
     'Very High': 4,
+  };
+
+  useEffect(() => {
+    (async () => {
+      const options = await getLocalCuisines(currLocation);
+      setCuisineOptions(options);
+    })();
+  }, [currLocation]);
+
+  const getSlider = (value, setValue, disabled) => {
+    return (
+      <div className='preference-form-slider-container'>
+        <Slider
+          defaultValue={value}
+          min={1}
+          step={1}
+          max={5}
+          onChange={setValue}
+          disabled={disabled}
+          graduated
+          progress
+        />
+      </div>
+    );
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    history.push({
+      pathname: '/match-results',
+      state: {
+        currLocation,
+        cuisine,
+        radius: { pref: radius, weight: radiusWeight },
+        diningExp: { pref: diningExp, weight: diningExpWeight },
+        priceLevel: { pref: priceLevel, weight: priceLevelWeight },
+        open,
+        cuisineOptions,
+      },
+    });
   };
 
   return (
@@ -167,69 +157,34 @@ function UserPreferenceForm(props) {
             </div>
           </div>
         )}
-      <form className='preference-form' onSubmit={handleSubmit}>
-        <h4>Your preferences.</h4>
-        <p>
+      <PreferenceForm
+        headerLabel='Your Preferences.'
+        rowItemLabels={itemLabels}>
+        {/* <form className='preference-form' onSubmit={handleSubmit}> */}
+        {/* <p>
           Please enter your restaurant preferences below. You may leave any
           field blank if you have no preference. Specify an importance to
           indicate your priority for different fields.
-        </p>
-        <div className='preference-form-row'>
-          <img src={Place} alt='' />
-          <label>Location</label>
-          <p>{locationName}</p>
-        </div>
-        <div className='preference-form-row'>
-          <img src={Cuisine} alt='' />
-          <label htmlFor='cuisine'>Cuisines</label>
-          <CuisineAutocomplete
-            cuisineOptions={cuisineOptions}
-            setCuisine={setCuisine}
-          />
-        </div>
-        <div className='preference-form-row'>
-          <div className='preference-form-column'>
-            <div className='preference-form-row'>
-              <img src={Distance} alt='' />
-              <label htmlFor='radius'>Distance</label>
-              {getSelect('radius', radius, setRadius, distancesInMiles)}
-            </div>
-            <div className='preference-form-row'>
-              <img src={Experience} alt='' />
-              <label htmlFor='diningExp'>Experience</label>
-              {getSelect(
-                'diningExp',
-                diningExp,
-                setDiningExp,
-                diningExperiences
-              )}
-            </div>
-            <div className='preference-form-row'>
-              <img src={Price} alt='' />
-              <label htmlFor='priceLevel'>Price Level</label>
-              {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
-            </div>
+        </p> */}
+        <div className='preference-form-column'>
+          <div className='preference-form-row'>
+            <label>Importance</label>
+            {getSlider(radiusWeight, setRadiusWeight, radius === '')}
           </div>
-          <div className='preference-form-column'>
-            <div className='preference-form-row'>
-              <label>Importance</label>
-              {getSlider(radiusWeight, setRadiusWeight, radius === '')}
-            </div>
-            <div className='preference-form-row'>
-              <label>Importance</label>
-              {getSlider(diningExpWeight, setDiningExpWeight, diningExp === '')}
-            </div>
-            <div className='preference-form-row'>
-              <label>Importance</label>
-              {getSlider(
-                priceLevelWeight,
-                setPriceLevelWeight,
-                priceLevel === ''
-              )}
-            </div>
+          <div className='preference-form-row'>
+            <label>Importance</label>
+            {getSlider(diningExpWeight, setDiningExpWeight, diningExp === '')}
+          </div>
+          <div className='preference-form-row'>
+            <label>Importance</label>
+            {getSlider(
+              priceLevelWeight,
+              setPriceLevelWeight,
+              priceLevel === ''
+            )}
           </div>
         </div>
-        <div
+        {/* <div
           className='preference-form-row'
           style={{ justifyContent: 'center', margin: '32px 0px' }}>
           <label htmlFor='open'>Open Now</label>
@@ -239,11 +194,9 @@ function UserPreferenceForm(props) {
             checked={open}
             onChange={(event) => setOpen(event.target.checked)}
           />
-        </div>
-        <div className='preference-form-submit-container'>
-          <button type='submit'>Find my match</button>
-        </div>
-      </form>
+        </div> */}
+        {/* </form> */}
+      </PreferenceForm>
     </div>
   );
 }

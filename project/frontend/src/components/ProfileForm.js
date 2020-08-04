@@ -1,6 +1,5 @@
 import React from 'react';
 
-import ButtonGroup from './ButtonGroup.js';
 import PreferenceForm from './PreferenceForm.js';
 
 /**
@@ -20,11 +19,7 @@ function ProfileForm(props) {
     experience: 'Dining Experience',
   };
   return (
-    <PreferenceForm headerLabel='Your Profile' rowItemLabels={itemLabels}>
-      <ButtonGroup labelList={['1 mile', '5 miles', '10 miles', '25 miles']} />
-      <ButtonGroup labelList={['$', '$$', '$$$', '$$$$']} />
-      <ButtonGroup labelList={['Takeout', 'Delivery', 'Dine-In']} />
-    </PreferenceForm>
+    <PreferenceForm headerLabel='Your Profile' rowItemLabels={itemLabels} />
   );
 }
 
