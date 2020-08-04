@@ -89,6 +89,7 @@ function PreferenceForm(props) {
         priceLevel: { pref: priceLevel, weight: priceLevelWeight },
         open,
         cuisineOptions,
+        locationName,
       },
     });
   };

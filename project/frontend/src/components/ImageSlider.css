@@ -1,8 +1,9 @@
 .slider {
   position: relative;
+  height: 200px;
   width: 344px;
   overflow: hidden;
-  background-color: brown;
+  background-color: white;
 }
 
 .slider-wrapper {
