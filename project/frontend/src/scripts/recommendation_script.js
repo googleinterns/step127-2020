@@ -7,27 +7,23 @@ export default function getRecommendation(preferences, callback) {
       Promise.all(responses.map((response) => response.json()))
     )
     .then((data) => {
-      let restaurants = [];
-      for (const restaurant of data) {
-        restaurants = restaurants.concat(restaurant.results);
-      }
-
-      if (!restaurants) {
-        if (preferences.radius.pref) {
-          preferences.radius.pref = '';
-          getRecommendation(preferences, callback);
-        } else {
-          let message = "We can't find any restaurants near you";
+      if (data[0].status !== 'OK') {
+        let message;
+        if (data[0].status === 'ZERO_RESULTS') {
+          message = "We can't find any restaurants near you";
           if (preferences.open) {
             message += ' that are currently open';
           }
           message +=
             ' that match your preferences. Please try changing your preferences.';
           // TODO: create NoResults page that would be rendered here.
-          alert(message);
+        } else {
+          message =
+            'Sorry, we are unable to process your request at this time.';
         }
-        return;
+        return callback(/* result= */ null, new Error(message));
       }
+      const restaurants = data[0].results;
 
       fetch('/api/recommendation', {
         method: 'POST',
@@ -46,7 +42,7 @@ export default function getRecommendation(preferences, callback) {
             const selections = JSON.parse(data);
             return callback(selections);
           } catch (err) {
-            console.log(err);
+            return callback(/* result= */ null, err);
           }
         });
     });
@@ -70,7 +66,7 @@ function makePromisesArray(preferences) {
   const cuisineTypes = cuisine;
   // Make sure we still create a promise even if no cuisine type is specified.
   // This will make the text search query just "restaurant" without specifying a cuisine.
-  if (!cuisineTypes) {
+  if (!cuisineTypes.length) {
     cuisineTypes.push('');
   }
   for (const cuisineType of cuisineTypes) {
