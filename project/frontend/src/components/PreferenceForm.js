@@ -52,7 +52,9 @@ async function getLocalCuisines(currLocation) {
  */
 function PreferenceForm(props) {
   const { currLocation, locationName } = props;
-  const currHour = parseInt(new Date(Date.now()).toTimeString().substring(0,2));
+  const currHour = parseInt(
+    new Date(Date.now()).toTimeString().substring(0, 2)
+  );
   const isOpenCheckedDefault = currHour >= 10 && currHour <= 22;
   const history = useHistory();
   const authContext = useContext(AuthContext);
