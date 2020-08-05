@@ -109,6 +109,7 @@ function MapContainer(props) {
         const coords = restaurants[addMarkerIndex].key.latLngCoords;
         markers.push(
           <MarkerIcon
+            key={restaurants[addMarkerIndex].key.id}
             lat={coords.lat}
             lng={coords.lng}
             id={addMarkerIndex}
@@ -163,9 +164,17 @@ function MapContainer(props) {
       onChildMouseEnter={onMouseEnterMarker}
       onChildMouseLeave={onMouseLeaveMarker}
       onChildClick={onMouseClickMarker}
+      distanceToMouse={(pt, mousePos) => {
+        if (!pt) return 0;
+        return Math.sqrt(
+          (pt.x - mousePos.x) * (pt.x - mousePos.x) +
+            (pt.y - mousePos.y) * (pt.y - mousePos.y)
+        );
+      }}
       aria-label='Google Map with restaurant markers.'>
       {createMarkers()}
       <YouAreHereIcon
+        key='youAreHere'
         lat={userLocation.lat}
         lng={userLocation.lng}
         aria-label='Your current location!'
