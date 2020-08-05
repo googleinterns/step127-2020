@@ -12,6 +12,7 @@ import Cuisine from '../assets/cuisine.svg';
 import Distance from '../assets/distance.svg';
 import Experience from '../assets/food_service.svg';
 import Price from '../assets/dollar.svg';
+import PreferenceForm from './PreferenceForm';
 
 /**
  * Returns a list of cuisine types of local restaurants using the Zomato API.
@@ -243,6 +244,22 @@ function UserPreferenceForm(props) {
         <div className='preference-form-submit-container'>
           <button type='submit'>Find my match</button>
         </div>
+        <PreferenceForm
+          headerLabel={'Your Preference'}
+          rowItemLabels={{
+            cuisine: 'Cuisines',
+            location: 'Location',
+            experience: 'Experience',
+            price: 'Price Level',
+            distance: 'Distance',
+          }}
+          isPreference={true}>
+          {/* select items are going to go here so let's hit a get select */}
+          {getSelect('radius', radius, setRadius, distancesInMiles)}
+          {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
+          {getSelect('diningExp', diningExp, setDiningExp, diningExperiences)}
+          {getSlider(radiusWeight, setRadiusWeight, radius === '')}
+        </PreferenceForm>
       </form>
     </div>
   );

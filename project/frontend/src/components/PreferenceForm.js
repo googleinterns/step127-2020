@@ -12,7 +12,7 @@ import Experience from '../assets/food_service.svg';
 import Price from '../assets/dollar.svg';
 
 function PreferenceForm(props) {
-  const { headerLabel, rowItemLabels } = props;
+  const { headerLabel, rowItemLabels, isPreference } = props;
   const cuisineOptions = ['Italian', 'Mexican'];
   const [cuisine, setCuisine] = useState([]);
   return (
@@ -39,6 +39,9 @@ function PreferenceForm(props) {
         <FormItem imageName={Experience} label={rowItemLabels.experience}>
           {props.children[2]}
         </FormItem>
+        {console.log('the children are: ')}
+        {console.log(props.children)}
+        <div className='form-column'>{isPreference && props.children[3]}</div>
         <div className='form-submit-container'>
           <button type='submit'>Update Profile</button>
         </div>
