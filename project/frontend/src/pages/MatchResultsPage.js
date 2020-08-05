@@ -30,20 +30,22 @@ function MatchResultsPage(props) {
     });
   }, [formState]);
 
-  const cardStack = !errorMessage ? 
+  const cardStack = !errorMessage ? (
     <RestaurantCardStack
       restaurants={restaurants}
       currentCardIndex={currentRestaurantIndex}
       setCurrentCardIndex={setCurrentRestaurantIndex}
-    /> : null;
+    />
+  ) : null;
 
-  const map = !errorMessage ? 
+  const map = !errorMessage ? (
     <MapContainer
       restaurants={restaurants}
       userLocation={userLocation}
       currentCardIndex={currentRestaurantIndex}
       setCurrentCardIndex={setCurrentRestaurantIndex}
-    /> : null;
+    />
+  ) : null;
 
   return [
     <div key='match-results' className='container u-full-width'>
