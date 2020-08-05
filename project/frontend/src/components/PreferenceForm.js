@@ -55,7 +55,8 @@ function PreferenceForm(props) {
   const currHour = parseInt(
     new Date(Date.now()).toTimeString().substring(0, 2)
   );
-  const isOpenCheckedDefault = currHour >= 10 && currHour <= 22;
+  // Check open by default if time is between 10 am and 10 pm.
+  const isOpenCheckedDefault = currHour >= 10 && currHour < 22;
   const history = useHistory();
   const authContext = useContext(AuthContext);
 
