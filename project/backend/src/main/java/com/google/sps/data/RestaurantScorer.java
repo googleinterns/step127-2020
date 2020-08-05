@@ -57,9 +57,10 @@ public final class RestaurantScorer {
 
       if (distMiles <= prefDistMiles) {
         score += radiusWeight;
-      } else {
-        double percentDistDiff = (distMiles - prefDistMiles) / prefDistMiles;
-        score -= percentDistDiff * radiusWeight;
+        // Promotes closer restaurants.
+        double percentDistDiff = (prefDistMiles - distMiles) / prefDistMiles;
+        // A maximum of 5 percent can be added to the score.
+        score += percentDistDiff * (double) maxPoints / 20;
       }
     }
 
@@ -70,7 +71,7 @@ public final class RestaurantScorer {
     if (hasRating) {
       score += calculateRatingScore(restaurantRating, restaurant.getNumRatings(), statistics);
     }
-    double percentMatch = score / maxPoints;
+    double percentMatch = score / maxPoints <= 1 ? score / maxPoints : 1.0;
     return percentMatch;
   }
 
