@@ -170,6 +170,14 @@ function UserPreferenceForm(props) {
     'Very High': 4,
   };
 
+  const itemLabels = {
+    cuisine: 'Cuisines',
+    location: 'Location',
+    experience: 'Experience',
+    price: 'Price Level',
+    distance: 'Distance',
+  };
+
   const tooltipInfo = (
     <React.Fragment>
       <p>
@@ -238,13 +246,7 @@ function UserPreferenceForm(props) {
         priority for different fields.
       </p>
       <PreferenceForm
-        rowItemLabels={{
-          cuisine: 'Cuisines',
-          location: 'Location',
-          experience: 'Experience',
-          price: 'Price Level',
-          distance: 'Distance',
-        }}
+        rowItemLabels={itemLabels}
         isUserPreference={true}
         locationName={locationName}
         buttonLabel='Find my match'
