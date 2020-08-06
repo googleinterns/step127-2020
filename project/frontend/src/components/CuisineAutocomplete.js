@@ -1,6 +1,6 @@
 import './CuisineAutocomplete.css';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import Autocomplete, {
   createFilterOptions,
@@ -39,8 +39,10 @@ function inputIsNewAndValid(input, options) {
  */
 function CuisineAutocomplete(props) {
   const { cuisineOptions, setCuisine } = props;
+  const [numSelected, setNumSelected] = useState(0);
 
   const filter = createFilterOptions();
+  const maxNumCuisines = 10;
 
   return (
     <Autocomplete
@@ -48,13 +50,18 @@ function CuisineAutocomplete(props) {
       id='cuisine'
       options={cuisineOptions}
       multiple
+      limitTags={maxNumCuisines}
       fullWidth={true}
       autoHighlight={true}
       onChange={(_event, newCuisineList) => {
+        setNumSelected(newCuisineList.length);
         setCuisine(newCuisineList);
       }}
       filterSelectedOptions={true}
       filterOptions={(options, state) => {
+        if (numSelected >= maxNumCuisines) {
+          return [];
+        }
         const filtered = filter(options, state);
         if (inputIsNewAndValid(state.inputValue, options)) {
           filtered.push(state.inputValue.trim());
@@ -64,7 +71,8 @@ function CuisineAutocomplete(props) {
       renderInput={(params) => (
         <TextField
           {...params}
-          variant='standard'
+          label={`${numSelected}/${maxNumCuisines}`}
+          variant='outlined'
           placeholder='Select Cuisine Types'
         />
       )}

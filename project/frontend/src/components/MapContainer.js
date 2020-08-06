@@ -1,5 +1,5 @@
-// TODO: Change file name to MapContainer.js to match the component name.
 import React, { Fragment, useState } from 'react';
+
 import GoogleMapReact from 'google-map-react';
 import Lunch from '../assets/lunch.svg';
 
@@ -10,10 +10,12 @@ function MapContainer(props) {
     currentCardIndex,
     setCurrentCardIndex,
   } = props;
+
   const center =
     restaurants.length === 0
       ? userLocation
       : restaurants[currentCardIndex].key.latLngCoords;
+
   const [showInfoWindows, setShowInfoWindows] = useState({});
 
   const YouAreHereIcon = (props) => {
@@ -49,7 +51,7 @@ function MapContainer(props) {
     const percentValue = Math.round(restaurants[markerID].value * 100);
     return (
       <Fragment>
-        <img src={Lunch} alt={'lunch icon'} />
+        <img src={Lunch} alt='lunch icon' />
         {(markerID === currentCardIndex || showInfoWindows[markerName]) && (
           <InfoWindow
             restaurantName={restaurantName}
@@ -65,30 +67,30 @@ function MapContainer(props) {
     const { restaurantName, percentMatch } = props;
     const infoWindowStyle = {
       position: 'relative',
-      bottom: 80,
-      left: '-45px',
-      width: 220,
+      width: '344px',
+      fontFamily: 'Montserrat',
+      transform: 'translate(calc(-50% + 15px), calc(-100% - 38px))',
       backgroundColor: 'white',
       boxShadow: '0 2px 7px 1px rgba(0, 0, 0, 0.3)',
-      padding: 10,
-      fontSize: 14,
-      zIndex: 100,
+      textAlign: 'left',
+      padding: '16px',
+      zIndex: '50',
+      borderRadius: '4px',
     };
 
     return (
-      <div style={infoWindowStyle}>
-        <div style={{ fontSize: 16 }}>
-          <span style={{ float: 'right' }}>{percentMatch}</span>
-          {restaurantName}
-        </div>
+      <div className='restaurant-header' style={infoWindowStyle}>
+        <h5 className='restaurant-name'>{restaurantName}</h5>
+        <h5 className='restaurant-score'>{percentMatch}</h5>
       </div>
     );
   };
 
-  /** Creates all the markers that are going to be displayed
-   *  on the screen. It creates the marker corresponding
-   *  to the restaurant at currentCardIndex, the numAdjacentMarkers
-   *  markers before that and the numAdjacentMarkers markers
+  /**
+   * Creates all the markers that are going to be displayed
+   * on the screen. It creates the marker corresponding
+   * to the restaurant at currentCardIndex, the numAdjacentMarkers
+   * markers before that and the numAdjacentMarkers markers
    * after that.
    */
   const createMarkers = () => {
@@ -107,6 +109,7 @@ function MapContainer(props) {
         const coords = restaurants[addMarkerIndex].key.latLngCoords;
         markers.push(
           <MarkerIcon
+            key={restaurants[addMarkerIndex].key.id}
             lat={coords.lat}
             lng={coords.lng}
             id={addMarkerIndex}
@@ -118,12 +121,14 @@ function MapContainer(props) {
     return markers;
   };
 
-  /** Checks that the current index is a valid index for
+  /**
+   * Checks that the current index is a valid index for
    * the restaurant matches list.
    */
   const isValidIndex = (index) => index >= 0 && index < restaurants.length;
 
-  /** Info Window with name and match appears when the mouse hovers
+  /**
+   * Info Window with name and match appears when the mouse hovers
    * over the marker.
    */
   const onMouseEnterMarker = (props, marker) => {
@@ -133,7 +138,8 @@ function MapContainer(props) {
     setShowInfoWindows(showInfoWindowsChange);
   };
 
-  /** Info window with name and match disappears when the mouse
+  /**
+   * Info window with name and match disappears when the mouse
    * leaves the marker.
    */
   const onMouseLeaveMarker = (props, marker) => {
@@ -147,7 +153,8 @@ function MapContainer(props) {
     setCurrentCardIndex(marker.id);
   };
 
-  const mapStyle = { height: '100vh', width: '50%' };
+  const mapStyle = { height: 'inherit', width: '50%', position: 'relative' };
+
   return (
     <GoogleMapReact
       bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
@@ -157,12 +164,20 @@ function MapContainer(props) {
       onChildMouseEnter={onMouseEnterMarker}
       onChildMouseLeave={onMouseLeaveMarker}
       onChildClick={onMouseClickMarker}
-      aria-label={'Google Map with restaurant markers.'}>
+      distanceToMouse={(pt, mousePos) => {
+        if (!pt) return 0;
+        return Math.sqrt(
+          (pt.x - mousePos.x) * (pt.x - mousePos.x) +
+            (pt.y - mousePos.y) * (pt.y - mousePos.y)
+        );
+      }}
+      aria-label='Google Map with restaurant markers.'>
       {createMarkers()}
       <YouAreHereIcon
+        key='youAreHere'
         lat={userLocation.lat}
         lng={userLocation.lng}
-        aria-label={'Your current location!'}
+        aria-label='Your current location!'
       />
     </GoogleMapReact>
   );

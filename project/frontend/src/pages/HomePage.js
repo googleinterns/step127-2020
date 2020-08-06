@@ -4,14 +4,20 @@ import React, { useState } from 'react';
 
 import LocationFinder from '../components/LocationFinder';
 import Modal from '../components/Modal.js';
-import PreferenceForm from '../components/PreferenceForm.js';
+import UserPreferenceForm from '../components/UserPreferenceForm.js';
 import SwipeMatchForm from '../components/SwipeMatchForm.js';
 
 function HomePage(props) {
+  const retrievedLocation = props.location.state
+    ? props.location.state.currLocation
+    : {};
+  const retrievedLocationName = props.location.state
+    ? props.location.state.locationName
+    : '';
   const [isPreferenceFormOpen, setIsPreferenceFormOpen] = useState(false);
   const [isSwipeMatchFormOpen, setIsSwipeMatchFormOpen] = useState(false);
-  const [currLocation, setCurrLocation] = useState({});
-  const [locationName, setLocationName] = useState('');
+  const [currLocation, setCurrLocation] = useState(retrievedLocation);
+  const [locationName, setLocationName] = useState(retrievedLocationName);
 
   const togglePreferenceForm = () => {
     setIsPreferenceFormOpen((prev) => !prev);
@@ -36,7 +42,10 @@ function HomePage(props) {
         <div id='welcome' className='column'>
           <h1 className='logo'>MAKMatch</h1>
           <h4>Discover your restaurant match.</h4>
-          <LocationFinder sendData={handleLocationData} />
+          <LocationFinder
+            locationName={locationName}
+            sendData={handleLocationData}
+          />
           <div>
             <button
               className='welcome-button'
@@ -113,7 +122,10 @@ function HomePage(props) {
       top='64px'
       bottom='64px'
       style={{ paddingBottom: '0px' }}>
-      <PreferenceForm currLocation={currLocation} locationName={locationName} />
+      <UserPreferenceForm
+        currLocation={currLocation}
+        locationName={locationName}
+      />
     </Modal>,
     <Modal
       key='swipe-match-form'

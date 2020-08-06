@@ -1,12 +1,14 @@
-import './PreferenceForm.css';
+import './UserPreferenceForm.css';
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 
 import CuisineAutocomplete from './CuisineAutocomplete.js';
 import { Slider } from 'rsuite';
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from './Authentication.js';
-
+import { withStyles } from '@material-ui/core/styles';
+import Info from '@material-ui/icons/Info';
+import Tooltip from '@material-ui/core/Tooltip';
 import Place from '../assets/place.svg';
 import Cuisine from '../assets/cuisine.svg';
 import Distance from '../assets/distance.svg';
@@ -50,7 +52,11 @@ async function getLocalCuisines(currLocation) {
  */
 function PreferenceForm(props) {
   const { currLocation, locationName } = props;
-
+  const currHour = parseInt(
+    new Date(Date.now()).toTimeString().substring(0, 2)
+  );
+  // Check open by default if time is between 10 am and 10 pm.
+  const isOpenCheckedDefault = currHour >= 10 && currHour < 22;
   const history = useHistory();
   const authContext = useContext(AuthContext);
 
@@ -62,7 +68,7 @@ function PreferenceForm(props) {
   const [diningExpWeight, setDiningExpWeight] = useState(3);
   const [priceLevel, setPriceLevel] = useState('');
   const [priceLevelWeight, setPriceLevelWeight] = useState(3);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(isOpenCheckedDefault);
 
   useEffect(() => {
     (async () => {
@@ -70,6 +76,10 @@ function PreferenceForm(props) {
       setCuisineOptions(options);
     })();
   }, [currLocation]);
+
+  useLayoutEffect(() => {
+    setTooltipVals([radiusWeight, diningExpWeight, priceLevelWeight]);
+  }, [radiusWeight, diningExpWeight, priceLevelWeight]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -83,6 +93,7 @@ function PreferenceForm(props) {
         priceLevel: { pref: priceLevel, weight: priceLevelWeight },
         open,
         cuisineOptions,
+        locationName,
       },
     });
   };
@@ -120,6 +131,17 @@ function PreferenceForm(props) {
     );
   };
 
+  const setTooltipVals = (prefWeights) => {
+    const levels = ['Least', 'Less', 'Medium', 'More', 'Most'];
+    const tooltips = document.getElementsByClassName('rs-tooltip-inner');
+    for (let i = 0; i < prefWeights.length; i++) {
+      if (i >= tooltips.length) {
+        return;
+      }
+      tooltips[i].innerHTML = levels[prefWeights[i] - 1];
+    }
+  };
+
   const distancesInMiles = {
     '1 mile': 1,
     '5 miles': 5,
@@ -139,6 +161,35 @@ function PreferenceForm(props) {
     High: 3,
     'Very High': 4,
   };
+
+  const tooltipInfo = (
+    <React.Fragment>
+      <p>
+        We will use your preferences entered here to find a restaurant we think
+        you'd like.
+      </p>
+      <p>
+        You may leave any field blank if you have no preference for that field.
+        If you are looking for a specific cuisine(s), you may specify up to 10
+        cuisines in the box. If you leave this box blank, we will consider
+        restaurants of any cuisine type for you.
+      </p>
+      <p>
+        You can also tell us how important each preference you indicate on the
+        form is using the slider next to it.
+      </p>
+    </React.Fragment>
+  );
+
+  const StyledTooltip = withStyles((theme) => ({
+    tooltip: {
+      backgroundColor: '#f5f5f9',
+      color: 'rgba(0, 0, 0, 0.87)',
+      maxWidth: 220,
+      fontSize: theme.typography.pxToRem(20),
+      border: '1px solid #dadde9',
+    },
+  }))(Tooltip);
 
   return (
     <div className='preference-form-container'>
@@ -168,7 +219,12 @@ function PreferenceForm(props) {
           </div>
         )}
       <form className='preference-form' onSubmit={handleSubmit}>
-        <h4>Your preferences.</h4>
+        <h4>
+          Your preferences.
+          <StyledTooltip title={tooltipInfo} interactive>
+            <Info />
+          </StyledTooltip>
+        </h4>
         <p>
           Please enter your restaurant preferences below. You may leave any
           field blank if you have no preference. Specify an importance to
@@ -213,19 +269,15 @@ function PreferenceForm(props) {
           <div className='preference-form-column'>
             <div className='preference-form-row'>
               <label>Importance</label>
-              {getSlider(radiusWeight, setRadiusWeight, radius === '')}
+              {getSlider(radiusWeight, setRadiusWeight, !radius)}
             </div>
             <div className='preference-form-row'>
               <label>Importance</label>
-              {getSlider(diningExpWeight, setDiningExpWeight, diningExp === '')}
+              {getSlider(diningExpWeight, setDiningExpWeight, !diningExp)}
             </div>
             <div className='preference-form-row'>
               <label>Importance</label>
-              {getSlider(
-                priceLevelWeight,
-                setPriceLevelWeight,
-                priceLevel === ''
-              )}
+              {getSlider(priceLevelWeight, setPriceLevelWeight, !priceLevel)}
             </div>
           </div>
         </div>
