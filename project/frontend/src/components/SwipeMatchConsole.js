@@ -18,7 +18,10 @@ function SwipeMatchConsole(props) {
         Below you will find a group ID to share with others so they may join the
         session.
         {isCreator
-          ? ' As the session leader, you may moderate the connected users and are responsible for starting the session once restaurants have been retrieved. You may start the session at any time, and users may still join after you have begun the session.'
+         ? ' As the session leader, you may moderate the connected users and ' +
+         'are responsible for starting the session once restaurants have been ' +
+         'retrieved. You may start the session at any time, and users may still ' +
+         'join after you have begun the session.'
           : ' Please wait for the session leader to begin the session.'}
       </p>
       <table className='swipe-match-console-table'>
