@@ -6,8 +6,8 @@ function FormItem(props) {
   return (
     <div className='row'>
       {/*TODO: add an alt prop to be passed in here*/}
-      <img src={imageName} alt='' />
-      <label>{label}</label>
+      <img src={imageName} alt={label + ' icon'} />
+      <label>{label} </label>
       {props.children}
     </div>
   );

@@ -34,10 +34,14 @@ function ProfileForm(props) {
         cuisineOptions={cuisineOptions}
         setCuisine={setCuisine}>
         <ButtonGroup
+          id='distance'
           labelList={['1 mile', '5 miles', '10 miles', '25 miles']}
         />
-        <ButtonGroup labelList={['$', '$$', '$$$', '$$$$']} />
-        <ButtonGroup labelList={['Takeout', 'Delivery', 'Dine-In']} />
+        <ButtonGroup id='price' labelList={['$', '$$', '$$$', '$$$$']} />
+        <ButtonGroup
+          id='experience'
+          labelList={['Takeout', 'Delivery', 'Dine-In']}
+        />
       </PreferenceForm>
     </div>
   );
