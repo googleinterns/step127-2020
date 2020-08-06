@@ -38,7 +38,7 @@ public class GenerateSwipeMatchGroupIdServlet extends HttpServlet {
                                          .setCredentials(GoogleCredentials.getApplicationDefault())
                                          .build());
 
-      db = Optional.of(firestoreOptions.getService());
+      db = Optional.of(firestoreOptions.get().getService());
     } catch (IOException e) {
       firestoreOptions = Optional.empty();
       db = Optional.empty();
