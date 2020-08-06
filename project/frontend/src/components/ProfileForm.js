@@ -2,6 +2,7 @@ import React from 'react';
 import './ProfileForm.css';
 
 import PreferenceForm from './PreferenceForm.js';
+import ButtonGroup from './ButtonGroup';
 
 /**
  * A form used to gather the restaurant preferences of a user for the 'Find My Match'

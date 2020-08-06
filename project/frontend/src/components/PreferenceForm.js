@@ -39,7 +39,6 @@ function PreferenceForm(props) {
         <div className='form-row'>
           <div className='form-column'>
             <FormItem imageName={Distance} label={rowItemLabels.distance}>
-<<<<<<< HEAD
               {props.children[0]}
             </FormItem>
             <FormItem imageName={Price} label={rowItemLabels.price}>
@@ -67,24 +66,6 @@ function PreferenceForm(props) {
           )}
         </div>
         {isPreference && props.children[6]}
-=======
-              {getSelect('radius', radius, setRadius, distancesInMiles)}
-            </FormItem>
-            <FormItem imageName={Price} label={rowItemLabels.price}>
-              {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
-            </FormItem>
-            <FormItem imageName={Experience} label={rowItemLabels.experience}>
-              {getSelect(
-                'diningExp',
-                diningExp,
-                setDiningExp,
-                diningExperiences
-              )}
-            </FormItem>
-          </div>
-          {props.children}
-        </div>
->>>>>>> 0dbad3ac669cfd56812b356aefb36461f144ecfb
         <div className='form-submit-container'>
           <button type='submit'>{buttonLabel}</button>
         </div>

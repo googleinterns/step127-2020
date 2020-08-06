@@ -2,7 +2,6 @@ import './UserPreferenceForm.css';
 
 import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
 
-import CuisineAutocomplete from './CuisineAutocomplete.js';
 import { Slider } from 'rsuite';
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from './Authentication.js';
@@ -62,34 +61,6 @@ function UserPreferenceForm(props) {
   const [priceLevel, setPriceLevel] = useState('');
   const [priceLevelWeight, setPriceLevelWeight] = useState(3);
   const [open, setOpen] = useState(true);
-
-  const itemLabels = {
-    cuisine: 'Cuisines',
-    location: 'Location',
-    price: 'Price Level',
-    distance: 'Distance',
-    experience: 'Dining Experience',
-  };
-
-  const distancesInMiles = {
-    '1 mile': 1,
-    '5 miles': 5,
-    '10 miles': 10,
-    '25 miles': 25,
-  };
-
-  const diningExperiences = {
-    Takeout: 'meal_takeaway',
-    Delivery: 'meal_delivery',
-    'Dine In': 'restaurant',
-  };
-
-  const prices = {
-    Low: 1,
-    Medium: 2,
-    High: 3,
-    'Very High': 4,
-  };
 
   useEffect(() => {
     (async () => {
@@ -266,7 +237,6 @@ function UserPreferenceForm(props) {
         blank if you have no preference. Specify an importance to indicate your
         priority for different fields.
       </p>
-      {/* TODO: Add handle submit functionality. */}
       <PreferenceForm
         rowItemLabels={{
           cuisine: 'Cuisines',
@@ -289,7 +259,6 @@ function UserPreferenceForm(props) {
         {getSlider(diningExpWeight, setDiningExpWeight, !diningExp)}
         {openNowCheckBox()}
       </PreferenceForm>
-      {/* </form> */}
     </div>
   );
 }
