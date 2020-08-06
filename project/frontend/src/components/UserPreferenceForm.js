@@ -1,15 +1,15 @@
 import './UserPreferenceForm.css';
 
-import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
+
+import PreferenceForm from './PreferenceForm.js';
+import { AuthContext } from './Authentication.js';
 
 import { Slider } from 'rsuite';
 import { useHistory } from 'react-router-dom';
-import { AuthContext } from './Authentication.js';
 import { withStyles } from '@material-ui/core/styles';
 import Info from '@material-ui/icons/Info';
 import Tooltip from '@material-ui/core/Tooltip';
-
-import PreferenceForm from './PreferenceForm';
 
 /**
  * Returns a list of cuisine types of local restaurants using the Zomato API.
@@ -247,7 +247,7 @@ function UserPreferenceForm(props) {
         }}
         isPreference={true}
         locationName={locationName}
-        buttonLabel='Find Match'
+        buttonLabel='Find my match'
         handleSubmit={handleSubmit}
         cuisineOptions={cuisineOptions}
         setCuisine={setCuisine}>

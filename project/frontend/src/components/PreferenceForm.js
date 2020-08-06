@@ -1,5 +1,5 @@
 import './PreferenceForm.css';
-import './FormItem.js';
+
 import React from 'react';
 
 import CuisineAutocomplete from './CuisineAutocomplete.js';
@@ -22,7 +22,6 @@ function PreferenceForm(props) {
     cuisineOptions,
     setCuisine,
   } = props;
-  // const [cuisine, setCuisine] = useState([]);
   return (
     <div className='form-container'>
       <form className='form' onSubmit={handleSubmit}>
