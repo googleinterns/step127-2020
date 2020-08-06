@@ -12,7 +12,7 @@ import ButtonGroup from './ButtonGroup';
  *     coordinates of the user.
  * @param {string} locationName The formatted address of the current user.
  */
-function ProfileForm(props) {
+function ProfileForm() {
   const itemLabels = {
     cuisine: 'Preferred Cuisine',
     location: 'Your Location',
