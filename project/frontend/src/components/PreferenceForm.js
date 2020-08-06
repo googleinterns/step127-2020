@@ -11,11 +11,24 @@ import Distance from '../assets/distance.svg';
 import Experience from '../assets/food_service.svg';
 import Price from '../assets/dollar.svg';
 
+/**
+ * A form used to help gather user preferences for the 'Find My Match' and Profile Page.
+ *
+ * @param {!Object<string, string>} rowItemLabels The labels for each form input item.
+ * @param {boolean} isUserPreference  True if the use of this form is for the user
+ *      preference form on the home page.
+ * @param {string} locationName The formatted address of the current user.
+ * @param {string} buttonLabel The label on the submit button.
+ * @param {function} handleSubmit The function called when the submit button is pressed.
+ * @param {!Array<string>} cuisineOptions The list of cuisines that will be shown
+ *      in the cuisine autocomplete component.
+ * @param {function} setCuisine A cuisine setter function that will update
+ *      when something is added to autocomplete.
+ */
 function PreferenceForm(props) {
   const {
-    headerLabel,
     rowItemLabels,
-    isPreference,
+    isUserPreference,
     locationName,
     buttonLabel,
     handleSubmit,
@@ -25,7 +38,6 @@ function PreferenceForm(props) {
   return (
     <div className='form-container'>
       <form className='form' onSubmit={handleSubmit}>
-        <h4 className='header'>{headerLabel}</h4>
         <FormItem imageName={Place} label={rowItemLabels.location}>
           <p>{locationName}</p>
         </FormItem>
@@ -47,7 +59,7 @@ function PreferenceForm(props) {
               {props.children[2]}
             </FormItem>
           </div>
-          {isPreference && (
+          {isUserPreference && (
             <div className='form-column'>
               <div className='form-row'>
                 <label>Importance</label>
@@ -64,7 +76,7 @@ function PreferenceForm(props) {
             </div>
           )}
         </div>
-        {isPreference && props.children[6]}
+        {isUserPreference && props.children[6]}
         <div className='form-submit-container'>
           <button type='submit'>{buttonLabel}</button>
         </div>

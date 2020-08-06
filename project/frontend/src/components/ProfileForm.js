@@ -25,6 +25,7 @@ function ProfileForm(props) {
   const setCuisine = () => {};
   return (
     <div className='profile-form-container'>
+      <h4 className='header'>Your Profile</h4>
       <PreferenceForm
         headerLabel='Your Profile'
         rowItemLabels={itemLabels}

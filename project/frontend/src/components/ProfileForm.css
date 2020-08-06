@@ -8,3 +8,9 @@
   display: block;
   margin: 16px auto;
 }
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 15px;
+}

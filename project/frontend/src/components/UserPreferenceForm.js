@@ -245,7 +245,7 @@ function UserPreferenceForm(props) {
           price: 'Price Level',
           distance: 'Distance',
         }}
-        isPreference={true}
+        isUserPreference={true}
         locationName={locationName}
         buttonLabel='Find my match'
         handleSubmit={handleSubmit}
