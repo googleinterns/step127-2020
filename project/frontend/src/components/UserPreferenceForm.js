@@ -208,7 +208,7 @@ function UserPreferenceForm(props) {
   }))(Tooltip);
 
   return (
-    <div className='preference-form-container'>
+    <div className='preference-form-container' style={{ maxWidth: '600px' }}>
       {authContext.currentUser.get &&
         !authContext.currentUser.get.isSignedIn() && (
           <div className='preference-form-sign-in'>

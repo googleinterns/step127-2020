@@ -36,8 +36,8 @@ function PreferenceForm(props) {
     setCuisine,
   } = props;
   return (
-    <div className='form-container'>
-      <form className='form' onSubmit={handleSubmit}>
+    <div className='preference-form-container'>
+      <form className='preference-form' onSubmit={handleSubmit}>
         <FormItem imageName={Place} label={rowItemLabels.location}>
           <p>{locationName}</p>
         </FormItem>
@@ -47,8 +47,8 @@ function PreferenceForm(props) {
             setCuisine={setCuisine}
           />
         </FormItem>
-        <div className='form-row'>
-          <div className='form-column'>
+        <div className='preference-form-row'>
+          <div className='preference-form-column'>
             <FormItem imageName={Distance} label={rowItemLabels.distance}>
               {props.children[0]}
             </FormItem>
@@ -60,16 +60,16 @@ function PreferenceForm(props) {
             </FormItem>
           </div>
           {isUserPreference && (
-            <div className='form-column'>
-              <div className='form-row'>
+            <div className='preference-form-column'>
+              <div className='preference-form-row'>
                 <label>Importance</label>
                 {props.children[3]}
               </div>
-              <div className='form-row'>
+              <div className='preference-form-row'>
                 <label>Importance</label>
                 {props.children[4]}
               </div>
-              <div className='form-row'>
+              <div className='preference-form-row'>
                 <label>Importance</label>
                 {props.children[5]}
               </div>
@@ -77,7 +77,7 @@ function PreferenceForm(props) {
           )}
         </div>
         {isUserPreference && props.children[6]}
-        <div className='form-submit-container'>
+        <div className='preference-form-submit-container'>
           <button type='submit'>{buttonLabel}</button>
         </div>
       </form>

@@ -4,7 +4,7 @@ import './FormItem.css';
 function FormItem(props) {
   const { label, imageName } = props;
   return (
-    <div className='row'>
+    <div className='form-item-row'>
       <img src={imageName} alt={label + ' icon'} />
       <label>{label}</label>
       {props.children}

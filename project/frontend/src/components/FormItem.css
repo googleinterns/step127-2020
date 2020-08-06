@@ -1,15 +1,15 @@
-.row {
+.form-item-row {
   display: flex;
   align-items: center;
   margin: 16px 0px;
 }
 
-.row label {
+.form-item-row label {
   margin: 0px 16px;
   white-space: nowrap;
 }
 
-.row p {
+.form-item-row p {
   margin-bottom: 0px;
   padding: 6px 8px;
   border: 1px solid #bbb;
@@ -18,13 +18,13 @@
   font-size: 1.4rem;
 }
 
-.row select {
+.form-item-row select {
   width: 100%;
   margin: 0px;
   font-family: 'Roboto';
   font-size: 1.4rem;
 }
 
-.row input {
+.form-item-row input {
   margin: 0px;
 }
