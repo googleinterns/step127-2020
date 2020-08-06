@@ -12,15 +12,23 @@ import Experience from '../assets/food_service.svg';
 import Price from '../assets/dollar.svg';
 
 function PreferenceForm(props) {
-  const { headerLabel, rowItemLabels, isPreference } = props;
-  const cuisineOptions = ['Italian', 'Mexican'];
-  const [cuisine, setCuisine] = useState([]);
+  const {
+    headerLabel,
+    rowItemLabels,
+    isPreference,
+    locationName,
+    buttonLabel,
+    handleSubmit,
+    cuisineOptions,
+    setCuisine,
+  } = props;
+  // const [cuisine, setCuisine] = useState([]);
   return (
     <div className='form-container'>
-      <form className='form'>
+      <form className='form' onSubmit={handleSubmit}>
         <h4 className='header'>{headerLabel}</h4>
         <FormItem imageName={Place} label={rowItemLabels.location}>
-          <p>Your Location</p>
+          <p>{locationName}</p>
         </FormItem>
         <FormItem imageName={Cuisine} label={rowItemLabels.cuisine}>
           <CuisineAutocomplete
@@ -28,22 +36,38 @@ function PreferenceForm(props) {
             setCuisine={setCuisine}
           />
         </FormItem>
-        <FormItem imageName={Distance} label={rowItemLabels.distance}>
-          {/** The input types are different for the distance, price and experience
-           * depedning on the form so I made this props.children */}
-          {props.children[0]}
-        </FormItem>
-        <FormItem imageName={Price} label={rowItemLabels.price}>
-          {props.children[1]}
-        </FormItem>
-        <FormItem imageName={Experience} label={rowItemLabels.experience}>
-          {props.children[2]}
-        </FormItem>
-        {console.log('the children are: ')}
-        {console.log(props.children)}
-        <div className='form-column'>{isPreference && props.children[3]}</div>
+        <div className='form-row'>
+          <div className='form-column'>
+            <FormItem imageName={Distance} label={rowItemLabels.distance}>
+              {props.children[0]}
+            </FormItem>
+            <FormItem imageName={Price} label={rowItemLabels.price}>
+              {props.children[1]}
+            </FormItem>
+            <FormItem imageName={Experience} label={rowItemLabels.experience}>
+              {props.children[2]}
+            </FormItem>
+          </div>
+          {isPreference && (
+            <div className='form-column'>
+              <div className='form-row'>
+                <label>Importance</label>
+                {props.children[3]}
+              </div>
+              <div className='form-row'>
+                <label>Importance</label>
+                {props.children[4]}
+              </div>
+              <div className='form-row'>
+                <label>Importance</label>
+                {props.children[5]}
+              </div>
+            </div>
+          )}
+        </div>
+        {isPreference && props.children[6]}
         <div className='form-submit-container'>
-          <button type='submit'>Update Profile</button>
+          <button type='submit'>{buttonLabel}</button>
         </div>
       </form>
     </div>

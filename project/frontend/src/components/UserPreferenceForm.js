@@ -86,6 +86,16 @@ function UserPreferenceForm(props) {
         cuisineOptions,
       },
     });
+    console.log('uh ha ha');
+    console.log({
+      currLocation,
+      cuisine,
+      radius: { pref: radius, weight: radiusWeight },
+      diningExp: { pref: diningExp, weight: diningExpWeight },
+      priceLevel: { pref: priceLevel, weight: priceLevelWeight },
+      open,
+      cuisineOptions,
+    });
   };
 
   const getSelect = (name, value, setValue, options) => {
@@ -116,6 +126,22 @@ function UserPreferenceForm(props) {
           disabled={disabled}
           graduated
           progress
+        />
+      </div>
+    );
+  };
+
+  const openNowCheckBox = () => {
+    return (
+      <div
+        className='preference-form-row'
+        style={{ justifyContent: 'center', margin: '32px 0px' }}>
+        <label htmlFor='open'>Open Now</label>
+        <input
+          name='open'
+          type='checkbox'
+          checked={open}
+          onChange={(event) => setOpen(event.target.checked)}
         />
       </div>
     );
@@ -168,99 +194,36 @@ function UserPreferenceForm(props) {
             </div>
           </div>
         )}
-      <form className='preference-form' onSubmit={handleSubmit}>
-        <h4>Your preferences.</h4>
-        <p>
-          Please enter your restaurant preferences below. You may leave any
-          field blank if you have no preference. Specify an importance to
-          indicate your priority for different fields.
-        </p>
-        <div className='preference-form-row'>
-          <img src={Place} alt='' />
-          <label>Location</label>
-          <p>{locationName}</p>
-        </div>
-        <div className='preference-form-row'>
-          <img src={Cuisine} alt='' />
-          <label htmlFor='cuisine'>Cuisines</label>
-          <CuisineAutocomplete
-            cuisineOptions={cuisineOptions}
-            setCuisine={setCuisine}
-          />
-        </div>
-        <div className='preference-form-row'>
-          <div className='preference-form-column'>
-            <div className='preference-form-row'>
-              <img src={Distance} alt='' />
-              <label htmlFor='radius'>Distance</label>
-              {getSelect('radius', radius, setRadius, distancesInMiles)}
-            </div>
-            <div className='preference-form-row'>
-              <img src={Experience} alt='' />
-              <label htmlFor='diningExp'>Experience</label>
-              {getSelect(
-                'diningExp',
-                diningExp,
-                setDiningExp,
-                diningExperiences
-              )}
-            </div>
-            <div className='preference-form-row'>
-              <img src={Price} alt='' />
-              <label htmlFor='priceLevel'>Price Level</label>
-              {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
-            </div>
-          </div>
-          <div className='preference-form-column'>
-            <div className='preference-form-row'>
-              <label>Importance</label>
-              {getSlider(radiusWeight, setRadiusWeight, radius === '')}
-            </div>
-            <div className='preference-form-row'>
-              <label>Importance</label>
-              {getSlider(diningExpWeight, setDiningExpWeight, diningExp === '')}
-            </div>
-            <div className='preference-form-row'>
-              <label>Importance</label>
-              {getSlider(
-                priceLevelWeight,
-                setPriceLevelWeight,
-                priceLevel === ''
-              )}
-            </div>
-          </div>
-        </div>
-        <div
-          className='preference-form-row'
-          style={{ justifyContent: 'center', margin: '32px 0px' }}>
-          <label htmlFor='open'>Open Now</label>
-          <input
-            name='open'
-            type='checkbox'
-            checked={open}
-            onChange={(event) => setOpen(event.target.checked)}
-          />
-        </div>
-        <div className='preference-form-submit-container'>
-          <button type='submit'>Find my match</button>
-        </div>
-        <PreferenceForm
-          headerLabel={'Your Preference'}
-          rowItemLabels={{
-            cuisine: 'Cuisines',
-            location: 'Location',
-            experience: 'Experience',
-            price: 'Price Level',
-            distance: 'Distance',
-          }}
-          isPreference={true}>
-          {/* select items are going to go here so let's hit a get select */}
-          {getSelect('radius', radius, setRadius, distancesInMiles)}
-          {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
-          {getSelect('diningExp', diningExp, setDiningExp, diningExperiences)}
-          {getSlider(radiusWeight, setRadiusWeight, radius === '')}
-        </PreferenceForm>
-      </form>
+      <h4>Your preferences.</h4>
+      <p>
+        Please enter your restaurant preferences below. You may leave any field
+        blank if you have no preference. Specify an importance to indicate your
+        priority for different fields.
+      </p>
+      {/* TODO: Add handle submit functionality. */}
+      <PreferenceForm
+        rowItemLabels={{
+          cuisine: 'Cuisines',
+          location: 'Location',
+          experience: 'Experience',
+          price: 'Price Level',
+          distance: 'Distance',
+        }}
+        isPreference={true}
+        locationName={locationName}
+        buttonLabel='Find Match'
+        handleSubmit={handleSubmit}
+        cuisineOptions={cuisineOptions}
+        setCuisine={setCuisine}>
+        {getSelect('radius', radius, setRadius, distancesInMiles)}
+        {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
+        {getSelect('diningExp', diningExp, setDiningExp, diningExperiences)}
+        {getSlider(radiusWeight, setRadiusWeight, radius === '')}
+        {getSlider(priceLevelWeight, setPriceLevelWeight, priceLevel === '')}
+        {getSlider(diningExpWeight, setDiningExpWeight, diningExp === '')}
+        {openNowCheckBox()}
+      </PreferenceForm>
+      {/* </form> */}
     </div>
   );
 }

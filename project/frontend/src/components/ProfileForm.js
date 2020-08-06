@@ -19,8 +19,17 @@ function ProfileForm(props) {
     price: 'Price Level',
     experience: 'Dining Experience',
   };
+  const cuisineOptions = ['Italian', 'Mexican'];
+  // This is a filler value. I plan on moving all cuisine stuff to PreferenceForm.js
+  const setCuisine = () => {};
   return (
-    <PreferenceForm headerLabel='Your Profile' rowItemLabels={itemLabels}>
+    <PreferenceForm
+      headerLabel='Your Profile'
+      rowItemLabels={itemLabels}
+      locationName='Your Location'
+      buttonLabel='Update Profile'
+      cuisineOptions={cuisineOptions}
+      setCuisine={setCuisine}>
       <ButtonGroup labelList={['1 mile', '5 miles', '10 miles', '25 miles']} />
       <ButtonGroup labelList={['$', '$$', '$$$', '$$$$']} />
       <ButtonGroup labelList={['Takeout', 'Delivery', 'Dine-In']} />
