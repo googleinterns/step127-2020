@@ -1,4 +1,5 @@
 import React from 'react';
+import './ProfileForm.css';
 
 import ButtonGroup from './ButtonGroup.js';
 import PreferenceForm from './PreferenceForm.js';
