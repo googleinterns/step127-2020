@@ -62,3 +62,7 @@
   margin: 0px;
   background-color: white;
 }
+
+.swipe-match-invalid-input {
+  border-color: red;
+}

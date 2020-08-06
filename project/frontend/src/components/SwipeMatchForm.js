@@ -28,6 +28,7 @@ function SwipeMatchForm(props) {
 
   const [username, setUsername] = useState('');
   const [groupId, setGroupId] = useState('');
+  const [isGroupIdValid, setIsGroupIdValid] = useState(true);
 
   const anonUsername = useRef('Anonymous ' + Animals.random());
 
@@ -54,15 +55,32 @@ function SwipeMatchForm(props) {
 
   const joinSession = (event) => {
     event.preventDefault();
-    history.push({
-      pathname: '/swipe-match',
-      state: {
-        currLocation,
-        action: 'join',
-        username: username ? username : anonUsername.current,
-        groupId,
-      },
-    });
+
+    (async () => {
+      const response = await fetch('/api/swipe-match/validate-group-id', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'groupId=' + groupId,
+      });
+
+      const valid = (await response.json()).valid;
+
+      if (valid) {
+        history.push({
+          pathname: '/swipe-match',
+          state: {
+            currLocation,
+            action: 'join',
+            username: username ? username : anonUsername.current,
+            groupId,
+          },
+        });
+      } else {
+        
+      }
+    })();
   };
 
   const signIn = (event) => {
@@ -168,10 +186,12 @@ function SwipeMatchForm(props) {
               </td>
               <td>
                 <input
+                  className={isGroupIdValid ? 'swipe-match-invalid-input' : ''}
                   type='text'
                   name='groupId'
                   value={groupId}
                   onChange={(event) => setGroupId(event.target.value)}
+                  onFocus={() => setIsGroupIdValid(true)}
                   placeholder='Enter a group ID'
                   required
                 />
