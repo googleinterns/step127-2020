@@ -56,7 +56,7 @@ function reducer(previous, action) {
  */
 function RestaurantCardDeck(props) {
   const { restaurants, onSwipe } = props;
-  
+
   const [state, dispatch] = useReducer(reducer, {
     index: 0,
     history: new Array(restaurants.length),

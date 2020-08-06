@@ -40,7 +40,10 @@ class SwipeMatchService {
   }
 
   static async fetchCreatorCurrentSwipeMatchSession(firestore, user) {
-    const doc = await firestore.collection(this.USER_COLLECTION_NAME).doc(user.getId()).get();
+    const doc = await firestore
+      .collection(this.USER_COLLECTION_NAME)
+      .doc(user.getId())
+      .get();
     return doc.data().currentSwipeMatchSession;
   }
 
@@ -52,7 +55,7 @@ class SwipeMatchService {
 
   static async createSession(firestore, location) {
     const id = await this.generateGroupId();
-    
+
     firestore.collection(this.SESSION_COLLECTION_NAME).doc(id).set({
       location,
       likes: {},
@@ -68,10 +71,10 @@ class SwipeMatchService {
   }
 
   static addSessionListener(firestore, id, onUpdate, onError) {
-    return firestore.collection(this.SESSION_COLLECTION_NAME).doc(id).onSnapshot(
-      onUpdate,
-      onError,
-    );
+    return firestore
+      .collection(this.SESSION_COLLECTION_NAME)
+      .doc(id)
+      .onSnapshot(onUpdate, onError);
   }
 
   static addUser(firebase, firestore, id, username) {
@@ -92,7 +95,14 @@ class SwipeMatchService {
     });
   }
 
-  static swipeRestaurant(firebase, firestore, id, restaurantId, username, action) {
+  static swipeRestaurant(
+    firebase,
+    firestore,
+    id,
+    restaurantId,
+    username,
+    action
+  ) {
     let value;
     if (action === 1 /* Action.INTERESTED */) {
       value = firebase.firestore.FieldValue.arrayUnion(username);
