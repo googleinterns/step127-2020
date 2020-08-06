@@ -163,7 +163,9 @@ function RestaurantCard(props) {
   let photoUrls;
   if (details) {
     if (details.result.photos) {
-      photoUrls = details.result.photos.map((photo) => photo.getUrl({ maxWidth: 344 }));
+      photoUrls = details.result.photos.map((photo) =>
+        photo.getUrl({ maxWidth: 344 })
+      );
     } else {
       // TODO: Display a better "no images found" type image
       photoUrls = ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
@@ -222,10 +224,11 @@ function RestaurantCard(props) {
             ref={restaurantName}>
             {restaurant.key.name}
           </h5>
-          {restaurant.value &&
-           <h5 className='restaurant-score'>
-             {Math.round(restaurant.value * 100) + '%'}
-           </h5>}
+          {restaurant.value && (
+            <h5 className='restaurant-score'>
+              {Math.round(restaurant.value * 100) + '%'}
+            </h5>
+          )}
         </div>
         <RatingStars
           avgRating={restaurant.key.avgRating}
