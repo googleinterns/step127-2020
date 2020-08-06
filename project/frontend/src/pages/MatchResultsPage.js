@@ -20,10 +20,8 @@ function MatchResultsPage(props) {
   useEffect(() => {
     getRecommendation(formState, (result, err) => {
       if (err) {
-        console.log('error');
         setErrorMessage(err.message);
       } else {
-        console.log('no error');
         setRestaurants(result);
       }
       setLoading(false);
