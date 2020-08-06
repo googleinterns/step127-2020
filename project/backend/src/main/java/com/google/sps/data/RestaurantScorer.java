@@ -71,7 +71,7 @@ public final class RestaurantScorer {
     if (hasRating) {
       score += calculateRatingScore(restaurantRating, restaurant.getNumRatings(), statistics);
     }
-    double percentMatch = score / maxPoints <= 1 ? score / maxPoints : 1.0;
+    double percentMatch = Math.min(score / maxPoints, 1.0);
     return percentMatch;
   }
 
