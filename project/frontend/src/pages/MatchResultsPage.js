@@ -28,6 +28,23 @@ function MatchResultsPage(props) {
     });
   }, [formState]);
 
+  const cardStack = !errorMessage ? (
+    <RestaurantCardStack
+      restaurants={restaurants}
+      currentCardIndex={currentRestaurantIndex}
+      setCurrentCardIndex={setCurrentRestaurantIndex}
+    />
+  ) : null;
+
+  const map = !errorMessage ? (
+    <MapContainer
+      restaurants={restaurants}
+      userLocation={userLocation}
+      currentCardIndex={currentRestaurantIndex}
+      setCurrentCardIndex={setCurrentRestaurantIndex}
+    />
+  ) : null;
+
   return [
     <div key='match-results' className='container u-full-width'>
       <div className='row u-flex'>
@@ -39,18 +56,9 @@ function MatchResultsPage(props) {
             }}>
             Your restaurant match is...
           </h2>
-          <RestaurantCardStack
-            restaurants={restaurants}
-            currentCardIndex={currentRestaurantIndex}
-            setCurrentCardIndex={setCurrentRestaurantIndex}
-          />
+          {cardStack}
         </div>
-        <MapContainer
-          restaurants={restaurants}
-          userLocation={userLocation}
-          currentCardIndex={currentRestaurantIndex}
-          setCurrentCardIndex={setCurrentRestaurantIndex}
-        />
+        {map}
       </div>
     </div>,
     <Modal key='loading-modal' open={loading} center={true}>

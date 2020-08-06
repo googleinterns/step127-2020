@@ -40,6 +40,9 @@ export default function getRecommendation(preferences, callback) {
         .then((data) => {
           try {
             const selections = JSON.parse(data);
+            if (selections['error']) {
+              throw new Error(selections['error']);
+            }
             return callback(selections);
           } catch (err) {
             return callback(/* result= */ null, err);
