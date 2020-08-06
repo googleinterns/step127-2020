@@ -1,6 +1,6 @@
 import './PreferenceForm.css';
 import './FormItem.js';
-import React, { useState } from 'react';
+import React from 'react';
 
 import CuisineAutocomplete from './CuisineAutocomplete.js';
 import FormItem from './FormItem.js';
