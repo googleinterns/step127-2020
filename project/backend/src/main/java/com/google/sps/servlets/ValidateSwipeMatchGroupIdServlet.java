@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/api/swipe-match/validate-group-id")
-public class GenerateSwipeMatchGroupIdServlet extends HttpServlet {
+public class ValidateSwipeMatchGroupIdServlet extends HttpServlet {
   private static final String PROJECT_ID = "mak-step-2020";
   private static final String COLLECTION_NAME = "swipe-match-sessions";
 
@@ -28,7 +28,7 @@ public class GenerateSwipeMatchGroupIdServlet extends HttpServlet {
                                          .setCredentials(GoogleCredentials.getApplicationDefault())
                                          .build());
 
-      db = Optional.of(firestoreOptions.getService());
+      db = Optional.of(firestoreOptions.get().getService());
     } catch (IOException e) {
       firestoreOptions = Optional.empty();
       db = Optional.empty();
@@ -40,13 +40,13 @@ public class GenerateSwipeMatchGroupIdServlet extends HttpServlet {
     boolean valid = false;
     try {
       valid = validateGroupId(request.getParameter("groupId"));
-      response.getWriter().println("{\"valid\": \"" + valid.toString() + "\"}");
+      response.getWriter().println("{\"valid\": \"" + valid + "\"}");
     } catch (InterruptedException | ExecutionException e) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
   }
 
-  private String validateGroupId(String groupId) throws InterruptedException, ExecutionException {
+  private boolean validateGroupId(String groupId) throws InterruptedException, ExecutionException {
     return db.get().collection(COLLECTION_NAME).document(groupId).get().get().exists();
   }
 }
