@@ -41,12 +41,12 @@ public class GenerateSwipeMatchGroupIdServlet extends HttpServlet {
     try {
       valid = validateGroupId(request.getParameter("groupId"));
       response.getWriter().println("{\"valid\": \"" + valid.toString() + "\"}");
-    } catch (InterruptedException | ExecutionException) {
+    } catch (InterruptedException | ExecutionException e) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
   }
 
-  private String validateGroupId(groupId) throws InterruptedException, ExecutionException {
-    return db.collection(COLLECTION_NAME).document(groupId).get().get().exists();
+  private String validateGroupId(String groupId) throws InterruptedException, ExecutionException {
+    return db.get().collection(COLLECTION_NAME).document(groupId).get().get().exists();
   }
 }
