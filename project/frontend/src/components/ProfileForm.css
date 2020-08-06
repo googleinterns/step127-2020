@@ -1,6 +1,4 @@
-/* I STILL HAVE THINGS TO CHANGE HERE */
 .profile-form-container {
-  /* max-width: 600px; */
   max-width: 800px;
   text-align: left;
   margin: 0px auto;
@@ -11,54 +9,7 @@
   margin: 16px auto;
 }
 
-.profile-form {
-  margin-bottom: 0px;
-}
-
-.profile-form-submit-container {
-  position: sticky;
-  bottom: 0px;
-  background-color: white;
-  padding: 16px;
-  border-top: 1px solid #bbb;
-}
-
-.profile-form-submit-container button {
-  margin: 0px auto;
-}
-
-.profile-form-row {
-  display: flex;
-  align-items: center;
-  margin: 16px 0px;
-}
-
-.profile-form-row label {
-  margin: 0px 16px;
-  white-space: nowrap;
-}
-
-.profile-form-row p {
-  margin-bottom: 0px;
-  padding: 6px 8px;
-  border: 1px solid #bbb;
-  border-radius: 4px;
-  background-color: #f3f3f3;
-  font-size: 1.4rem;
-}
-
-.profile-form-row select {
-  width: 100%;
-  margin: 0px;
-  font-family: 'Roboto';
-  font-size: 1.4rem;
-}
-
-.profile-form-row input {
-  margin: 0px;
-}
-
-.profile-header {
+.header {
   text-align: center;
   margin-bottom: 20px;
   margin-top: 15px;
