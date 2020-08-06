@@ -4,6 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +20,8 @@ public class GenerateSwipeMatchGroupIdServlet extends HttpServlet {
   private static final String COLLECTION_NAME = "swipe-match-sessions";
   private static final int RETRY_LIMIT = 10;
 
-  private FirestoreOptions firestoreOptions;
-  private Firestore db;
+  private Optional<FirestoreOptions> firestoreOptions;
+  private Optional<Firestore> db;
 
   private class RetryLimitExceededException extends Exception {
     public RetryLimitExceededException(String message) {
@@ -31,25 +32,30 @@ public class GenerateSwipeMatchGroupIdServlet extends HttpServlet {
   @Override
   public void init() {
     try {
-      firestoreOptions = FirestoreOptions.getDefaultInstance()
-                             .toBuilder()
-                             .setProjectId(PROJECT_ID)
-                             .setCredentials(GoogleCredentials.getApplicationDefault())
-                             .build();
+      firestoreOptions = Optional.of(FirestoreOptions.getDefaultInstance()
+                                         .toBuilder()
+                                         .setProjectId(PROJECT_ID)
+                                         .setCredentials(GoogleCredentials.getApplicationDefault())
+                                         .build());
 
-      db = firestoreOptions.getService();
+      db = Optional.of(firestoreOptions.getService());
     } catch (IOException e) {
-      // Not sure what to do if initialization fails...
+      firestoreOptions = Optional.empty();
+      db = Optional.empty();
     }
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    try {
-      String groupId = generateGroupId(0);
-      // TODO: replace ABCD1234 with groupId
-      response.getWriter().println("{\"groupId\": \"ABCD1234\"}");
-    } catch (RetryLimitExceededException e) {
+    if (db.isPresent()) {
+      try {
+        String groupId = generateGroupId(0);
+        // TODO: replace ABCD1234 with groupId
+        response.getWriter().println("{\"groupId\": \"ABCD1234\"}");
+      } catch (RetryLimitExceededException e) {
+        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      }
+    } else {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
   }
@@ -74,10 +80,8 @@ public class GenerateSwipeMatchGroupIdServlet extends HttpServlet {
 
   private boolean isGroupIdUnique(String groupId) {
     try {
-      return !db.collection(COLLECTION_NAME).document(groupId).get().get().exists();
-    } catch (InterruptedException e) {
-      return false;
-    } catch (ExecutionException e) {
+      return !db.get().collection(COLLECTION_NAME).document(groupId).get().get().exists();
+    } catch (InterruptedException | ExecutionException e) {
       return false;
     }
   }
