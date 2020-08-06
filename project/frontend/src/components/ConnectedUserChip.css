@@ -1,0 +1,30 @@
+.connected-user-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: #e3e3e3;
+  padding: 4px 8px;
+  margin: 0px 8px 8px 0px;
+}
+
+.connected-user-chip > p {
+  font-size: 1.4rem;
+  margin: 0px 8px 0px 0px;
+}
+
+.connected-user-chip > p:last-child {
+  margin: 0px 4px;
+}
+
+.connected-user-chip > img {
+  height: 20px;
+  width: 20px;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.25s cubic-bezier(0.35, 0.91, 0.33, 0.97);
+}
+
+.connected-user-chip > img:hover {
+  opacity: 0.75;
+}
