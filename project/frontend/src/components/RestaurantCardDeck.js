@@ -1,6 +1,6 @@
 import './RestaurantCardDeck.css';
 
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 
 import RestaurantCard from './RestaurantCard.js';
 
@@ -10,9 +10,9 @@ import RestaurantCard from './RestaurantCard.js';
  */
 const Action = {
   NOT_INTERESTED: -1,
-  NEUTRAL: 0,
   INTERESTED: 1,
-  BACK: 2,
+  BACK: 0,
+  RESET: 2,
 };
 
 /**
@@ -24,15 +24,19 @@ const Action = {
  *     state is updated.
  */
 function reducer(previous, action) {
-  let index = previous.index;
-  const history = previous.history;
+  let { index, history } = previous;
 
   switch (action.type) {
+    case Action.RESET:
+      index = 0;
+      history = new Array(action.newLength);
+      break;
     case Action.INTERESTED:
     case Action.NOT_INTERESTED:
-    case Action.NEUTRAL:
       history[index] = action.type;
-      index++;
+      if (index < history.length - 1) {
+        index++;
+      }
       break;
     case Action.BACK:
     default:
@@ -46,13 +50,21 @@ function reducer(previous, action) {
  * A navigable deck of restaurant cards.
  *
  * @param {!Array<Object<string, *>>} props.restaurants A list of restaurant objects
- * whose data will be displayed in RestaurantCard components within this stack.
+ *     whose data will be displayed in RestaurantCard components within this stack.
+ * @param {function(id: string, action: number): undefined} props.onSwipe A callback
+ *     executed on a user swipe. Called with the restaurant place id and action type.
  */
 function RestaurantCardDeck(props) {
+  const { restaurants, onSwipe } = props;
+  
   const [state, dispatch] = useReducer(reducer, {
     index: 0,
-    history: new Array(props.restaurants.length),
+    history: new Array(restaurants.length),
   });
+
+  useEffect(() => {
+    dispatch({ type: Action.RESET, newLength: restaurants.length });
+  }, [restaurants.length]);
 
   const maxScaleFactor = 1.0;
   const minScaleFactor = 0.9;
@@ -64,7 +76,7 @@ function RestaurantCardDeck(props) {
     'left 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'transform 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97), ' +
     'opacity 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)';
-  const cards = props.restaurants.map((restaurant, index) => {
+  const cards = restaurants.map((restaurant, index) => {
     if (
       index < state.index - numberOfRenderedCards ||
       index > state.index + numberOfRenderedCards
@@ -81,7 +93,7 @@ function RestaurantCardDeck(props) {
         'px',
       left: '0px',
       opacity: relativeIndex < numberOfVisibleCards ? 1 : 0,
-      zIndex: props.restaurants.length - index,
+      zIndex: restaurants.length - index,
       transform:
         'scale(' +
         Math.min(
@@ -94,9 +106,8 @@ function RestaurantCardDeck(props) {
 
     if (relativeIndex < 0) {
       style.top = '-100px';
-      style.left = state.history[index] * 700 + 'px';
+      style.left = state.history[index] * 750 + 'px';
       style.transform += ' rotate(' + state.history[index] * 45 + 'deg)';
-      style.opacity = state.history[index] === Action.NEUTRAL ? 0 : 1;
     }
 
     return (
@@ -108,20 +119,22 @@ function RestaurantCardDeck(props) {
     );
   });
 
+  const onClick = (index, action) => {
+    if (onSwipe) onSwipe(restaurants[index].key.id, action);
+    dispatch({ type: action });
+  };
+
   return (
     <div className='restaurant-card-deck'>
       <div className='restaurant-card-deck-wrapper'>{cards}</div>
       <div className='control-container'>
-        <button onClick={() => dispatch({ type: Action.NOT_INTERESTED })}>
+        <button onClick={() => onClick(state.index, Action.NOT_INTERESTED)}>
           Not Interested
         </button>
-        <button onClick={() => dispatch({ type: Action.INTERESTED })}>
+        <button onClick={() => onClick(state.index, Action.INTERESTED)}>
           Interested
         </button>
       </div>
-      <button onClick={() => dispatch({ type: Action.NEUTRAL })}>
-        Neutral
-      </button>
       <button onClick={() => dispatch({ type: Action.BACK })}>Back</button>
     </div>
   );

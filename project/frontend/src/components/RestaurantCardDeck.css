@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   padding: 32px;
+  overflow: hidden;
 }
 
 .restaurant-card-deck-wrapper {
