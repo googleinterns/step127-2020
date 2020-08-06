@@ -2,18 +2,14 @@ import './UserPreferenceForm.css';
 
 import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 
-import CuisineAutocomplete from './CuisineAutocomplete.js';
+import PreferenceForm from './PreferenceForm.js';
+import { AuthContext } from './Authentication.js';
+
 import { Slider } from 'rsuite';
 import { useHistory } from 'react-router-dom';
-import { AuthContext } from './Authentication.js';
 import { withStyles } from '@material-ui/core/styles';
 import Info from '@material-ui/icons/Info';
 import Tooltip from '@material-ui/core/Tooltip';
-import Place from '../assets/place.svg';
-import Cuisine from '../assets/cuisine.svg';
-import Distance from '../assets/distance.svg';
-import Experience from '../assets/food_service.svg';
-import Price from '../assets/dollar.svg';
 
 /**
  * Returns a list of cuisine types of local restaurants using the Zomato API.
@@ -50,7 +46,7 @@ async function getLocalCuisines(currLocation) {
  *     coordinates of the user.
  * @param {string} locationName The formatted address of the current user.
  */
-function PreferenceForm(props) {
+function UserPreferenceForm(props) {
   const { currLocation, locationName } = props;
 
   const history = useHistory();
@@ -138,6 +134,22 @@ function PreferenceForm(props) {
     }
   };
 
+  const openNowCheckBox = () => {
+    return (
+      <div
+        className='preference-form-row'
+        style={{ justifyContent: 'center', margin: '32px 0px' }}>
+        <label htmlFor='open'>Open Now</label>
+        <input
+          name='open'
+          type='checkbox'
+          checked={open}
+          onChange={(event) => setOpen(event.target.checked)}
+        />
+      </div>
+    );
+  };
+
   const distancesInMiles = {
     '1 mile': 1,
     '5 miles': 5,
@@ -156,6 +168,14 @@ function PreferenceForm(props) {
     Medium: 2,
     High: 3,
     'Very High': 4,
+  };
+
+  const itemLabels = {
+    cuisine: 'Cuisines',
+    location: 'Location',
+    experience: 'Experience',
+    price: 'Price Level',
+    distance: 'Distance',
   };
 
   const tooltipInfo = (
@@ -214,86 +234,39 @@ function PreferenceForm(props) {
             </div>
           </div>
         )}
-      <form className='preference-form' onSubmit={handleSubmit}>
-        <h4>
-          Your preferences.
-          <StyledTooltip title={tooltipInfo} interactive>
-            <Info />
-          </StyledTooltip>
-        </h4>
-        <p>
-          Please enter your restaurant preferences below. You may leave any
-          field blank if you have no preference. Specify an importance to
-          indicate your priority for different fields.
-        </p>
-        <div className='preference-form-row'>
-          <img src={Place} alt='' />
-          <label>Location</label>
-          <p>{locationName}</p>
-        </div>
-        <div className='preference-form-row'>
-          <img src={Cuisine} alt='' />
-          <label htmlFor='cuisine'>Cuisines</label>
-          <CuisineAutocomplete
-            cuisineOptions={cuisineOptions}
-            setCuisine={setCuisine}
-          />
-        </div>
-        <div className='preference-form-row'>
-          <div className='preference-form-column'>
-            <div className='preference-form-row'>
-              <img src={Distance} alt='' />
-              <label htmlFor='radius'>Distance</label>
-              {getSelect('radius', radius, setRadius, distancesInMiles)}
-            </div>
-            <div className='preference-form-row'>
-              <img src={Experience} alt='' />
-              <label htmlFor='diningExp'>Experience</label>
-              {getSelect(
-                'diningExp',
-                diningExp,
-                setDiningExp,
-                diningExperiences
-              )}
-            </div>
-            <div className='preference-form-row'>
-              <img src={Price} alt='' />
-              <label htmlFor='priceLevel'>Price Level</label>
-              {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
-            </div>
-          </div>
-          <div className='preference-form-column'>
-            <div className='preference-form-row'>
-              <label>Importance</label>
-              {getSlider(radiusWeight, setRadiusWeight, !radius)}
-            </div>
-            <div className='preference-form-row'>
-              <label>Importance</label>
-              {getSlider(diningExpWeight, setDiningExpWeight, !diningExp)}
-            </div>
-            <div className='preference-form-row'>
-              <label>Importance</label>
-              {getSlider(priceLevelWeight, setPriceLevelWeight, !priceLevel)}
-            </div>
-          </div>
-        </div>
-        <div
-          className='preference-form-row'
-          style={{ justifyContent: 'center', margin: '32px 0px' }}>
-          <label htmlFor='open'>Open Now</label>
-          <input
-            name='open'
-            type='checkbox'
-            checked={open}
-            onChange={(event) => setOpen(event.target.checked)}
-          />
-        </div>
-        <div className='preference-form-submit-container'>
-          <button type='submit'>Find my match</button>
-        </div>
-      </form>
+      <h4>
+        Your preferences.
+        <StyledTooltip title={tooltipInfo} interactive>
+          <Info />
+        </StyledTooltip>
+      </h4>
+      <p>
+        Please enter your restaurant preferences below. You may leave any field
+        blank if you have no preference. Specify an importance to indicate your
+        priority for different fields.
+      </p>
+      <PreferenceForm
+        rowItemLabels={itemLabels}
+        isUserPreference={true}
+        locationName={locationName}
+        buttonLabel='Find my match'
+        handleSubmit={handleSubmit}
+        cuisineOptions={cuisineOptions}
+        setCuisine={setCuisine}>
+        {/**
+         * If the order of the children here is changed this will need to be
+         * accounted for in the preference form (PreferenceForm.js).
+         */}
+        {getSelect('radius', radius, setRadius, distancesInMiles)}
+        {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
+        {getSelect('diningExp', diningExp, setDiningExp, diningExperiences)}
+        {getSlider(radiusWeight, setRadiusWeight, !radius)}
+        {getSlider(priceLevelWeight, setPriceLevelWeight, !priceLevel)}
+        {getSlider(diningExpWeight, setDiningExpWeight, !diningExp)}
+        {openNowCheckBox()}
+      </PreferenceForm>
     </div>
   );
 }
 
-export default PreferenceForm;
+export default UserPreferenceForm;
