@@ -98,7 +98,6 @@ function UserPreferenceForm(props) {
     })();
   }, [currLocation]);
 
-<<<<<<< HEAD
   useLayoutEffect(() => {
     setTooltipVals([radiusWeight, diningExpWeight, priceLevelWeight]);
   }, [radiusWeight, diningExpWeight, priceLevelWeight]);
@@ -136,8 +135,6 @@ function UserPreferenceForm(props) {
     );
   };
 
-=======
->>>>>>> 0dbad3ac669cfd56812b356aefb36461f144ecfb
   const getSlider = (value, setValue, disabled) => {
     return (
       <div className='preference-form-slider-container'>
@@ -155,7 +152,6 @@ function UserPreferenceForm(props) {
     );
   };
 
-<<<<<<< HEAD
   const setTooltipVals = (prefWeights) => {
     const levels = ['Least', 'Less', 'Medium', 'More', 'Most'];
     const tooltips = document.getElementsByClassName('rs-tooltip-inner');
@@ -201,22 +197,6 @@ function UserPreferenceForm(props) {
     Medium: 2,
     High: 3,
     'Very High': 4,
-=======
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    history.push({
-      pathname: '/match-results',
-      state: {
-        currLocation,
-        cuisine,
-        radius: { pref: radius, weight: radiusWeight },
-        diningExp: { pref: diningExp, weight: diningExpWeight },
-        priceLevel: { pref: priceLevel, weight: priceLevelWeight },
-        open,
-        cuisineOptions,
-      },
-    });
->>>>>>> 0dbad3ac669cfd56812b356aefb36461f144ecfb
   };
 
   const tooltipInfo = (
@@ -275,7 +255,6 @@ function UserPreferenceForm(props) {
             </div>
           </div>
         )}
-<<<<<<< HEAD
       <h4>
         Your preferences.
         <StyledTooltip title={tooltipInfo} interactive>
@@ -311,48 +290,6 @@ function UserPreferenceForm(props) {
         {openNowCheckBox()}
       </PreferenceForm>
       {/* </form> */}
-=======
-      <PreferenceForm
-        headerLabel='Your Preferences.'
-        rowItemLabels={itemLabels}>
-        {/* <form className='preference-form' onSubmit={handleSubmit}> */}
-        {/* <p>
-          Please enter your restaurant preferences below. You may leave any
-          field blank if you have no preference. Specify an importance to
-          indicate your priority for different fields.
-        </p> */}
-        <div className='preference-form-column'>
-          <div className='preference-form-row'>
-            <label>Importance</label>
-            {getSlider(radiusWeight, setRadiusWeight, radius === '')}
-          </div>
-          <div className='preference-form-row'>
-            <label>Importance</label>
-            {getSlider(diningExpWeight, setDiningExpWeight, diningExp === '')}
-          </div>
-          <div className='preference-form-row'>
-            <label>Importance</label>
-            {getSlider(
-              priceLevelWeight,
-              setPriceLevelWeight,
-              priceLevel === ''
-            )}
-          </div>
-        </div>
-        {/* <div
-          className='preference-form-row'
-          style={{ justifyContent: 'center', margin: '32px 0px' }}>
-          <label htmlFor='open'>Open Now</label>
-          <input
-            name='open'
-            type='checkbox'
-            checked={open}
-            onChange={(event) => setOpen(event.target.checked)}
-          />
-        </div> */}
-        {/* </form> */}
-      </PreferenceForm>
->>>>>>> 0dbad3ac669cfd56812b356aefb36461f144ecfb
     </div>
   );
 }
