@@ -20,7 +20,7 @@ const AuthContext = React.createContext({});
  */
 function Authentication(props) {
   const { firestore } = useContext(FirestoreContext);
-  
+
   const [GoogleAuth, setGoogleAuth] = useState({
     signIn: () => {},
     signOut: () => {},
@@ -48,7 +48,7 @@ function Authentication(props) {
     } catch (e) {
       return;
     }
-    
+
     const id = user.getId();
     try {
       const ref = firestore.collection('users').doc(id);
