@@ -5,12 +5,7 @@ import PreferenceForm from './PreferenceForm.js';
 import ButtonGroup from './ButtonGroup';
 
 /**
- * A form used to gather the restaurant preferences of a user for the 'Find My Match'
- * service.
- *
- * @param {!Object<string, number>} currLocation The current latitude and longitude
- *     coordinates of the user.
- * @param {string} locationName The formatted address of the current user.
+ * A form used to gather information for a user's profile page.
  */
 function ProfileForm() {
   const itemLabels = {

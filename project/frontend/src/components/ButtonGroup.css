@@ -24,3 +24,7 @@
 .btn-group button:hover {
   background-color: #dcdcdc;
 }
+
+.is-selected-class {
+  background-color: #dcdcdc;
+}
