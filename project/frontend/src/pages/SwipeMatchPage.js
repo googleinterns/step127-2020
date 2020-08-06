@@ -122,8 +122,8 @@ function SwipeMatchPage(props) {
           SwipeMatchService.removeUser(firebase, firestore, id, username);
         }
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     isCreator ? [authContext] : []
   );
 
