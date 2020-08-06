@@ -7,7 +7,7 @@ import ButtonGroup from './ButtonGroup';
 /**
  * A form used to gather information for a user's profile page.
  */
-function ProfileForm(props) {
+function ProfileForm() {
   const itemLabels = {
     cuisine: 'Preferred Cuisine',
     location: 'Your Location',
