@@ -18,11 +18,13 @@ function reducer(previous, action) {
   if (type === 'set restaurants') {
     restaurants = payload;
   } else if (type === 'snapshot') {
-    if (location.lat !== payload.location.lat ||
-        location.lng !== payload.location.lng) {
+    if (
+      location.lat !== payload.location.lat ||
+      location.lng !== payload.location.lng
+    ) {
       location = payload.location;
     }
-    
+
     if (sessionStarted !== payload.sessionStarted) {
       sessionStarted = payload.sessionStarted;
     }
@@ -52,72 +54,83 @@ function SwipeMatchPage(props) {
   const placesService = useContext(PlacesApiContext);
 
   const [groupId, setGroupId] = useState(props.location.state.groupId || '');
-  const [{ location, restaurants, sessionStarted, users }, dispatch] = useReducer(reducer, {
+  const [
+    { location, restaurants, sessionStarted, users },
+    dispatch,
+  ] = useReducer(reducer, {
     location: { lat: undefined, lng: undefined },
     restaurants: [],
     sessionStarted: false,
     users: [],
   });
-  
-  useEffect(() => {
-    let unsubscribe;
-    let id = groupId;
 
-    (async () => {
-      if (isCreator) {
-        let user = authContext.currentUser.get;
-        
-        if (user && user.isSignedIn()) {
-          let creatorCurrentSwipeMatchSession = null;
-          try {
-            creatorCurrentSwipeMatchSession =
-              await SwipeMatchService.fetchCreatorCurrentSwipeMatchSession(firestore, user);
-          } catch (e) {}
+  useEffect(
+    () => {
+      let unsubscribe;
+      let id = groupId;
 
-          if (creatorCurrentSwipeMatchSession) {
-            id = creatorCurrentSwipeMatchSession;
-          } else {
+      (async () => {
+        if (isCreator) {
+          let user = authContext.currentUser.get;
+
+          if (user && user.isSignedIn()) {
+            let creatorCurrentSwipeMatchSession = null;
             try {
-              id = await SwipeMatchService.createSession(firestore, currLocation);
-              SwipeMatchService.updateCreatorCurrentSwipeMatchSession(firestore, user, id);
-            } catch (e) {
-              setGroupId(null);
+              creatorCurrentSwipeMatchSession = await SwipeMatchService.fetchCreatorCurrentSwipeMatchSession(
+                firestore,
+                user
+              );
+            } catch (e) {}
+
+            if (creatorCurrentSwipeMatchSession) {
+              id = creatorCurrentSwipeMatchSession;
+            } else {
+              try {
+                id = await SwipeMatchService.createSession(
+                  firestore,
+                  currLocation
+                );
+                SwipeMatchService.updateCreatorCurrentSwipeMatchSession(
+                  firestore,
+                  user,
+                  id
+                );
+              } catch (e) {
+                setGroupId(null);
+              }
             }
+            setGroupId(id);
           }
-          setGroupId(id);
         }
-      }
 
-      if (id) {
-        unsubscribe = SwipeMatchService.addSessionListener(
-          firestore,
-          id,
-          (doc) => dispatch({ type: 'snapshot', payload: doc.data() }),
-          (error) => console.log('ERROR: ' + error),
-        );
-        SwipeMatchService.addUser(firebase, firestore, id, username);
-      }
-    })();
+        if (id) {
+          unsubscribe = SwipeMatchService.addSessionListener(
+            firestore,
+            id,
+            (doc) => dispatch({ type: 'snapshot', payload: doc.data() }),
+            (error) => console.log('ERROR: ' + error)
+          );
+          SwipeMatchService.addUser(firebase, firestore, id, username);
+        }
+      })();
 
-    return () => {
-      if (unsubscribe !== undefined) {
-        unsubscribe();
-      }
-      if (id) {
-        SwipeMatchService.removeUser(firebase, firestore, id, username);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, isCreator ? [authContext] : []);
+      return () => {
+        if (unsubscribe !== undefined) {
+          unsubscribe();
+        }
+        if (id) {
+          SwipeMatchService.removeUser(firebase, firestore, id, username);
+        }
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    isCreator ? [authContext] : []
+  );
 
   useEffect(() => {
     if (location.lat && location.lng) {
       console.log('ACTUALLY UPDATING RESTAURANTS');
-      SwipeMatchService.fetchRestaurants(
-        placesService,
-        location,
-        dispatch,
-      );
+      SwipeMatchService.fetchRestaurants(placesService, location, dispatch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
@@ -127,7 +140,13 @@ function SwipeMatchPage(props) {
   };
 
   const onDeckSwipe = (restaurantId, action) => {
-    SwipeMatchService.swipeRestaurant(firebase, firestore, groupId, restaurantId, action);
+    SwipeMatchService.swipeRestaurant(
+      firebase,
+      firestore,
+      groupId,
+      restaurantId,
+      action
+    );
   };
 
   return [
@@ -145,16 +164,13 @@ function SwipeMatchPage(props) {
           <h4>Nearby Restaurants</h4>
           <RestaurantCardDeck restaurants={restaurants} onSwipe={onDeckSwipe} />
         </div>
-        <div className="one-half column u-pad32">
+        <div className='one-half column u-pad32'>
           <h4>Rankings</h4>
           <SwipeMatchLeaderboard restaurants={restaurants} />
         </div>
       </div>
     </div>,
-    <Modal
-      key='swipe-match-console'
-      open={!sessionStarted}
-      center={true}>
+    <Modal key='swipe-match-console' open={!sessionStarted} center={true}>
       <SwipeMatchConsole
         username={username}
         groupId={groupId}
