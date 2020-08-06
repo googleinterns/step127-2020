@@ -33,6 +33,10 @@ function ProfileForm(props) {
         buttonLabel='Update Profile'
         cuisineOptions={cuisineOptions}
         setCuisine={setCuisine}>
+        {/**
+         * If the order of the children here is changed this will need to be
+         * accounted for in the preference form (PreferenceForm.js).
+         */}
         <ButtonGroup
           id='distance'
           labelList={['1 mile', '5 miles', '10 miles', '25 miles']}

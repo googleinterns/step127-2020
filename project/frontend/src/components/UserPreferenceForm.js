@@ -251,6 +251,10 @@ function UserPreferenceForm(props) {
         handleSubmit={handleSubmit}
         cuisineOptions={cuisineOptions}
         setCuisine={setCuisine}>
+        {/**
+         * If the order of the children here is changed this will need to be
+         * accounted for in the preference form (PreferenceForm.js).
+         */}
         {getSelect('radius', radius, setRadius, distancesInMiles)}
         {getSelect('priceLevel', priceLevel, setPriceLevel, prices)}
         {getSelect('diningExp', diningExp, setDiningExp, diningExperiences)}

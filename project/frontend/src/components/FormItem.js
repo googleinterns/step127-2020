@@ -6,7 +6,7 @@ function FormItem(props) {
   return (
     <div className='row'>
       <img src={imageName} alt={label + ' icon'} />
-      <label>{label} </label>
+      <label>{label}</label>
       {props.children}
     </div>
   );
