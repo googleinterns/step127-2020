@@ -1,0 +1,40 @@
+.swipe-match-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-image: linear-gradient(to right, #ff8383, #bdd8fe);
+  color: white;
+  padding: 0px 16px;
+  border-bottom: 1px solid #bbb;
+  overflow: hidden;
+  transition: height 0.3s cubic-bezier(0.35, 0.91, 0.33, 0.97);
+}
+
+.swipe-match-header > div {
+  display: flex;
+  align-items: center;
+}
+
+.swipe-match-header button {
+  margin: 0px;
+  background-color: white;
+}
+
+.swipe-match-header span {
+  margin-right: 32px;
+  font-family: 'Montserrat';
+  font-weight: bold;
+}
+
+.swipe-match-header span:last-of-type {
+  margin-right: 0px;
+}
+
+.swipe-match-header img {
+  margin: 0px 16px;
+}
+
+.swipe-match-header img:first-of-type {
+  margin: 0px 16px 0px 0px;
+}
