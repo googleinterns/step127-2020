@@ -46,6 +46,7 @@ function Authentication(props) {
     try {
       user = await GoogleAuth.signIn();
     } catch (e) {
+      // TODO: Add component to notify user of sign in failure
       return;
     }
 
