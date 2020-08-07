@@ -5,13 +5,13 @@ import 'firebase/firestore';
 
 function _initFirestore() {
   const firebaseConfig = {
-    apiKey: 'AIzaSyC0Q4CyO-BM4M5jPvL3ayJ09RfymZYQjhs',
-    authDomain: 'mak-step-2020.firebaseapp.com',
-    databaseURL: 'https://mak-step-2020.firebaseio.com',
-    projectId: 'mak-step-2020',
-    storageBucket: 'mak-step-2020.appspot.com',
-    messagingSenderId: '21423804760',
-    appId: '1:21423804760:web:4fd3b3fdef792c51b3552d',
+    apiKey: process.env.REACT_APP_FIRESTORE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+    databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_I,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID,
   };
 
   firebase.initializeApp(firebaseConfig);

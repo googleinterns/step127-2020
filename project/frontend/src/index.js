@@ -11,7 +11,7 @@ import Footer from './pages/Footer.js';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
 import MatchResultsPage from './pages/MatchResultsPage.js';
-import ProfilePage from './pages/ProfilePage';
+import ProfilePage from './pages/ProfilePage.js';
 import SwipeMatchPage from './pages/SwipeMatchPage.js';
 
 import * as serviceWorker from './serviceWorker';

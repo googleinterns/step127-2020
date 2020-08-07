@@ -38,9 +38,11 @@ function PreferenceForm(props) {
   return (
     <div className='preference-form-container'>
       <form className='preference-form' onSubmit={handleSubmit}>
-        <FormItem imageName={Place} label={rowItemLabels.location}>
-          <p>{locationName}</p>
-        </FormItem>
+        {isUserPreference && (
+          <FormItem imageName={Place} label={rowItemLabels.location}>
+            <p>{locationName}</p>
+          </FormItem>
+        )}
         <FormItem imageName={Cuisine} label={rowItemLabels.cuisine}>
           <CuisineAutocomplete
             cuisineOptions={cuisineOptions}
