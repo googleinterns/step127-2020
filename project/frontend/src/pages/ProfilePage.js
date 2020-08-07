@@ -7,13 +7,11 @@ import ProfileForm from '../components/ProfileForm.js';
 function ProfilePage(props) {
   const authContext = useContext(AuthContext);
   let user = authContext.currentUser.get;
-  console.log('the user is');
-  console.log(user);
-  const notLoggedIn = user === null;
+  const signedIn = user && user.isSignedIn();
   return [
     <Modal
       key='not-signed-in-modal'
-      open={notLoggedIn}
+      open={signedIn}
       centerHorizontal={true}
       top='120px'>
       <div style={{ height: '200px', width: '300px' }}>
