@@ -8,23 +8,18 @@ import React, { useState } from 'react';
  * @param {!Array<string>} labelList The list of labels for the buttons
  */
 function ButtonGroup(props) {
-  const { labelList } = props;
+  const { id, labelList, sendCheckedButtons } = props;
   const isSelectedInitial = {};
   for (let labelIndex = 0; labelIndex < labelList.length; labelIndex++) {
-    isSelectedInitial[`button${labelIndex}`] = false;
+    isSelectedInitial[labelIndex] = false;
   }
   const [isSelected, setIsSelected] = useState(isSelectedInitial);
 
-  // const sendCheckedButtons = (isSelected) => {
-  //   props.sendCheckedButtons(isSelected);
-  // };
-
   const onClickButton = (props) => {
     let tempIsSelected = Object.assign({}, isSelected);
-    tempIsSelected[`button${props}`] = !tempIsSelected[`button${props}`];
+    tempIsSelected[props] = !tempIsSelected[props];
     setIsSelected(tempIsSelected);
-    console.log(isSelected);
-    // sendCheckedButtons(isSelected);
+    sendCheckedButtons(id, tempIsSelected);
   };
 
   const createButtons = () => {
