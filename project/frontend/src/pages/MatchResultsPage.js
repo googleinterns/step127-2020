@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import getRecommendation from '../scripts/recommendation_script.js';
+import Loading from '../components/Loading.js';
 import MapContainer from '../components/MapContainer.js';
 import Modal from '../components/Modal.js';
 import RestaurantCardStack from '../components/RestaurantCardStack.js';
@@ -62,8 +63,11 @@ function MatchResultsPage(props) {
       </div>
     </div>,
     <Modal key='loading-modal' open={loading} center={true}>
-      <div style={{ height: '300px', width: '300px' }}>
-        <h4>Hi there your results are loading...</h4>
+      <div className='your-match-loading-modal'>
+        <h4>Putting the 1s and 0s to work to find your best match.</h4>
+        <div>
+          <Loading />
+        </div>
       </div>
     </Modal>,
     <Modal key='error-modal' open={Boolean(errorMessage)} center={true}>
