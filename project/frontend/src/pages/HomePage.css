@@ -44,10 +44,18 @@
 }
 
 .example {
+  background-color: brown;
+  border-radius: 8px;
+}
+
+.example > div {
   display: inline-block;
   height: 400px;
   width: 625px;
-  background-color: brown;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  border: 1px solid #bbb;
 }
 
 .match {
@@ -56,6 +64,7 @@
 
 .description {
   z-index: 2;
+  border-radius: 8px;
 }
 
 .description.match {
