@@ -14,10 +14,6 @@ import MatchResultsPage from './pages/MatchResultsPage.js';
 import ProfilePage from './pages/ProfilePage';
 import SwipeMatchPage from './pages/SwipeMatchPage.js';
 
-import RestaurantCard from './components/RestaurantCard.js';
-import RestaurantCardDeck from './components/RestaurantCardDeck.js';
-import RestaurantCardStack from './components/RestaurantCardStack.js';
-
 import * as serviceWorker from './serviceWorker';
 
 // TODO: Use Redirect component
