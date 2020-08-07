@@ -2,6 +2,8 @@ import './Header.css';
 
 import React, { useState, useContext } from 'react';
 
+import { useHistory } from 'react-router';
+
 import { AuthContext } from '../components/Authentication.js';
 import Loading from '../components/Loading.js';
 import UserModal from '../components/UserModal.js';
@@ -12,14 +14,21 @@ import UserModal from '../components/UserModal.js';
  */
 function Header(props) {
   const authContext = useContext(AuthContext);
+  const history = useHistory();
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const user = authContext.currentUser.get;
+  const goHome = () => {
+    history.push('/');
+  };
 
+  const logo = <h5 className='header-logo' onClick={goHome}>MAKMatch</h5>;
+
+  const user = authContext.currentUser.get;
   if (!user) {
     return (
       <div id='header'>
-        <h5 className='header-logo'>MAKMatch</h5>
+        {logo}
         <Loading style={{ marginRight: '16px' }} />
       </div>
     );
@@ -28,7 +37,7 @@ function Header(props) {
   if (user.isSignedIn()) {
     return (
       <div id='header'>
-        <h5 className='header-logo'>MAKMatch</h5>
+        {logo}
         <img
           className='profile-pic'
           src={user.getBasicProfile().getImageUrl()}
@@ -50,7 +59,7 @@ function Header(props) {
 
   return (
     <div id='header'>
-      <h5 className='header-logo'>MAKMatch</h5>
+      {logo}
       <button className='sign-in' onClick={authContext.signIn}>
         Sign In with Google
       </button>
