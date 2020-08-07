@@ -10,7 +10,7 @@ function Footer() {
         <button>Let us know</button>
       </div>
       <div id='footer'>
-        <h3>[Footer]</h3>
+        <h5>Brought to you by Miah, Alex, and Kira</h5>
       </div>
     </div>
   );
