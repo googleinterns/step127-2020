@@ -61,11 +61,11 @@ function SwipeMatchSummary(props) {
                 </td>
                 <td>
                   {userLikes &&
-                    users.map((user) => {
-                      if (!userLikes.includes(user)) {
-                        return <ConnectedUserChip key={user} username={user} />;
-                      } else return null;
-                    })}
+                    users.map((user) =>
+                      !userLikes.includes(user) ? (
+                        <ConnectedUserChip key={user} username={user} />
+                      ) : null
+                    )}
                 </td>
               </tr>
             )}
