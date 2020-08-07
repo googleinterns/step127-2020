@@ -66,3 +66,14 @@
 .swipe-match-invalid-input {
   border-color: red !important;
 }
+
+.swipe-match-existing-session {
+  display: flex;
+  justify-content: center;
+  margin: 0px auto;
+}
+
+.swipe-match-existing-session > button {
+  display: inline-block;
+  margin: 0px 16px 8px 16px;
+}
