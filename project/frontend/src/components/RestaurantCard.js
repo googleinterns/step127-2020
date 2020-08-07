@@ -159,9 +159,22 @@ function RestaurantCard(props) {
     height: collapsed ? '0px' : imageSliderMaxHeight.current + 'px',
     transition: 'height 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)',
   };
-  const photoUrls = details
-    ? details.result.photos.map((photo) => photo.getUrl({ maxWidth: 344 }))
-    : ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
+
+  const placeholderImageUrl =
+    'https://pixelpapa.com/wp-content/uploads/2018/11/26.gif';
+  let photoUrls;
+  if (details) {
+    if (details.result.photos) {
+      photoUrls = details.result.photos.map((photo) =>
+        photo.getUrl({ maxWidth: 344 })
+      );
+    } else {
+      // TODO: Display a better "no images found" type image
+      photoUrls = [placeholderImageUrl];
+    }
+  } else {
+    photoUrls = [placeholderImageUrl];
+  }
 
   let open;
   if (details) {
@@ -213,9 +226,11 @@ function RestaurantCard(props) {
             ref={restaurantName}>
             {restaurant.key.name}
           </h5>
-          <h5 className='restaurant-score'>
-            {Math.round(restaurant.value * 100) + '%'}
-          </h5>
+          {restaurant.value && (
+            <h5 className='restaurant-score'>
+              {Math.round(restaurant.value * 100) + '%'}
+            </h5>
+          )}
         </div>
         <RatingStars
           avgRating={restaurant.key.avgRating}
