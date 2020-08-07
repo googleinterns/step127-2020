@@ -13,8 +13,7 @@ import PreferenceForm from './PreferenceForm.js';
 function ProfileForm() {
   const { firestore } = useContext(FirestoreContext);
   const authContext = useContext(AuthContext);
-  // going to need to do some sort of null checking here to make sure that
-  // things don't break!
+  // TODO: Add logic to make sure that a user is logged in.
   const user = authContext.currentUser.get;
   const userId = user.getId();
 
@@ -34,41 +33,47 @@ function ProfileForm() {
 
   const [selectedCuisines, setSelectedCuisines] = useState([]);
   const [location, setLocation] = useState('');
-  const [checkedDistanceButtons, setCheckedDistanceButtons] = useState([]);
-  const [checkedPriceButtons, setCheckedPriceButtons] = useState([]);
-  const [checkedExperienceButtons, setCheckedExperienceButtons] = useState([]);
+  const [clickedDistanceButtons, setClickedDistanceButtons] = useState([]);
+  const [clickedPriceButtons, setClickedPriceButtons] = useState([]);
+  const [clickedExperienceButtons, setClickedExperienceButtons] = useState([]);
 
   // This is a filler value. I plan on moving all cuisine stuff to PreferenceForm.js
   const setCuisine = () => {};
 
-  const sendCheckedButtons = (id, isSelected) => {
-    const checkedButtons = [];
+  /**
+   * A callback function that is going to be used to get the updated
+   * map of clicked buttons from the <ButtonGroup> component's on click function.
+   *
+   * The clicked button state will get updated for the corresponding id.
+   */
+  const clickedButtonsCallback = (id, clickedButtonsMap) => {
+    const clickedButtons = [];
     const labels = labelsList[id];
-    for (const [key, value] of Object.entries(isSelected)) {
-      if (value) {
-        checkedButtons.push(labels[key]);
+    for (const [buttonNumber, isClicked] of Object.entries(clickedButtonsMap)) {
+      if (isClicked) {
+        clickedButtons.push(labels[buttonNumber]);
       }
     }
     if (id === 'distance') {
-      setCheckedDistanceButtons(checkedButtons);
+      setClickedDistanceButtons(clickedButtons);
     } else if (id === 'price') {
-      setCheckedPriceButtons(checkedButtons);
+      setClickedPriceButtons(clickedButtons);
     } else {
-      setCheckedExperienceButtons(checkedButtons);
+      setClickedExperienceButtons(clickedButtons);
     }
   };
 
   const handleSubmit = (event) => {
     // update the database based on the users' inputted values
-    // sooo we need to pass the cuisine and location into here (with a call back function)
+    // we need to pass the cuisine and location into here (with a call back function)
     // and then we call it here
     event.preventDefault();
     firestore.collection('users').doc(userId).update({
       location: '',
       cuisines: cuisineOptions,
-      distance: checkedDistanceButtons,
-      price: checkedPriceButtons,
-      experience: checkedExperienceButtons,
+      distance: clickedDistanceButtons,
+      price: clickedPriceButtons,
+      experience: clickedExperienceButtons,
     });
   };
 
@@ -90,17 +95,17 @@ function ProfileForm() {
         <ButtonGroup
           id='distance'
           labelList={labelsList.distance}
-          sendCheckedButtons={sendCheckedButtons}
+          sendClickedButtons={clickedButtonsCallback}
         />
         <ButtonGroup
           id='price'
           labelList={labelsList.price}
-          sendCheckedButtons={sendCheckedButtons}
+          sendClickedButtons={clickedButtonsCallback}
         />
         <ButtonGroup
           id='experience'
           labelList={labelsList.experience}
-          sendCheckedButtons={sendCheckedButtons}
+          sendClickedButtons={clickedButtonsCallback}
         />
       </PreferenceForm>
     </div>

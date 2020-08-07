@@ -11,7 +11,7 @@ import React, { useState } from 'react';
  *    buttons map to this component's parent.
  */
 function ButtonGroup(props) {
-  const { id, labelList, sendCheckedButtons } = props;
+  const { id, labelList, sendClickedButtons } = props;
   const isSelectedInitial = {};
   for (let labelIndex = 0; labelIndex < labelList.length; labelIndex++) {
     isSelectedInitial[labelIndex] = false;
@@ -22,7 +22,7 @@ function ButtonGroup(props) {
     let tempIsSelected = Object.assign({}, isSelected);
     tempIsSelected[props] = !tempIsSelected[props];
     setIsSelected(tempIsSelected);
-    sendCheckedButtons(id, tempIsSelected);
+    sendClickedButtons(id, tempIsSelected);
   };
 
   const createButtons = () => {
