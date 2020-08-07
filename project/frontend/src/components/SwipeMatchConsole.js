@@ -9,7 +9,7 @@ import Group from '../assets/group.svg';
 import Username from '../assets/username.svg';
 
 function SwipeMatchConsole(props) {
-  const { username, groupId, users, isCreator, startSession } = props;
+  const { username, groupId, users, isCreator, startSession, kickUser } = props;
 
   return (
     <div className='swipe-match-console'>
@@ -63,6 +63,9 @@ function SwipeMatchConsole(props) {
                 key={user}
                 username={user}
                 kickable={isCreator}
+                onKick={() => {
+                  if (isCreator) kickUser(user);
+                }}
               />
             );
           } else return null;
