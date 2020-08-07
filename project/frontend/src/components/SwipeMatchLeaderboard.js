@@ -13,7 +13,8 @@ function SwipeMatchLeaderboard(props) {
       {[...restaurants]
         .sort((r1, r2) => r2.fractionLiked - r1.fractionLiked)
         .map((restaurant, index) => {
-          if (index > 4) return null;
+          const maxVisibleRankings = 5;
+          if (index >= maxVisibleRankings) return null;
           return (
             <RestaurantRankingView
               key={restaurant.key.id}
