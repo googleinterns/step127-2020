@@ -47,6 +47,9 @@ function Authentication(props) {
       user = await GoogleAuth.signIn();
     } catch (e) {
       // TODO: Add component to notify user of sign in failure
+      //
+      // Ignore Google custom errors like user closing the sign-in popup
+      // without authenticating.
       return;
     }
 
@@ -72,7 +75,7 @@ function Authentication(props) {
         });
       }
     } catch (e) {
-      throw e;
+      return;
     }
   };
 
