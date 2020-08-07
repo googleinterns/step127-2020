@@ -1,0 +1,30 @@
+.form-item-row {
+  display: flex;
+  align-items: center;
+  margin: 16px 0px;
+}
+
+.form-item-row label {
+  margin: 0px 16px;
+  white-space: nowrap;
+}
+
+.form-item-row p {
+  margin-bottom: 0px;
+  padding: 6px 8px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background-color: #f3f3f3;
+  font-size: 1.4rem;
+}
+
+.form-item-row select {
+  width: 100%;
+  margin: 0px;
+  font-family: 'Roboto';
+  font-size: 1.4rem;
+}
+
+.form-item-row input {
+  margin: 0px;
+}
