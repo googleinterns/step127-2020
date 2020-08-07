@@ -9,11 +9,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-<<<<<<< HEAD
-    "firebase": "^7.17.2",
-=======
     "firebase": "^7.17.1",
->>>>>>> 1d07ed6e16aa53d8e90edd83bc148e6f2b07aa1f
     "google-map-react": "^1.1.7",
     "material-ui": "^0.20.2",
     "react": "^16.13.1",
