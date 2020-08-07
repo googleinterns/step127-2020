@@ -11,6 +11,7 @@ import Footer from './pages/Footer.js';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
 import MatchResultsPage from './pages/MatchResultsPage.js';
+import ProfilePage from './pages/ProfilePage';
 import SwipeMatchPage from './pages/SwipeMatchPage.js';
 
 import RestaurantCard from './components/RestaurantCard.js';
@@ -19,15 +20,6 @@ import RestaurantCardStack from './components/RestaurantCardStack.js';
 
 import * as serviceWorker from './serviceWorker';
 
-// TODO: remove
-import generateRestaurant from './components/SampleRestaurant.js';
-const numberOfCardsToGenerate = 20;
-const restaurants = [];
-for (let i = 0; i < numberOfCardsToGenerate; i++) {
-  const restaurant = generateRestaurant('Olive Garden Italian Restaurant ' + i);
-  restaurants.push(restaurant);
-}
-
 // TODO: Use Redirect component
 ReactDOM.render(
   <React.StrictMode>
@@ -35,23 +27,7 @@ ReactDOM.render(
       <Router>
         <Header />
         <Switch>
-          <Route path='/deck'>
-            <div className='container'>
-              <div className='row'>
-                <div className='one-half column'>
-                  <RestaurantCardDeck restaurants={restaurants} />
-                </div>
-                <div className='one-half column'>
-                  <RestaurantCardStack restaurants={restaurants} />
-                </div>
-              </div>
-            </div>
-          </Route>
-
-          <Route path='/card'>
-            <RestaurantCard restaurant={generateRestaurant()} />
-          </Route>
-
+          <Route path='/profile' component={ProfilePage} />
           <Route path='/match-results' component={MatchResultsPage} />
           <Route path='/swipe-match' component={SwipeMatchPage} />
           <Route path='/' component={HomePage} />
