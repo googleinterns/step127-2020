@@ -33,6 +33,9 @@ function SwipeMatchForm(props) {
   const [username, setUsername] = useState('');
   const [groupId, setGroupId] = useState('');
   const [creatorCurrentSession, setCreatorCurrentSession] = useState(null);
+  
+  // Responsible for indicating an invalid group id with a red border
+  // around the group id input.
   const [isGroupIdValid, setIsGroupIdValid] = useState(true);
 
   const anonUsername = useRef('Anonymous ' + Animals.random());
