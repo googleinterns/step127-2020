@@ -63,6 +63,11 @@ function Authentication(props) {
           email: profile.getEmail(),
           imageUrl: profile.getImageUrl(),
           currentSwipeMatchSession: null,
+          location: '',
+          cuisines: [],
+          distance: [],
+          price: [],
+          experience: [],
         });
       }
     } catch (e) {
