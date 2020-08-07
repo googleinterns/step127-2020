@@ -160,6 +160,8 @@ function RestaurantCard(props) {
     transition: 'height 0.75s cubic-bezier(0.35, 0.91, 0.33, 0.97)',
   };
 
+  const placeholderImageUrl =
+    'https://pixelpapa.com/wp-content/uploads/2018/11/26.gif';
   let photoUrls;
   if (details) {
     if (details.result.photos) {
@@ -168,10 +170,10 @@ function RestaurantCard(props) {
       );
     } else {
       // TODO: Display a better "no images found" type image
-      photoUrls = ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
+      photoUrls = [placeholderImageUrl];
     }
   } else {
-    photoUrls = ['https://pixelpapa.com/wp-content/uploads/2018/11/26.gif'];
+    photoUrls = [placeholderImageUrl];
   }
 
   let open;
