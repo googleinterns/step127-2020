@@ -1,6 +1,6 @@
 import './ButtonGroup.css';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * A list of labelList.length buttons with the labels in labelList.
@@ -9,11 +9,37 @@ import React from 'react';
  */
 function ButtonGroup(props) {
   const { labelList } = props;
-  const buttonList = [];
-  for (let delta = 0; delta < labelList.length; delta++) {
-    buttonList.push(<button>{labelList[delta]}</button>);
+  const isSelectedInitial = {};
+  for (let labelIndex = 0; labelIndex < labelList.length; labelIndex++) {
+    isSelectedInitial[`button${labelIndex}`] = false;
   }
-  return <div className='btn-group'>{buttonList}</div>;
+  const [isSelected, setIsSelected] = useState(isSelectedInitial);
+
+  const onClickButton = (props) => {
+    let tempIsSelected = Object.assign({}, isSelected);
+    tempIsSelected[props] = !tempIsSelected[props];
+    setIsSelected(tempIsSelected);
+  };
+
+  const createButtons = () => {
+    const buttonList = [];
+    for (let buttonIndex = 0; buttonIndex < labelList.length; buttonIndex++) {
+      let className = isSelected[buttonIndex]
+        ? 'is-selected-class'
+        : 'not-selected-class';
+      buttonList.push(
+        <button
+          type='button'
+          onClick={() => onClickButton(buttonIndex)}
+          className={className}>
+          {labelList[buttonIndex]}
+        </button>
+      );
+    }
+    return buttonList;
+  };
+
+  return <div className='btn-group'>{createButtons()}</div>;
 }
 
 export default ButtonGroup;
