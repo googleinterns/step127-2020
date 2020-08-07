@@ -47,10 +47,18 @@ class SwipeMatchService {
     return doc.data().currentSwipeMatchSession;
   }
 
-  static updateCreatorCurrentSwipeMatchSession(firestore, user, id) {
-    firestore.collection(this.USER_COLLECTION_NAME).doc(user.getId()).update({
-      currentSwipeMatchSession: id,
-    });
+  static async updateCreatorCurrentSwipeMatchSession(firestore, user, id) {
+    try {
+      await firestore
+        .collection(this.USER_COLLECTION_NAME)
+        .doc(user.getId())
+        .update({
+          currentSwipeMatchSession: id,
+        });
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   static async createSession(firestore, location) {
@@ -64,6 +72,16 @@ class SwipeMatchService {
     });
 
     return id;
+  }
+
+  static async deleteSession(firestore, user, id) {
+    try {
+      await firestore.collection(this.SESSION_COLLECTION_NAME).doc(id).delete();
+      await this.updateCreatorCurrentSwipeMatchSession(firestore, user, null);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   static updateSession(firestore, id, opts) {
