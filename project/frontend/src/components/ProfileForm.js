@@ -66,12 +66,15 @@ function ProfileForm() {
       return;
     }
     const userId = user.getId();
-    firestore.collection('users').doc(userId).update({
+    try{
+    await firestore.collection('users').doc(userId).update({
       cuisines: selectedCuisines,
       distance: clickedDistanceButtons,
       price: clickedPriceButtons,
       experience: clickedExperienceButtons,
-    });
+    });} catch {
+      // need to add error handling here!!
+    }
   };
 
   return (
