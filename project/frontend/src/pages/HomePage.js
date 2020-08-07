@@ -75,10 +75,10 @@ function HomePage(props) {
         <div className='seven columns description match u-pad56'>
           <h4>Let us find your best restaurant match.</h4>
           <p>
-            You tell us what you're in the mood for and the rest is on is.
-            We use your preferences to find the restaurants that we think are your
-            perfect fit! Along with considering your preferences, we take a
-            look at ratings, distance, and more, so we can be sure that you're
+            You tell us what you're in the mood for and the rest is on is. We
+            use your preferences to find the restaurants that we think are your
+            perfect fit! Along with considering your preferences, we take a look
+            at ratings, distance, and more, so we can be sure that you're
             getting the highest quality reccommendations that fit what you're
             looking for. Get started by providing your location above!
           </p>
