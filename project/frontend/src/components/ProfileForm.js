@@ -30,7 +30,6 @@ function ProfileForm() {
   const cuisineOptions = [''];
 
   const [selectedCuisines, setSelectedCuisines] = useState([]);
-  const [location, setLocation] = useState('');
   const [clickedDistanceButtons, setClickedDistanceButtons] = useState([]);
   const [clickedPriceButtons, setClickedPriceButtons] = useState([]);
   const [clickedExperienceButtons, setClickedExperienceButtons] = useState([]);
@@ -68,7 +67,6 @@ function ProfileForm() {
     }
     const userId = user.getId();
     firestore.collection('users').doc(userId).update({
-      location: location,
       cuisines: selectedCuisines,
       distance: clickedDistanceButtons,
       price: clickedPriceButtons,
@@ -82,7 +80,6 @@ function ProfileForm() {
       <PreferenceForm
         headerLabel='Your Profile'
         rowItemLabels={itemLabels}
-        locationName='Your Location'
         buttonLabel='Update Profile'
         handleSubmit={handleSubmit}
         cuisineOptions={cuisineOptions}
