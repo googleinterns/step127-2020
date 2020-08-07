@@ -102,10 +102,6 @@ function HomePage(props) {
           className='example'
           style={{ transform: 'translateX(-48px)' }}></div>
       </div>
-      <div className='row-flex feedback u-pad48'>
-        <h4>Have any feedback?</h4>
-        <button>Let us know</button>
-      </div>
     </div>,
     <Modal
       key='preference-form'
