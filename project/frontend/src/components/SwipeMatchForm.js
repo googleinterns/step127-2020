@@ -24,7 +24,7 @@ function SwipeMatchForm(props) {
   const { currLocation, locationName } = props;
 
   const history = useHistory();
-  const { firestore } = useContext(FirestoreContext); 
+  const { firestore } = useContext(FirestoreContext);
   const authContext = useContext(AuthContext);
   const signedIn =
     authContext.currentUser.get && authContext.currentUser.get.isSignedIn();
@@ -41,8 +41,10 @@ function SwipeMatchForm(props) {
     if (user && user.isSignedIn()) {
       setUsername(user.getBasicProfile().getName());
       (async () => {
-        const creatorCurrentSession =
-              await SwipeMatchService.fetchCreatorCurrentSwipeMatchSession(firestore, user);
+        const creatorCurrentSession = await SwipeMatchService.fetchCreatorCurrentSwipeMatchSession(
+          firestore,
+          user
+        );
         setCreatorCurrentSession(creatorCurrentSession);
       })();
     } else {
@@ -157,21 +159,25 @@ function SwipeMatchForm(props) {
                 </tr>
               </tbody>
             </table>
-            {creatorCurrentSession ? [
-              <p>
-                It seems you already have an existing session! You can either return
-                to your existing session or delete the old session and create a new
-                one with the buttons below.
-              </p>,
-              <div className='swipe-match-existing-session'>
-                <button type='submit' disabled={!signedIn}>
-                  Return
-                </button>
-                <button onClick={deleteThenCreateSession} disabled={!signedIn}>
-                  Delete and Create
-                </button>
-              </div>
-            ] : (
+            {creatorCurrentSession ? (
+              [
+                <p>
+                  It seems you already have an existing session! You can either
+                  return to your existing session or delete the old session and
+                  create a new one with the buttons below.
+                </p>,
+                <div className='swipe-match-existing-session'>
+                  <button type='submit' disabled={!signedIn}>
+                    Return
+                  </button>
+                  <button
+                    onClick={deleteThenCreateSession}
+                    disabled={!signedIn}>
+                    Delete and Create
+                  </button>
+                </div>,
+              ]
+            ) : (
               <button type='submit' disabled={!signedIn}>
                 Create
               </button>
