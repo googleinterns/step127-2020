@@ -60,19 +60,20 @@ function ProfileForm() {
   /**
    * Updates the database if the user has changed any of their previous preferences.
    */
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (!(user && user.isSignedIn())) {
       return;
     }
     const userId = user.getId();
-    try{
-    await firestore.collection('users').doc(userId).update({
-      cuisines: selectedCuisines,
-      distance: clickedDistanceButtons,
-      price: clickedPriceButtons,
-      experience: clickedExperienceButtons,
-    });} catch {
+    try {
+      await firestore.collection('users').doc(userId).update({
+        cuisines: selectedCuisines,
+        distance: clickedDistanceButtons,
+        price: clickedPriceButtons,
+        experience: clickedExperienceButtons,
+      });
+    } catch {
       // need to add error handling here!!
     }
   };
