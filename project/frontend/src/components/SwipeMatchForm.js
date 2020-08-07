@@ -65,7 +65,7 @@ function SwipeMatchForm(props) {
         body: 'groupId=' + groupId,
       });
 
-      const valid = (await response.json()).valid;
+      const valid = (await response.json()).valid === 'true';
 
       if (valid) {
         history.push({
@@ -78,7 +78,7 @@ function SwipeMatchForm(props) {
           },
         });
       } else {
-        
+        setIsGroupIdValid(false);
       }
     })();
   };
@@ -186,7 +186,7 @@ function SwipeMatchForm(props) {
               </td>
               <td>
                 <input
-                  className={isGroupIdValid ? 'swipe-match-invalid-input' : ''}
+                  className={isGroupIdValid ? '' : 'swipe-match-invalid-input'}
                   type='text'
                   name='groupId'
                   value={groupId}

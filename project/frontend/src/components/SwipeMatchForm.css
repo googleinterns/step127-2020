@@ -64,5 +64,5 @@
 }
 
 .swipe-match-invalid-input {
-  border-color: red;
+  border-color: red !important;
 }
