@@ -5,7 +5,10 @@ import React, { useState } from 'react';
 /**
  * A list of labelList.length buttons with the labels in labelList.
  *
- * @param {!Array<string>} labelList The list of labels for the buttons
+ * @param {string} id The id of the button group.
+ * @param {!Array<string>} labelList The list of labels for the buttons.
+ * @param {function} sendCheckedButtons A callback function to send the checked
+ *    buttons map to this component's parent.
  */
 function ButtonGroup(props) {
   const { id, labelList, sendCheckedButtons } = props;
