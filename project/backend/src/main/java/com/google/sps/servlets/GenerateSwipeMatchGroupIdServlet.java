@@ -50,8 +50,7 @@ public class GenerateSwipeMatchGroupIdServlet extends HttpServlet {
     if (db.isPresent()) {
       try {
         String groupId = generateGroupId(0);
-        // TODO: replace ABCD1234 with groupId
-        response.getWriter().println("{\"groupId\": \"ABCD1234\"}");
+        response.getWriter().println("{\"groupId\": \"" + groupId + "\"}");
       } catch (RetryLimitExceededException e) {
         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       }
