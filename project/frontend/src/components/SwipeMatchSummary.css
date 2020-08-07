@@ -1,0 +1,59 @@
+.swipe-match-summary {
+  max-width: 600px;
+}
+
+.swipe-match-summary-name {
+  display: inline;
+  font-weight: 900;
+  font-style: italic;
+  text-shadow: 2px 2px rgba(32, 32, 32, 0.3);
+}
+
+.swipe-match-summary button {
+  display: block;
+  margin: 0px auto;
+}
+
+.swipe-match-summary-card-container {
+  display: flex;
+  justify-content: center;
+  margin: 64px 0px;
+}
+
+.swipe-match-summary-card-container > div {
+  display: inline-block;
+  border-radius: 12px;
+  padding: 16px;
+  background-image: linear-gradient(315deg, #d99ec9, #f6f0c4);
+  transform: rotate(10deg);
+}
+
+.swipe-match-summary-card-container > div > div {
+  transform: rotate(-10deg);
+}
+
+.swipe-match-summary table {
+  margin: 0px auto 32px auto;
+}
+
+.swipe-match-summary table td {
+  border: none;
+  padding: 8px 16px 8px 0px;
+  vertical-align: middle;
+}
+
+.swipe-match-summary table td:last-of-type {
+  padding-right: 0px;
+}
+
+.swipe-match-summary table tr:first-of-type > td {
+  padding-top: 0px;
+}
+
+.swipe-match-summary table tr:last-of-type > td {
+  padding-bottom: 0px;
+}
+
+.swipe-match-summary table td > * {
+  margin: 0px;
+}
