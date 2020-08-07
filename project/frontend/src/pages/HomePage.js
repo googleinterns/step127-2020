@@ -75,10 +75,12 @@ function HomePage(props) {
         <div className='seven columns description match u-pad56'>
           <h4>Let us find your best restaurant match.</h4>
           <p>
-            All you have to do is fill out the form and tell us what kind of restaurant you are looking for-- 
-            the rest is on us. We'll use your preferences to find the restaurants that we think would be perfect for you!
-            Along with considering your preferences, we'll also take a look at the ratings of each restaurant, so we can
-            reccommend a great restaurant that fits your desires.
+            All you have to do is fill out the form and tell us what kind of
+            restaurant you are looking for-- the rest is on us. We'll use your
+            preferences to find the restaurants that we think would be perfect
+            for you! Along with considering your preferences, we'll also take a
+            look at the ratings of each restaurant, so we can reccommend a great
+            restaurant that fits your desires.
           </p>
         </div>
       </div>
@@ -93,9 +95,10 @@ function HomePage(props) {
             Match.
           </h4>
           <p>
-            Swipe right on the restaurants you love, and left on the ones you're not so interested in.
-            Join a group with your friends, and start swiping! As you are all swiping, you can see a leaderboard
-            in real time showing the popularity of the restaurants among your group.
+            Swipe right on the restaurants you love, and left on the ones you're
+            not so interested in. Join a group with your friends, and start
+            swiping! As you are all swiping, you can see a leaderboard in real
+            time showing the popularity of the restaurants among your group.
           </p>
         </div>
         <div

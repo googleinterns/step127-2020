@@ -15,14 +15,18 @@ import UserModal from '../components/UserModal.js';
 function Header(props) {
   const authContext = useContext(AuthContext);
   const history = useHistory();
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const goHome = () => {
     history.push('/');
   };
 
-  const logo = <h5 className='header-logo' onClick={goHome}>MAKMatch</h5>;
+  const logo = (
+    <h5 className='header-logo' onClick={goHome}>
+      MAKMatch
+    </h5>
+  );
 
   const user = authContext.currentUser.get;
   if (!user) {
