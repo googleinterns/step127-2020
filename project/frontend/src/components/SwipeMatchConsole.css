@@ -1,0 +1,60 @@
+.swipe-match-console {
+  max-width: 600px;
+  text-align: left;
+}
+
+.swipe-match-console-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.swipe-match-console-header > label {
+  margin: 0px 0px 0px 16px;
+}
+
+.swipe-match-console-connected-users {
+  display: flex;
+  align-content: flex-start;
+  align-items: flex-start;
+  min-height: 136px;
+  flex-wrap: wrap;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background-color: #f3f3f3;
+  padding: 12px 4px 4px 12px;
+}
+
+.swipe-match-console-table td {
+  border: none;
+  padding: 8px 16px 8px 0px;
+  vertical-align: middle;
+}
+
+.swipe-match-console-table td:last-of-type {
+  padding-right: 0px;
+}
+
+.swipe-match-console-table tr:first-of-type > td {
+  padding-top: 0px;
+}
+
+.swipe-match-console-table tr:last-of-type > td {
+  padding-bottom: 0px;
+}
+
+.swipe-match-console-table td > * {
+  margin: 0px;
+}
+
+.swipe-match-console-start-session {
+  display: block;
+  margin: 32px auto 0px auto;
+}
+
+.swipe-match-console-waiting {
+  display: block;
+  margin: 32px auto 0px auto;
+  border: none;
+  cursor: default;
+}
