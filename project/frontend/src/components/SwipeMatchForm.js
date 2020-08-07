@@ -5,6 +5,8 @@ import { useHistory } from 'react-router-dom';
 
 import Animals from '../scripts/animals.js';
 import { AuthContext } from './Authentication.js';
+import FirestoreContext from '../contexts/FirestoreContext.js';
+import SwipeMatchService from '../scripts/SwipeMatchFirestoreService.js';
 
 import Place from '../assets/place.svg';
 import Fingerprint from '../assets/fingerprint.svg';
@@ -22,47 +24,117 @@ function SwipeMatchForm(props) {
   const { currLocation, locationName } = props;
 
   const history = useHistory();
+  const { firestore } = useContext(FirestoreContext);
   const authContext = useContext(AuthContext);
-  const signedIn =
-    authContext.currentUser.get && authContext.currentUser.get.isSignedIn();
+
+  const user = authContext.currentUser.get;
+  const signedIn = user && user.isSignedIn();
 
   const [username, setUsername] = useState('');
   const [groupId, setGroupId] = useState('');
+  const [creatorCurrentSession, setCreatorCurrentSession] = useState(null);
+
+  // Responsible for indicating an invalid group id with a red border
+  // around the group id input.
+  const [isGroupIdValid, setIsGroupIdValid] = useState(true);
 
   const anonUsername = useRef('Anonymous ' + Animals.random());
 
   useEffect(() => {
-    const user = authContext.currentUser.get;
-    if (user && user.isSignedIn()) {
+    if (signedIn) {
       setUsername(user.getBasicProfile().getName());
+      (async () => {
+        const creatorCurrentSession = await SwipeMatchService.fetchCreatorCurrentSwipeMatchSession(
+          firestore,
+          user
+        );
+        setCreatorCurrentSession(creatorCurrentSession);
+      })();
     } else {
       setUsername('');
+      setCreatorCurrentSession(null);
     }
-  }, [authContext]);
+  }, [authContext, user, signedIn, firestore]);
 
   const createSession = (event) => {
+    if (event) event.preventDefault();
+
+    (async () => {
+      let id = null;
+
+      try {
+        id = await SwipeMatchService.createSession(firestore, currLocation);
+        SwipeMatchService.updateCreatorCurrentSwipeMatchSession(
+          firestore,
+          user,
+          id
+        );
+      } catch (e) {}
+
+      if (id) {
+        history.push({
+          pathname: '/swipe-match',
+          state: {
+            isCreator: true,
+            username: username ? username : anonUsername.current,
+            groupId: id,
+          },
+        });
+      }
+    })();
+  };
+
+  const deleteThenCreateSession = (event) => {
+    event.preventDefault();
+    (async () => {
+      await SwipeMatchService.deleteSession(
+        firestore,
+        authContext.currentUser.get,
+        creatorCurrentSession
+      );
+      createSession();
+    })();
+  };
+
+  const returnToSession = (event) => {
     event.preventDefault();
     history.push({
       pathname: '/swipe-match',
       state: {
-        currLocation,
-        action: 'create',
+        isCreator: true,
         username: username ? username : anonUsername.current,
+        groupId: creatorCurrentSession,
       },
     });
   };
 
   const joinSession = (event) => {
     event.preventDefault();
-    history.push({
-      pathname: '/swipe-match',
-      state: {
-        currLocation,
-        action: 'join',
-        username: username ? username : anonUsername.current,
-        groupId,
-      },
-    });
+
+    (async () => {
+      const response = await fetch('/api/swipe-match/validate-group-id', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'groupId=' + groupId,
+      });
+
+      const valid = (await response.json()).valid === 'true';
+
+      if (valid) {
+        history.push({
+          pathname: '/swipe-match',
+          state: {
+            isCreator: false,
+            username: username ? username : anonUsername.current,
+            groupId,
+          },
+        });
+      } else {
+        setIsGroupIdValid(false);
+      }
+    })();
   };
 
   const signIn = (event) => {
@@ -117,9 +189,31 @@ function SwipeMatchForm(props) {
                 </tr>
               </tbody>
             </table>
-            <button type='submit' disabled={!signedIn}>
-              Create
-            </button>
+            {creatorCurrentSession ? (
+              [
+                <p key='description'>
+                  It seems you already have an existing session! You can either
+                  return to your existing session or delete the old session and
+                  create a new one with the buttons below.
+                </p>,
+                <div
+                  key='existing-session-buttons'
+                  className='swipe-match-existing-session'>
+                  <button onClick={returnToSession} disabled={!signedIn}>
+                    Return
+                  </button>
+                  <button
+                    onClick={deleteThenCreateSession}
+                    disabled={!signedIn}>
+                    Delete and Create
+                  </button>
+                </div>,
+              ]
+            ) : (
+              <button type='submit' disabled={!signedIn}>
+                Create
+              </button>
+            )}
           </div>
           <button
             onClick={signIn}
@@ -168,10 +262,12 @@ function SwipeMatchForm(props) {
               </td>
               <td>
                 <input
+                  className={isGroupIdValid ? '' : 'swipe-match-invalid-input'}
                   type='text'
                   name='groupId'
                   value={groupId}
                   onChange={(event) => setGroupId(event.target.value)}
+                  onFocus={() => setIsGroupIdValid(true)}
                   placeholder='Enter a group ID'
                   required
                 />
