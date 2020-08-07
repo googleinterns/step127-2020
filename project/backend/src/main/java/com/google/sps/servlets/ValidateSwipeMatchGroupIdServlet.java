@@ -36,7 +36,7 @@ public class ValidateSwipeMatchGroupIdServlet extends HttpServlet {
   }
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     boolean valid = false;
     try {
       valid = validateGroupId(request.getParameter("groupId"));
