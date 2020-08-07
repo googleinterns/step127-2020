@@ -67,6 +67,8 @@ function ProfileForm() {
     }
     const userId = user.getId();
     try {
+      // TODO: only call update on the fields that have actually been changed by the user.
+      // Ideally we would be keeping db updates scoped to fields that have actually been changed.
       await firestore.collection('users').doc(userId).update({
         cuisines: selectedCuisines,
         distance: clickedDistanceButtons,
@@ -74,7 +76,7 @@ function ProfileForm() {
         experience: clickedExperienceButtons,
       });
     } catch {
-      // need to add error handling here!!
+      // TODO: add error handling here!!
     }
   };
 
