@@ -26,8 +26,9 @@ function SwipeMatchForm(props) {
   const history = useHistory();
   const { firestore } = useContext(FirestoreContext);
   const authContext = useContext(AuthContext);
-  const signedIn =
-    authContext.currentUser.get && authContext.currentUser.get.isSignedIn();
+
+  const user = authContext.currentUser.get;
+  const signedIn = user && user.isSignedIn();
 
   const [username, setUsername] = useState('');
   const [groupId, setGroupId] = useState('');
@@ -37,8 +38,7 @@ function SwipeMatchForm(props) {
   const anonUsername = useRef('Anonymous ' + Animals.random());
 
   useEffect(() => {
-    const user = authContext.currentUser.get;
-    if (user && user.isSignedIn()) {
+    if (signedIn) {
       setUsername(user.getBasicProfile().getName());
       (async () => {
         const creatorCurrentSession = await SwipeMatchService.fetchCreatorCurrentSwipeMatchSession(
@@ -51,18 +51,34 @@ function SwipeMatchForm(props) {
       setUsername('');
       setCreatorCurrentSession(null);
     }
-  }, [authContext, firestore]);
+  }, [authContext, user, signedIn, firestore]);
 
   const createSession = (event) => {
-    event.preventDefault();
-    history.push({
-      pathname: '/swipe-match',
-      state: {
-        currLocation,
-        action: 'create',
-        username: username ? username : anonUsername.current,
-      },
-    });
+    if (event) event.preventDefault();
+
+    (async () => {
+      let id = null;
+
+      try {
+        id = await SwipeMatchService.createSession(firestore, currLocation);
+        SwipeMatchService.updateCreatorCurrentSwipeMatchSession(
+          firestore,
+          user,
+          id
+        );
+      } catch (e) {}
+
+      if (id) {
+        history.push({
+          pathname: '/swipe-match',
+          state: {
+            isCreator: true,
+            username: username ? username : anonUsername.current,
+            groupId: id,
+          },
+        });
+      }
+    })();
   };
 
   const deleteThenCreateSession = (event) => {
@@ -73,8 +89,20 @@ function SwipeMatchForm(props) {
         authContext.currentUser.get,
         creatorCurrentSession
       );
-      createSession(event);
+      createSession();
     })();
+  };
+
+  const returnToSession = (event) => {
+    event.preventDefault();
+    history.push({
+      pathname: '/swipe-match',
+      state: {
+        isCreator: true,
+        username: username ? username : anonUsername.current,
+        groupId: creatorCurrentSession,
+      },
+    });
   };
 
   const joinSession = (event) => {
@@ -95,8 +123,7 @@ function SwipeMatchForm(props) {
         history.push({
           pathname: '/swipe-match',
           state: {
-            currLocation,
-            action: 'join',
+            isCreator: false,
             username: username ? username : anonUsername.current,
             groupId,
           },
@@ -161,13 +188,15 @@ function SwipeMatchForm(props) {
             </table>
             {creatorCurrentSession ? (
               [
-                <p>
+                <p key='description'>
                   It seems you already have an existing session! You can either
                   return to your existing session or delete the old session and
                   create a new one with the buttons below.
                 </p>,
-                <div className='swipe-match-existing-session'>
-                  <button type='submit' disabled={!signedIn}>
+                <div
+                  key='existing-session-buttons'
+                  className='swipe-match-existing-session'>
+                  <button onClick={returnToSession} disabled={!signedIn}>
                     Return
                   </button>
                   <button
