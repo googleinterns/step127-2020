@@ -18,6 +18,13 @@ function ProfileForm() {
   const cuisineOptions = ['Italian', 'Mexican'];
   // This is a filler value. I plan on moving all cuisine stuff to PreferenceForm.js
   const setCuisine = () => {};
+
+  const sendCheckedButtons = (isSelected) => {
+    console.log('in the actual function');
+    console.log(isSelected);
+    return isSelected;
+  };
+
   return (
     <div className='profile-form-container'>
       <h4 className='profile-form-header'>Your Profile</h4>
@@ -35,6 +42,7 @@ function ProfileForm() {
         <ButtonGroup
           id='distance'
           labelList={['1 mile', '5 miles', '10 miles', '25 miles']}
+          sendCheckedButtons={sendCheckedButtons}
         />
         <ButtonGroup id='price' labelList={['$', '$$', '$$$', '$$$$']} />
         <ButtonGroup

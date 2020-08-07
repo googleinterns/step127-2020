@@ -15,10 +15,16 @@ function ButtonGroup(props) {
   }
   const [isSelected, setIsSelected] = useState(isSelectedInitial);
 
+  // const sendCheckedButtons = (isSelected) => {
+  //   props.sendCheckedButtons(isSelected);
+  // };
+
   const onClickButton = (props) => {
     let tempIsSelected = Object.assign({}, isSelected);
-    tempIsSelected[props] = !tempIsSelected[props];
+    tempIsSelected[`button${props}`] = !tempIsSelected[`button${props}`];
     setIsSelected(tempIsSelected);
+    console.log(isSelected);
+    // sendCheckedButtons(isSelected);
   };
 
   const createButtons = () => {
