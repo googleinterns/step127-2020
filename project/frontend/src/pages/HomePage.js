@@ -7,6 +7,8 @@ import Modal from '../components/Modal.js';
 import UserPreferenceForm from '../components/UserPreferenceForm.js';
 import SwipeMatchForm from '../components/SwipeMatchForm.js';
 
+import FindMyMatch from '../assets/find_my_match.png';
+
 function HomePage(props) {
   const retrievedLocation = props.location.state
     ? props.location.state.currLocation
@@ -71,7 +73,13 @@ function HomePage(props) {
       <div className='row-flex match u-pad64 u-pad-no-top'>
         <div
           className='example'
-          style={{ transform: 'translateX(48px)' }}></div>
+          style={{
+            transform: 'translateX(48px)',
+            backgroundImage: 'url(' + FindMyMatch + ')',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
         <div className='seven columns description match u-pad56'>
           <h4>Let us find your best restaurant match.</h4>
           <p>
