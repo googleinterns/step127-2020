@@ -13,7 +13,10 @@ import PreferenceForm from './PreferenceForm.js';
 function ProfileForm() {
   const { firestore } = useContext(FirestoreContext);
   const authContext = useContext(AuthContext);
-  console.log(authContext);
+  // going to need to do some sort of null checking here to make sure that
+  // things don't break!
+  const user = authContext.currentUser.get;
+  const userId = user.getId();
 
   const itemLabels = {
     cuisine: 'Preferred Cuisine',
@@ -29,6 +32,8 @@ function ProfileForm() {
   };
   const cuisineOptions = ['Italian', 'Mexican'];
 
+  const [selectedCuisines, setSelectedCuisines] = useState([]);
+  const [location, setLocation] = useState('');
   const [checkedDistanceButtons, setCheckedDistanceButtons] = useState([]);
   const [checkedPriceButtons, setCheckedPriceButtons] = useState([]);
   const [checkedExperienceButtons, setCheckedExperienceButtons] = useState([]);
@@ -53,11 +58,18 @@ function ProfileForm() {
     }
   };
 
-  const handleSubmit = () => {
-    // going to need to get the user's thingy based on their email
-    // and then from there we are going to update everything based on the updated values
-    firestore.collection('users').where('email', '==', insertUserEmail).get()
-      .then;
+  const handleSubmit = (event) => {
+    // update the database based on the users' inputted values
+    // sooo we need to pass the cuisine and location into here (with a call back function)
+    // and then we call it here
+    event.preventDefault();
+    firestore.collection('users').doc(userId).update({
+      location: '',
+      cuisines: cuisineOptions,
+      distance: checkedDistanceButtons,
+      price: checkedPriceButtons,
+      experience: checkedExperienceButtons,
+    });
   };
 
   return (
@@ -68,6 +80,7 @@ function ProfileForm() {
         rowItemLabels={itemLabels}
         locationName='Your Location'
         buttonLabel='Update Profile'
+        handleSubmit={handleSubmit}
         cuisineOptions={cuisineOptions}
         setCuisine={setCuisine}>
         {/**
