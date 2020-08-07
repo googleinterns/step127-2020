@@ -57,3 +57,7 @@
 .swipe-match-summary table td > * {
   margin: 0px;
 }
+
+.swipe-match-summary table td > .connected-user-chip {
+  margin-right: 8px;
+}
