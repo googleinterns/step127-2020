@@ -7,7 +7,7 @@ import React, { useState } from 'react';
  *
  * @param {string} id The id of the button group.
  * @param {!Array<string>} labelList The list of labels for the buttons.
- * @param {function} sendCheckedButtons A callback function to send the checked
+ * @param {function} sendClickedButtons A callback function to send the clicked
  *    buttons map to this component's parent.
  */
 function ButtonGroup(props) {
