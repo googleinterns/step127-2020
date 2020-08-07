@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+
+import FirestoreContext from '../contexts/FirestoreContext.js';
 
 /**
  * A context containing the following fields:
@@ -17,6 +19,8 @@ const AuthContext = React.createContext({});
  * within the application. Serves the AuthContext to child components.
  */
 function Authentication(props) {
+  const { firestore } = useContext(FirestoreContext);
+
   const [GoogleAuth, setGoogleAuth] = useState({
     signIn: () => {},
     signOut: () => {},
@@ -37,9 +41,47 @@ function Authentication(props) {
     });
   }, []);
 
+  const signInWrapper = async () => {
+    let user;
+    try {
+      user = await GoogleAuth.signIn();
+    } catch (e) {
+      // TODO: Add component to notify user of sign in failure
+      //
+      // Ignore Google custom errors like user closing the sign-in popup
+      // without authenticating.
+      return;
+    }
+
+    const id = user.getId();
+    try {
+      const ref = firestore.collection('users').doc(id);
+      const doc = await ref.get();
+      if (!doc.exists) {
+        const profile = user.getBasicProfile();
+        ref.set({
+          id: profile.getId(),
+          name: profile.getName(),
+          givenName: profile.getGivenName(),
+          familyName: profile.getFamilyName(),
+          email: profile.getEmail(),
+          imageUrl: profile.getImageUrl(),
+          currentSwipeMatchSession: null,
+          location: '',
+          cuisines: [],
+          distance: [],
+          price: [],
+          experience: [],
+        });
+      }
+    } catch (e) {
+      return;
+    }
+  };
+
   const context = {
     currentUser: currentUser,
-    signIn: GoogleAuth.signIn,
+    signIn: signInWrapper,
     signOut: GoogleAuth.signOut,
   };
 
