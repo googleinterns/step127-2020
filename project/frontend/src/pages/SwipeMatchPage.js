@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext, useReducer } from 'react';
 
+import { useHistory } from 'react-router-dom';
+
 import { AuthContext } from '../components/Authentication.js';
 import FirestoreContext from '../contexts/FirestoreContext.js';
 import PlacesApiContext from '../contexts/PlacesApiContext.js';
@@ -7,136 +9,192 @@ import PlacesApiContext from '../contexts/PlacesApiContext.js';
 import Modal from '../components/Modal.js';
 import RestaurantCardDeck from '../components/RestaurantCardDeck.js';
 import SwipeMatchConsole from '../components/SwipeMatchConsole.js';
+import SwipeMatchHeader from '../components/SwipeMatchHeader.js';
 import SwipeMatchLeaderboard from '../components/SwipeMatchLeaderboard.js';
+import SwipeMatchSummary from '../components/SwipeMatchSummary.js';
 
 import SwipeMatchService from '../scripts/SwipeMatchFirestoreService.js';
 
+/**
+ * A reducer for the SwipeMatchPage component.
+ *
+ * @param {!Object<string, *>} previous The previous state of the SwipeMatchPage
+ *     component.
+ * @param {!Object<string, *>} action The data used to update the component's state,
+ *     including a type and payload.
+ */
 function reducer(previous, action) {
-  let { location, restaurants, sessionStarted, users } = previous;
+  let {
+    likes,
+    location,
+    restaurants,
+    sessionStarted,
+    sessionEnded,
+    users,
+  } = previous;
   const { payload, type } = action;
 
   if (type === 'set restaurants') {
     restaurants = payload;
   } else if (type === 'snapshot') {
-    if (
-      location.lat !== payload.location.lat ||
-      location.lng !== payload.location.lng
-    ) {
-      location = payload.location;
-    }
-
-    if (sessionStarted !== payload.sessionStarted) {
-      sessionStarted = payload.sessionStarted;
-    }
-
-    if (users.toString() !== payload.users.toString()) {
-      users = payload.users;
-    }
-
-    restaurants = restaurants.map((restaurant) => {
-      const likes = payload.likes[restaurant.key.id];
-      if (likes) {
-        restaurant.fractionLiked = likes.length / users.length;
+    if (payload) {
+      if (
+        location.lat !== payload.location.lat ||
+        location.lng !== payload.location.lng
+      ) {
+        location = payload.location;
       }
-      return restaurant;
-    });
+
+      if (sessionStarted !== payload.sessionStarted) {
+        sessionStarted = payload.sessionStarted;
+      }
+
+      if (users.toString() !== payload.users.toString()) {
+        users = payload.users;
+      }
+
+      if (JSON.stringify(likes) !== JSON.stringify(payload.likes)) {
+        likes = payload.likes;
+      }
+    } else {
+      sessionEnded = true;
+    }
   }
 
-  return { location, restaurants, sessionStarted, users };
+  restaurants = restaurants.map((restaurant) => {
+    const usersLiked = likes[restaurant.key.id];
+    if (usersLiked) {
+      restaurant.fractionLiked = usersLiked.length / users.length;
+    }
+    return restaurant;
+  });
+
+  return { likes, location, restaurants, sessionStarted, sessionEnded, users };
 }
 
+/**
+ * The landing page for the "Swipe Match" service.
+ *
+ * @param {string} props.username The username of the current user.e
+ * @param {string} props.groupId The group id of this swipe match session.
+ * @param {boolean} props.isCreator True if the current user is the creator of this
+ *     session; false otherwise.
+ */
 function SwipeMatchPage(props) {
-  const { currLocation, action, username } = props.location.state;
-  const isCreator = action === 'create';
+  const { username, groupId, isCreator } = props.location.state;
 
   const authContext = useContext(AuthContext);
   const { firebase, firestore } = useContext(FirestoreContext);
   const placesService = useContext(PlacesApiContext);
 
-  const [groupId, setGroupId] = useState(props.location.state.groupId || '');
+  const history = useHistory();
+
   const [
-    { location, restaurants, sessionStarted, users },
+    { likes, location, restaurants, sessionStarted, sessionEnded, users },
     dispatch,
   ] = useReducer(reducer, {
+    likes: {},
     location: { lat: undefined, lng: undefined },
     restaurants: [],
     sessionStarted: false,
-    users: [],
+    sessionEnded: false,
+    users: [username],
   });
 
-  useEffect(
-    () => {
-      let unsubscribe;
-      let id = groupId;
+  const [unsubscribe, setUnsubscribe] = useState(null);
 
+  useEffect(() => {
+    let unsubscribe = SwipeMatchService.addSessionListener(
+      firestore,
+      groupId,
+      (doc) => dispatch({ type: 'snapshot', payload: doc.data() }),
+      (error) => console.log('ERROR: ' + error)
+    );
+    SwipeMatchService.addUser(firebase, firestore, groupId, username);
+
+    const beforeUnload = (event) => {
       (async () => {
-        if (isCreator) {
-          let user = authContext.currentUser.get;
-
-          if (user && user.isSignedIn()) {
-            let creatorCurrentSwipeMatchSession = null;
-            try {
-              creatorCurrentSwipeMatchSession = await SwipeMatchService.fetchCreatorCurrentSwipeMatchSession(
-                firestore,
-                user
-              );
-            } catch (e) {}
-
-            if (creatorCurrentSwipeMatchSession) {
-              id = creatorCurrentSwipeMatchSession;
-            } else {
-              try {
-                id = await SwipeMatchService.createSession(
-                  firestore,
-                  currLocation
-                );
-                SwipeMatchService.updateCreatorCurrentSwipeMatchSession(
-                  firestore,
-                  user,
-                  id
-                );
-              } catch (e) {
-                setGroupId(null);
-              }
-            }
-            setGroupId(id);
-          }
-        }
-
-        if (id) {
-          unsubscribe = SwipeMatchService.addSessionListener(
-            firestore,
-            id,
-            (doc) => dispatch({ type: 'snapshot', payload: doc.data() }),
-            (error) => console.log('ERROR: ' + error)
-          );
-          SwipeMatchService.addUser(firebase, firestore, id, username);
-        }
+        const data = await SwipeMatchService.retrieveSession(
+          firestore,
+          groupId
+        );
+        window.swipeMatchSession = data;
       })();
 
-      return () => {
-        if (unsubscribe !== undefined) {
-          unsubscribe();
-        }
-        if (id) {
-          SwipeMatchService.removeUser(firebase, firestore, id, username);
-        }
-      };
-    },
+      // The following three lines each ensure a confirmation dialog will appear
+      // for different user agents.
+      event.preventDefault();
+      event.returnValue = '';
+      return '';
+    };
+
+    const unload = (fromWindow) => {
+      SwipeMatchService.removeUser(
+        firebase,
+        firestore,
+        groupId,
+        username,
+        fromWindow
+      );
+      unsubscribe();
+    };
+
+    window.addEventListener('beforeunload', beforeUnload);
+    window.addEventListener('unload', () => unload(/* fromWindow= */ true));
+
+    setUnsubscribe(() => unsubscribe);
+
+    return () => {
+      window.removeEventListener('beforeunload', beforeUnload);
+      unload(/* fromWindow= */ false);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    isCreator ? [authContext] : []
-  );
+  }, []);
 
   useEffect(() => {
     if (location.lat && location.lng) {
-      console.log('ACTUALLY UPDATING RESTAURANTS');
       SwipeMatchService.fetchRestaurants(placesService, location, dispatch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
+  useEffect(() => {
+    const user = authContext.currentUser.get;
+    if (restaurants.length !== 0 && !(user && user.isSignedIn())) {
+      leaveSession();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authContext]);
+
+  useEffect(() => {
+    if (restaurants.length !== 0 && !users.includes(username)) {
+      leaveSession();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [users]);
+
   const startSession = () => {
     SwipeMatchService.startSession(firestore, groupId);
+  };
+
+  const endSession = () => {
+    SwipeMatchService.deleteSession(
+      firestore,
+      authContext.currentUser.get,
+      groupId
+    );
+  };
+
+  const leaveSession = () => {
+    unsubscribe();
+    SwipeMatchService.removeUser(
+      firebase,
+      firestore,
+      groupId,
+      username,
+      /* fromWindow= */ false
+    );
+    history.replace('/');
   };
 
   const onDeckSwipe = (restaurantId, action) => {
@@ -145,11 +203,32 @@ function SwipeMatchPage(props) {
       firestore,
       groupId,
       restaurantId,
+      username,
       action
     );
   };
 
+  const kickUser = (user) => {
+    SwipeMatchService.removeUser(
+      firebase,
+      firestore,
+      groupId,
+      user,
+      /* fromWindow= */ false
+    );
+  };
+
   return [
+    <SwipeMatchHeader
+      key='swipe-match-header'
+      visible={sessionStarted}
+      groupId={groupId}
+      username={username}
+      users={users}
+      isCreator={isCreator}
+      endSession={endSession}
+      leaveSession={leaveSession}
+    />,
     <div key='swipe-match-page' className='container u-full-width'>
       <div
         className='row'
@@ -177,6 +256,21 @@ function SwipeMatchPage(props) {
         users={users}
         isCreator={isCreator}
         startSession={startSession}
+        kickUser={kickUser}
+      />
+    </Modal>,
+    <Modal
+      key='swipe-match-summary'
+      open={sessionEnded}
+      centerHorizontal={true}
+      top='64px'
+      bottom='64px'>
+      <SwipeMatchSummary
+        restaurants={[...restaurants].sort(
+          (r1, r2) => r2.fractionLiked - r1.fractionLiked
+        )}
+        users={users}
+        likes={likes}
       />
     </Modal>,
   ];

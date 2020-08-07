@@ -44,13 +44,26 @@ class SwipeMatchService {
       .collection(this.USER_COLLECTION_NAME)
       .doc(user.getId())
       .get();
-    return doc.data().currentSwipeMatchSession;
+
+    if (doc.exists) {
+      return doc.data().currentSwipeMatchSession;
+    } else {
+      return null;
+    }
   }
 
-  static updateCreatorCurrentSwipeMatchSession(firestore, user, id) {
-    firestore.collection(this.USER_COLLECTION_NAME).doc(user.getId()).update({
-      currentSwipeMatchSession: id,
-    });
+  static async updateCreatorCurrentSwipeMatchSession(firestore, user, id) {
+    try {
+      await firestore
+        .collection(this.USER_COLLECTION_NAME)
+        .doc(user.getId())
+        .update({
+          currentSwipeMatchSession: id,
+        });
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   static async createSession(firestore, location) {
@@ -66,8 +79,34 @@ class SwipeMatchService {
     return id;
   }
 
+  static async retrieveSession(firestore, id) {
+    const doc = await firestore
+      .collection(this.SESSION_COLLECTION_NAME)
+      .doc(id)
+      .get();
+    return doc.exists ? doc.data() : undefined;
+  }
+
   static updateSession(firestore, id, opts) {
     firestore.collection(this.SESSION_COLLECTION_NAME).doc(id).update(opts);
+  }
+
+  static async deleteSession(firestore, user, id) {
+    try {
+      await Promise.all([
+        firestore.collection(this.SESSION_COLLECTION_NAME).doc(id).delete(),
+        this.updateCreatorCurrentSwipeMatchSession(firestore, user, null),
+      ]);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static startSession(firestore, id) {
+    this.updateSession(firestore, id, {
+      sessionStarted: true,
+    });
   }
 
   static addSessionListener(firestore, id, onUpdate, onError) {
@@ -83,16 +122,40 @@ class SwipeMatchService {
     });
   }
 
-  static removeUser(firebase, firestore, id, username) {
-    this.updateSession(firestore, id, {
-      users: firebase.firestore.FieldValue.arrayRemove(username),
-    });
-  }
+  static removeUser(firebase, firestore, id, username, fromWindow) {
+    if (fromWindow) {
+      const likes = {};
+      if (window.swipeMatchSession) {
+        for (const id of Object.keys(window.swipeMatchSession.likes)) {
+          likes['likes.' + id] = firebase.firestore.FieldValue.arrayRemove(
+            username
+          );
+        }
+      }
 
-  static startSession(firestore, id) {
-    this.updateSession(firestore, id, {
-      sessionStarted: true,
-    });
+      this.updateSession(firestore, id, {
+        users: firebase.firestore.FieldValue.arrayRemove(username),
+        ...likes,
+      });
+    } else {
+      (async () => {
+        const data = await this.retrieveSession(firestore, id);
+
+        if (data) {
+          const likes = {};
+          for (const id of Object.keys(data.likes)) {
+            likes['likes.' + id] = firebase.firestore.FieldValue.arrayRemove(
+              username
+            );
+          }
+
+          this.updateSession(firestore, id, {
+            users: firebase.firestore.FieldValue.arrayRemove(username),
+            ...likes,
+          });
+        }
+      })();
+    }
   }
 
   static swipeRestaurant(
