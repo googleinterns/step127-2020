@@ -11,17 +11,8 @@ import Footer from './pages/Footer.js';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
 import MatchResultsPage from './pages/MatchResultsPage.js';
-<<<<<<< HEAD
 import ProfilePage from './pages/ProfilePage.js';
 import SwipeMatchPage from './pages/SwipeMatchPage.js';
-
-import RestaurantCard from './components/RestaurantCard.js';
-import RestaurantCardDeck from './components/RestaurantCardDeck.js';
-import RestaurantCardStack from './components/RestaurantCardStack.js';
-=======
-import ProfilePage from './pages/ProfilePage';
-import SwipeMatchPage from './pages/SwipeMatchPage.js';
->>>>>>> 1d07ed6e16aa53d8e90edd83bc148e6f2b07aa1f
 
 import * as serviceWorker from './serviceWorker';
 
