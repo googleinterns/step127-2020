@@ -5,13 +5,16 @@ import React, { useState } from 'react';
 /**
  * A list of labelList.length buttons with the labels in labelList.
  *
- * @param {!Array<string>} labelList The list of labels for the buttons
+ * @param {string} id The id of the button group.
+ * @param {!Array<string>} labelList The list of labels for the buttons.
+ * @param {function} sendClickedButtons A callback function to send the clicked
+ *    buttons map to this component's parent.
  */
 function ButtonGroup(props) {
-  const { labelList } = props;
+  const { id, labelList, sendClickedButtons } = props;
   const isSelectedInitial = {};
   for (let labelIndex = 0; labelIndex < labelList.length; labelIndex++) {
-    isSelectedInitial[`button${labelIndex}`] = false;
+    isSelectedInitial[labelIndex] = false;
   }
   const [isSelected, setIsSelected] = useState(isSelectedInitial);
 
@@ -19,6 +22,7 @@ function ButtonGroup(props) {
     let tempIsSelected = Object.assign({}, isSelected);
     tempIsSelected[props] = !tempIsSelected[props];
     setIsSelected(tempIsSelected);
+    sendClickedButtons(id, tempIsSelected);
   };
 
   const createButtons = () => {
