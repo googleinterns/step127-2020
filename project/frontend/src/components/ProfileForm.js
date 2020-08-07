@@ -2,7 +2,7 @@ import './ProfileForm.css';
 
 import React, { useContext, useState } from 'react';
 
-import AuthContext from './Authentication.js';
+import { AuthContext } from '../components/Authentication.js';
 import ButtonGroup from './ButtonGroup';
 import FirestoreContext from '../contexts/FirestoreContext.js';
 import PreferenceForm from './PreferenceForm.js';
@@ -13,9 +13,7 @@ import PreferenceForm from './PreferenceForm.js';
 function ProfileForm() {
   const { firestore } = useContext(FirestoreContext);
   const authContext = useContext(AuthContext);
-  // TODO: Add logic to make sure that a user is logged in.
-  const user = authContext.currentUser.get;
-  const userId = user.getId();
+  let user = authContext.currentUser.get;
 
   const itemLabels = {
     cuisine: 'Preferred Cuisine',
@@ -29,16 +27,13 @@ function ProfileForm() {
     price: ['$', '$$', '$$$', '$$$$'],
     experience: ['Takeout', 'Delivery', 'Dine-In'],
   };
-  const cuisineOptions = ['Italian', 'Mexican'];
+  const cuisineOptions = [''];
 
   const [selectedCuisines, setSelectedCuisines] = useState([]);
   const [location, setLocation] = useState('');
   const [clickedDistanceButtons, setClickedDistanceButtons] = useState([]);
   const [clickedPriceButtons, setClickedPriceButtons] = useState([]);
   const [clickedExperienceButtons, setClickedExperienceButtons] = useState([]);
-
-  // This is a filler value. I plan on moving all cuisine stuff to PreferenceForm.js
-  const setCuisine = () => {};
 
   /**
    * A callback function that is going to be used to get the updated
@@ -68,9 +63,13 @@ function ProfileForm() {
     // we need to pass the cuisine and location into here (with a call back function)
     // and then we call it here
     event.preventDefault();
+    if (!(user && user.isSignedIn())) {
+      return;
+    }
+    const userId = user.getId();
     firestore.collection('users').doc(userId).update({
-      location: '',
-      cuisines: cuisineOptions,
+      location: location,
+      cuisines: selectedCuisines,
       distance: clickedDistanceButtons,
       price: clickedPriceButtons,
       experience: clickedExperienceButtons,
@@ -87,7 +86,7 @@ function ProfileForm() {
         buttonLabel='Update Profile'
         handleSubmit={handleSubmit}
         cuisineOptions={cuisineOptions}
-        setCuisine={setCuisine}>
+        setCuisine={setSelectedCuisines}>
         {/**
          * If the order of the children here is changed this will need to be
          * accounted for in the preference form (PreferenceForm.js).
