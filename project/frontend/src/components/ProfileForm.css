@@ -1,0 +1,16 @@
+.profile-form-container {
+  max-width: 800px;
+  text-align: left;
+  margin: 0px auto;
+}
+
+.profile-form-container button {
+  display: block;
+  margin: 16px auto;
+}
+
+.profile-form-header {
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 15px;
+}
