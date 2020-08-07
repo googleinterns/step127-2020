@@ -2,6 +2,7 @@ import './ProfileForm.css';
 
 import React, { useContext, useState } from 'react';
 
+import AuthContext from './Authentication.js';
 import ButtonGroup from './ButtonGroup';
 import FirestoreContext from '../contexts/FirestoreContext.js';
 import PreferenceForm from './PreferenceForm.js';
@@ -11,12 +12,9 @@ import PreferenceForm from './PreferenceForm.js';
  */
 function ProfileForm() {
   const { firestore } = useContext(FirestoreContext);
-  firestore
-    .collection('users')
-    .get()
-    .then((snapshot) => {
-      snapshot.docs.forEach((doc) => console.log(doc.data().email));
-    });
+  const authContext = useContext(AuthContext);
+  console.log(authContext);
+
   const itemLabels = {
     cuisine: 'Preferred Cuisine',
     location: 'Your Location',
@@ -53,6 +51,13 @@ function ProfileForm() {
     } else {
       setCheckedExperienceButtons(checkedButtons);
     }
+  };
+
+  const handleSubmit = () => {
+    // going to need to get the user's thingy based on their email
+    // and then from there we are going to update everything based on the updated values
+    firestore.collection('users').where('email', '==', insertUserEmail).get()
+      .then;
   };
 
   return (
