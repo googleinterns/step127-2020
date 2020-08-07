@@ -35,17 +35,17 @@ function ProfileForm() {
   const [clickedExperienceButtons, setClickedExperienceButtons] = useState([]);
 
   /**
-   * A callback function that is going to be used to get the updated
-   * map of clicked buttons from the <ButtonGroup> component's on click function.
+   * A callback function that is used to get the updated map of
+   * clicked buttons from the <ButtonGroup> component's on click function.
    *
    * The clicked button state will get updated for the corresponding id.
    */
   const clickedButtonsCallback = (id, clickedButtonsMap) => {
     const clickedButtons = [];
-    const labels = labelsList[id];
+    const labelOptions = labelsList[id];
     for (const [buttonNumber, isClicked] of Object.entries(clickedButtonsMap)) {
       if (isClicked) {
-        clickedButtons.push(labels[buttonNumber]);
+        clickedButtons.push(labelOptions[buttonNumber]);
       }
     }
     if (id === 'distance') {
