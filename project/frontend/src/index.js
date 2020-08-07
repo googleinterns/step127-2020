@@ -11,6 +11,7 @@ import Footer from './pages/Footer.js';
 import Header from './pages/Header.js';
 import HomePage from './pages/HomePage.js';
 import MatchResultsPage from './pages/MatchResultsPage.js';
+import ProfilePage from './pages/ProfilePage';
 
 import RestaurantCard from './components/RestaurantCard.js';
 import RestaurantCardDeck from './components/RestaurantCardDeck.js';
@@ -34,6 +35,7 @@ ReactDOM.render(
       <Router>
         <Header />
         <Switch>
+          <Route path='/profile' component={ProfilePage} />
           <Route path='/deck'>
             <div className='container'>
               <div className='row'>
