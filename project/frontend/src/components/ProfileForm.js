@@ -57,10 +57,10 @@ function ProfileForm() {
     }
   };
 
+  /**
+   * Updates the database if the user has changed any of their previous preferences.
+   */
   const handleSubmit = (event) => {
-    // update the database based on the users' inputted values
-    // we need to pass the cuisine and location into here (with a call back function)
-    // and then we call it here
     event.preventDefault();
     if (!(user && user.isSignedIn())) {
       return;
